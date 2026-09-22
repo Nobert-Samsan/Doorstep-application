@@ -46,34 +46,32 @@ const JobRequests = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-text-primary mb-6">Incoming Job Requests</h2>
-      
       {requests.length === 0 ? (
-        <div className="bg-white rounded-lg border border-border p-8 text-center">
-          <p className="text-text-secondary">No new job requests at the moment.</p>
+        <div className="bg-white rounded-lg p-8 text-center border border-gray-100 border-dashed">
+          <p className="text-gray-500">No new job requests at the moment.</p>
         </div>
       ) : (
         <div className="space-y-4">
           {requests.map(request => (
-            <div key={request._id} className="bg-white rounded-lg shadow-sm border border-border overflow-hidden">
+            <div key={request._id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:border-gray-200 transition-colors overflow-hidden">
               <div className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-bold text-lg text-text-primary">{request.serviceTitle}</h3>
-                    {request.urgency === 'urgent' && <span className="bg-red-100 text-danger text-xs px-2 py-0.5 rounded font-bold uppercase">Urgent</span>}
+                    <h3 className="font-bold text-lg text-gray-900">{request.serviceTitle}</h3>
+                    {request.urgency === 'urgent' && <span className="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">Urgent</span>}
                   </div>
-                  <p className="text-sm text-text-secondary">
-                    Customer: {request.customerId?.firstName} {request.customerId?.lastName} • {request.city || 'Location N/A'}
+                  <p className="text-sm text-gray-500">
+                    <span className="font-medium text-gray-700">Customer:</span> {request.customerId?.firstName} {request.customerId?.lastName} &bull; {request.city || 'Location N/A'}
                   </p>
-                  <p className="text-sm text-text-secondary mt-1">
-                    🕒 {new Date(request.scheduledDate).toLocaleDateString()} | {request.scheduledTimeSlot}
+                  <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                    <Clock size={14} className="text-gray-400" /> {new Date(request.scheduledDate).toLocaleDateString()} | {request.scheduledTimeSlot}
                   </p>
                 </div>
 
                 <div className="flex gap-2 w-full md:w-auto mt-4 md:mt-0">
-                  <Link to={`/worker/jobs/${request._id}?from=dashboard`} className="flex-1 md:flex-none text-center px-4 py-2 border border-primary text-primary font-medium rounded hover:bg-light-accent">View Details</Link>
-                  <button onClick={() => handleAccept(request._id)} className="flex-1 md:flex-none px-4 py-2 bg-success text-white font-medium rounded hover:bg-green-700">Accept</button>
-                  <button onClick={() => handleDecline(request._id)} className="flex-1 md:flex-none px-4 py-2 border border-danger text-danger font-medium rounded hover:bg-red-50">Decline</button>
+                  <Link to={`/worker/jobs/${request._id}?from=dashboard`} className="flex-1 md:flex-none text-center px-4 py-2 border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors">View Details</Link>
+                  <button onClick={() => handleAccept(request._id)} className="flex-1 md:flex-none px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">Accept</button>
+                  <button onClick={() => handleDecline(request._id)} className="flex-1 md:flex-none px-4 py-2 border border-red-200 text-red-600 font-medium rounded-lg hover:bg-red-50 transition-colors">Decline</button>
                 </div>
               </div>
             </div>
