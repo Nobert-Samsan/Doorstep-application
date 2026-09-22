@@ -3,9 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-const { createServer } = require('http');
 const connectDB = require('./config/db');
-const { initSocket } = require('./socket/socket');
 
 // Load env vars
 dotenv.config();
@@ -14,10 +12,6 @@ dotenv.config();
 connectDB();
 
 const app = express();
-const httpServer = createServer(app);
-
-// Init Socket.io
-initSocket(httpServer);
 
 // Middleware
 app.use(helmet());
@@ -48,17 +42,21 @@ app.use('/api/admin', require('./routes/admin.routes'));
 
 // Basic route
 app.get('/', (req, res) => {
-  res.send('DoorStep API is running...');
+  res.send('DoorStep API is running on Vercel...');
 });
 
-// Error handling middleware (to be implemented later)
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ success: false, error: 'Server Error' });
 });
 
-const PORT = process.env.PORT || 5000;
+// Run local server if not on Vercel
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
-httpServer.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+module.exports = app;
