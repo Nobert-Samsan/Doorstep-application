@@ -29,11 +29,10 @@ const initSocket = (httpServer) => {
 };
 
 const getIO = () => {
-  // Mock IO for Vercel Serverless environment
-  return {
-    to: () => ({ emit: () => {} }),
-    emit: () => {}
-  };
+  if (!io) {
+    throw new Error('Socket.io not initialized!');
+  }
+  return io;
 };
 
 module.exports = { initSocket, getIO };

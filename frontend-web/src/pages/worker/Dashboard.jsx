@@ -33,42 +33,43 @@ const Dashboard = () => {
   return (
     <div className="max-w-7xl mx-auto pb-10">
       {/* Welcome Banner */}
-      <div className="bg-slate-900 rounded-2xl p-6 md:p-8 mb-8 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-blue-500 opacity-10 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-purple-500 opacity-10 blur-3xl"></div>
+      <div className="bg-white rounded-2xl p-6 md:p-8 mb-8 shadow-sm border border-orange-100 relative overflow-hidden">
+        {/* Decorative background element */}
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-orange-50 opacity-50 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-amber-50 opacity-50 blur-3xl"></div>
         
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-5">
             {user?.profilePhoto ? (
-              <img src={user.profilePhoto} alt="Profile" className="w-16 h-16 rounded-full object-cover border-2 border-slate-700 shadow-md" />
+              <img src={user.profilePhoto} alt="Profile" className="w-16 h-16 rounded-full object-cover border-2 border-orange-200 shadow-sm" />
             ) : (
-              <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-xl font-bold border-2 border-slate-700 shadow-md">
+              <div className="w-16 h-16 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xl font-bold border-2 border-orange-200 shadow-sm">
                 {name.charAt(0)}
               </div>
             )}
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold mb-1 tracking-tight">Welcome back, {name}!</h1>
-              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-400 mt-2">
-                <span className="bg-slate-800/80 px-2.5 py-1 rounded-md font-mono text-xs border border-slate-700/50">ID: #{workerId}</span>
-                <span className="flex items-center gap-1 bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-700/50"><MapPin size={14} /> {district}</span>
+              <h1 className="text-2xl md:text-3xl font-bold mb-1 tracking-tight text-gray-900">Welcome back, {name}!</h1>
+              <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-2">
+                <span className="bg-gray-50 px-2.5 py-1 rounded-md font-mono text-xs border border-gray-200 text-gray-600">ID: #{workerId}</span>
+                <span className="flex items-center gap-1 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-200 text-gray-600"><MapPin size={14} /> {district}</span>
               </div>
             </div>
           </div>
           
           <div className="flex flex-col gap-3 md:items-end w-full md:w-auto mt-4 md:mt-0">
             <div className="flex items-center gap-2 flex-wrap md:justify-end">
-              <span className="text-sm text-slate-400">Services:</span>
-              <span className="flex items-center gap-1.5 text-sm font-medium bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700/50 shadow-sm">
-                <Wrench size={12} className="text-slate-400" /> {servicesList}
+              <span className="text-sm text-gray-500">Services:</span>
+              <span className="flex items-center gap-1.5 text-sm font-medium bg-orange-50 text-orange-700 px-3 py-1.5 rounded-full border border-orange-100 shadow-sm">
+                <Wrench size={12} className="text-orange-600" /> {servicesList}
               </span>
             </div>
             
             {approvalStatus === 'approved' ? (
-              <div className="flex items-center gap-1.5 text-emerald-400 text-sm font-medium mt-1 bg-emerald-400/10 px-3 py-1.5 rounded-full border border-emerald-400/20">
+              <div className="flex items-center gap-1.5 text-emerald-600 text-sm font-medium mt-1 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100 shadow-sm">
                 <ShieldCheck size={16} /> Verified & Active
               </div>
             ) : (
-              <div className="flex items-center gap-1.5 text-amber-400 text-sm font-medium mt-1 bg-amber-400/10 px-3 py-1.5 rounded-full border border-amber-400/20">
+              <div className="flex items-center gap-1.5 text-amber-600 text-sm font-medium mt-1 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100 shadow-sm">
                 <Clock size={16} /> Pending Approval
               </div>
             )}
