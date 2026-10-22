@@ -15,7 +15,8 @@ exports.getDashboard = async (req, res) => {
       monthEarnings: workerProfile.totalEarnings,
       jobsCompleted: workerProfile.totalJobsCompleted,
       avgRating: workerProfile.averageRating,
-      commissionDue: workerProfile.commissionDue
+      commissionDue: workerProfile.commissionDue,
+      walletBalance: workerProfile.walletBalance !== undefined ? workerProfile.walletBalance : 0
     };
 
     const incomingRequests = await Booking.find({ workerId: req.user.id, status: 'pending' })
@@ -88,13 +89,33 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { bio, maxTravelDistance, bankDetails } = req.body;
-    const workerProfile = await WorkerProfile.findOneAndUpdate(
-      { userId: req.user.id },
-      { bio, maxTravelDistance, bankDetails },
-      { new: true }
-    );
-    res.status(200).json({ success: true, data: workerProfile });
+    const { bio, maxTravelDistance, bankDetails, firstName, lastName, phone, email, gender, preferredLanguage } = req.body;
+    
+    if (firstName || lastName || phone || email || gender || preferredLanguage) {
+      await User.findByIdAndUpdate(req.user.id, {
+        ...(firstName !== undefined && { firstName }),
+        ...(lastName !== undefined && { lastName }),
+        ...(phone !== undefined && { phone }),
+        ...(email !== undefined && { email }),
+        ...(gender !== undefined && { gender }),
+        ...(preferredLanguage !== undefined && { preferredLanguage })
+      }, { new: true, runValidators: true });
+    }
+
+    if (bio !== undefined || maxTravelDistance !== undefined || bankDetails !== undefined) {
+      await WorkerProfile.findOneAndUpdate(
+        { userId: req.user.id },
+        { 
+          ...(bio !== undefined && { bio }), 
+          ...(maxTravelDistance !== undefined && { maxTravelDistance }), 
+          ...(bankDetails && { bankDetails }) 
+        },
+        { new: true }
+      );
+    }
+
+    const updatedUser = await User.findById(req.user.id).select('-password');
+    res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -183,6 +204,7 @@ exports.getEarnings = async (req, res) => {
       data: {
         totalEarnings: workerProfile ? workerProfile.totalEarnings : 0,
         monthlyEarnings: workerProfile ? workerProfile.totalEarnings : 0, // Mocked to total for now
+        walletBalance: workerProfile ? (workerProfile.walletBalance || 0) : 0,
         commissionDue: workerProfile ? workerProfile.commissionDue : 0,
         transactions: formattedTransactions
       } 

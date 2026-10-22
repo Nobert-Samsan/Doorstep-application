@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import WorkerCard from '../../components/worker/WorkerCard';
+import WorkerCard, { WorkerCardSkeleton } from '../../components/worker/WorkerCard';
 import { DISTRICTS } from '../../constants/districts';
 import { Search, MapPin, Briefcase, Filter, X } from 'lucide-react';
 
@@ -47,7 +47,7 @@ const FindWorkers = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 py-8">
       
       {/* Search Header Banner */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
@@ -157,7 +157,7 @@ const FindWorkers = () => {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="h-72 bg-white animate-pulse rounded-2xl border border-gray-100 shadow-sm"></div>
+                <WorkerCardSkeleton key={i} />
               ))}
             </div>
           ) : (

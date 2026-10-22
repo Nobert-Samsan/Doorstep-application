@@ -7,13 +7,13 @@ const sendSMS = require('../utils/sendSMS');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'your_jwt_secret_here', {
-    expiresIn: '15m',
+    expiresIn: '90d',
   });
 };
 
 const generateRefreshToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET || 'your_jwt_refresh_secret_here', {
-    expiresIn: '30d',
+    expiresIn: '90d',
   });
 };
 

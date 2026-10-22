@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { DISTRICTS } from '../../constants/districts';
 import { 
   Briefcase, Calendar, MapPin, DollarSign, 
@@ -11,8 +11,17 @@ import api from '../../services/api';
 import MapLocationPicker from '../../components/MapLocationPicker';
 
 const PostJob = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ category: '', jobDescription: '', district: '', city: '', streetAddress: '', urgency: 'normal' });
+  const [formData, setFormData] = useState({ 
+    category: location.state?.category || '', 
+    jobDescription: location.state?.description || location.state?.jobDescription || '', 
+    district: '', 
+    city: '', 
+    streetAddress: '', 
+    urgency: 'normal' 
+  });
   const [photos, setPhotos] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleInputChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
@@ -21,7 +30,6 @@ const PostJob = () => {
   const [urgency, setUrgency] = useState('emergency');
   const [budgetType, setBudgetType] = useState('open');
   const [uploadedPhotos, setUploadedPhotos] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -83,7 +91,7 @@ const PostJob = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 py-10">
       
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -453,42 +461,160 @@ const PostJob = () => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN - Sticky Info Panel */}
+        {/* RIGHT COLUMN - Sticky How Job Broadcasts Work Card */}
         <div className="w-full lg:w-96">
-          <div className="sticky top-24 bg-amber-50/50 rounded-3xl border border-amber-100 p-8 text-gray-900 shadow-sm">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-primary mb-6 shadow-sm">
-              <Shield size={24} />
-            </div>
-            <h3 className="text-xl font-extrabold mb-6">How Job Broadcasts Work</h3>
-            
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-white shadow-sm text-primary flex items-center justify-center font-bold flex-shrink-0">1</div>
-                <div>
-                  <h4 className="font-bold text-gray-900 mb-1">Post Your Request</h4>
-                  <p className="text-sm text-gray-500 font-medium">Fill out this quick form. The more details, the better.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-white shadow-sm text-primary flex items-center justify-center font-bold flex-shrink-0">2</div>
-                <div>
-                  <h4 className="font-bold text-gray-900 mb-1">Receive Quotes</h4>
-                  <p className="text-sm text-gray-500 font-medium">Available professionals in your area will send you their price estimates.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-white shadow-sm text-primary flex items-center justify-center font-bold flex-shrink-0">3</div>
-                <div>
-                  <h4 className="font-bold text-gray-900 mb-1">Choose the Best</h4>
-                  <p className="text-sm text-gray-500 font-medium">Review their profiles, compare prices, and hire the perfect match.</p>
-                </div>
-              </div>
-            </div>
+          <style>{`
+            @keyframes stepFadeUp {
+              from {
+                opacity: 0;
+                transform: translateY(8px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .animate-stepFade {
+              animation: stepFadeUp 250ms ease-out both;
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .animate-stepFade {
+                animation: none !important;
+                transform: none !important;
+                transition: none !important;
+              }
+            }
+          `}</style>
 
-            <div className="mt-8 pt-6 border-t border-gray-100">
-              <div className="flex items-center gap-3 text-sm font-bold text-gray-700">
-                <Shield size={18} className="text-primary" />
-                100% Free to Broadcast
+          <div className="sticky top-28 bg-[#FFF8F1] rounded-[24px] border border-[#E8E2DB] p-7 text-gray-900 shadow-[0_16px_40px_rgba(0,0,0,0.06)] relative overflow-hidden">
+            {/* Top orange gradient accent bar (4px) */}
+            <div 
+              className="absolute top-0 left-0 right-0 h-1 rounded-t-[24px]"
+              style={{ background: 'linear-gradient(90deg, #FF9F0A 0%, #F94D1A 100%)' }}
+            />
+
+            {/* Top-right soft orange glow (rgba(255,122,0,0.10)) */}
+            <div className="absolute -top-12 -right-12 w-44 h-44 bg-[#FF7A00]/10 rounded-full blur-[40px] pointer-events-none" />
+
+            {/* Top-left faint 5% black dotted pattern */}
+            <div 
+              className="absolute top-0 left-0 w-32 h-32 pointer-events-none opacity-60 rounded-tl-[24px]"
+              style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0)',
+                backgroundSize: '12px 12px'
+              }}
+            />
+
+            <div className="relative z-10">
+              {/* HEADER */}
+              {/* 52px Orange Gradient Rounded Square with Radio-waves SVG line icon */}
+              <div 
+                className="w-[52px] h-[52px] rounded-[16px] flex items-center justify-center text-white mb-5 shadow-[0_8px_20px_rgba(255,122,0,0.35)] shrink-0"
+                style={{ background: 'linear-gradient(135deg, #FF9F0A 0%, #F94D1A 100%)' }}
+              >
+                <svg 
+                  className="w-6 h-6 text-white" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2.2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
+                  <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
+                  <circle cx="12" cy="12" r="2" />
+                  <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
+                  <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
+                </svg>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-[22px] md:text-[24px] font-poppins font-bold text-[#000000] leading-tight mb-6">
+                How Job{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF9F0A] to-[#F94D1A]">
+                  Broadcasts
+                </span>{' '}
+                Work
+              </h3>
+
+              {/* STEPS */}
+              <div className="relative space-y-[22px]">
+                {/* Thin dashed vertical line running through number circles */}
+                <div className="absolute left-[17px] top-[20px] bottom-[20px] w-0 border-l-2 border-dashed border-[#FF7A00]/40 pointer-events-none" />
+
+                {/* Step 1 */}
+                <div className="relative flex items-start gap-3.5 group animate-stepFade" style={{ animationDelay: '0ms' }}>
+                  <div 
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white font-poppins font-bold text-[14px] shrink-0 shadow-[0_4px_12px_rgba(255,122,0,0.30)] ring-2 ring-[#FF7A00]/20 ring-offset-2 ring-offset-[#FFF8F1] transition-transform duration-200 group-hover:scale-[1.08] relative z-10"
+                    style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
+                  >
+                    1
+                  </div>
+                  <div className="pt-0.5 flex-1 min-w-0">
+                    <h4 className="font-poppins font-semibold text-[16px] text-[#000000] leading-tight">
+                      Post Your Request
+                    </h4>
+                    <p className="font-inter text-[14px] text-[#3D3D3D] leading-[1.6] mt-1">
+                      Fill out this quick form. The <span className="font-semibold text-black">more details</span>, the better.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="relative flex items-start gap-3.5 group animate-stepFade" style={{ animationDelay: '100ms' }}>
+                  <div 
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white font-poppins font-bold text-[14px] shrink-0 shadow-[0_4px_12px_rgba(255,122,0,0.30)] ring-2 ring-[#FF7A00]/20 ring-offset-2 ring-offset-[#FFF8F1] transition-transform duration-200 group-hover:scale-[1.08] relative z-10"
+                    style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
+                  >
+                    2
+                  </div>
+                  <div className="pt-0.5 flex-1 min-w-0">
+                    <h4 className="font-poppins font-semibold text-[16px] text-[#000000] leading-tight">
+                      Receive Quotes
+                    </h4>
+                    <p className="font-inter text-[14px] text-[#3D3D3D] leading-[1.6] mt-1">
+                      Available professionals in your area will send you their <span className="font-semibold text-black">price estimates</span>.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="relative flex items-start gap-3.5 group animate-stepFade" style={{ animationDelay: '200ms' }}>
+                  <div 
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white font-poppins font-bold text-[14px] shrink-0 shadow-[0_4px_12px_rgba(255,122,0,0.30)] ring-2 ring-[#FF7A00]/20 ring-offset-2 ring-offset-[#FFF8F1] transition-transform duration-200 group-hover:scale-[1.08] relative z-10"
+                    style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
+                  >
+                    3
+                  </div>
+                  <div className="pt-0.5 flex-1 min-w-0">
+                    <h4 className="font-poppins font-semibold text-[16px] text-[#000000] leading-tight">
+                      Choose the Best
+                    </h4>
+                    <p className="font-inter text-[14px] text-[#3D3D3D] leading-[1.6] mt-1">
+                      Review their profiles, compare prices, and <span className="font-semibold text-black">hire the perfect match</span>.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* FOOTER */}
+              <div className="mt-8 pt-5 border-t border-[#E8E2DB]">
+                <div 
+                  className="w-full py-2.5 px-3 rounded-full flex items-center justify-center gap-2 border"
+                  style={{
+                    backgroundColor: 'rgba(46, 158, 91, 0.12)',
+                    borderColor: 'rgba(46, 158, 91, 0.3)'
+                  }}
+                >
+                  <svg className="w-4 h-4 text-[#2E9E5B] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="16 9 10 15 7 12" />
+                  </svg>
+                  <span className="text-[#1F7A44] font-poppins font-semibold text-[14px]">
+                    100% Free to Broadcast
+                  </span>
+                </div>
               </div>
             </div>
           </div>

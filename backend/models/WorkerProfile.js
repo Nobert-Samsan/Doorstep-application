@@ -50,6 +50,7 @@ const workerProfileSchema = new mongoose.Schema({
   totalReviews: { type: Number, default: 0 },
   totalJobsCompleted: { type: Number, default: 0 },
   totalEarnings: { type: Number, default: 0 },
+  walletBalance: { type: Number, default: 0 },
   commissionDue: { type: Number, default: 0 },
   commissionPaid: { type: Number, default: 0 },
   adminNotes: { type: String },

@@ -2,6 +2,68 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
+const ROLE_MAP = {
+  'Plumbing': 'Plumber',
+  'plumbing': 'Plumber',
+  'Plumber': 'Plumber',
+  'plumber': 'Plumber',
+  'Electrical': 'Electrician',
+  'electrical': 'Electrician',
+  'Electrician': 'Electrician',
+  'electrician': 'Electrician',
+  'Carpentry': 'Carpenter',
+  'carpentry': 'Carpenter',
+  'Carpenter': 'Carpenter',
+  'carpenter': 'Carpenter',
+  'Cleaning': 'Cleaner',
+  'cleaning': 'Cleaner',
+  'Cleaner': 'Cleaner',
+  'cleaner': 'Cleaner',
+  'Painting': 'Painter',
+  'painting': 'Painter',
+  'Painter': 'Painter',
+  'painter': 'Painter',
+  'AC Repair': 'AC Technician',
+  'ac repair': 'AC Technician',
+  'Masonry': 'Mason',
+  'masonry': 'Mason',
+  'Mason': 'Mason',
+  'mason': 'Mason',
+  'Appliance Repair': 'Appliance Tech',
+  'Pest Control': 'Pest Controller',
+  'Roofing': 'Roofer',
+  'Landscaping': 'Landscaper',
+  'Welding': 'Welder',
+  'Tiling': 'Tiler',
+  'CCTV & Security': 'CCTV Technician',
+  'Solar Installation': 'Solar Tech',
+  'Moving & Packing': 'Mover',
+  'Mechanic': 'Mechanic',
+  'Glass & Aluminum': 'Glass Specialist',
+  'Interior Design': 'Interior Designer',
+  'Locksmith': 'Locksmith',
+  'Event Helper': 'Event Helper',
+  'Handyman': 'Handyman'
+};
+
+const getJobRole = (title, fallback) => {
+  const tryResolve = (str) => {
+    if (!str) return null;
+    const clean = str.replace(/\s*\(custom request\)/i, '').replace(/\s*\(custom service\)/i, '').trim();
+    if (ROLE_MAP[clean]) return ROLE_MAP[clean];
+    const lower = clean.toLowerCase();
+    for (const [k, v] of Object.entries(ROLE_MAP)) {
+      if (k.toLowerCase() === lower) return v;
+    }
+    if (clean && !['other', 'general'].includes(lower)) {
+      return clean;
+    }
+    return null;
+  };
+
+  return tryResolve(title) || tryResolve(fallback) || 'Service';
+};
+
 const MyJobs = () => {
   const [activeTab, setActiveTab] = useState('All Jobs');
   const [jobs, setJobs] = useState([]);
@@ -41,24 +103,24 @@ const MyJobs = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-text-primary mb-6">My Active & Past Jobs</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-6">My Active & Past Jobs</h2>
       
-      <div className="flex space-x-4 mb-6 border-b border-border">
+      <div className="flex space-x-4 mb-6 overflow-x-auto pb-1">
         <button 
           onClick={() => setActiveTab('All Jobs')}
-          className={`pb-2 border-b-2 font-medium ${activeTab === 'All Jobs' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          className={`pb-2 border-b-2 font-medium whitespace-nowrap ${activeTab === 'All Jobs' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
         >
           All Jobs
         </button>
         <button 
           onClick={() => setActiveTab('Active')}
-          className={`pb-2 border-b-2 font-medium ${activeTab === 'Active' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          className={`pb-2 border-b-2 font-medium whitespace-nowrap ${activeTab === 'Active' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
         >
           Active
         </button>
         <button 
           onClick={() => setActiveTab('Completed')}
-          className={`pb-2 border-b-2 font-medium ${activeTab === 'Completed' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
+          className={`pb-2 border-b-2 font-medium whitespace-nowrap ${activeTab === 'Completed' ? 'border-primary text-primary' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
         >
           Completed
         </button>
@@ -77,8 +139,15 @@ const MyJobs = () => {
               <div className={`w-2 md:w-auto md:w-1 ${getStatusStyle(job.status).split(' ')[0]}`}></div>
               <div className="p-5 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                  <h3 className="font-bold text-lg text-text-primary">{job.serviceTitle}</h3>
-                  <p className="text-sm text-text-secondary">Customer: {job.customerId?.firstName} {job.customerId?.lastName} • {new Date(job.scheduledDate).toLocaleDateString()}</p>
+                  <h3 className="font-bold text-lg text-text-primary capitalize">
+                    {getJobRole(job.serviceTitle, job.workerSkill || job.categoryId?.nameEn)}
+                  </h3>
+                  {job.jobDescription && job.jobDescription.trim() !== '' && job.jobDescription.toLowerCase() !== 'no additional notes provided' && (
+                    <p className="text-xs text-text-muted mt-0.5 max-w-md line-clamp-1 italic">
+                      "{job.jobDescription}"
+                    </p>
+                  )}
+                  <p className="text-sm text-text-secondary mt-0.5">Customer: {job.customerId?.firstName} {job.customerId?.lastName} • {new Date(job.scheduledDate).toLocaleDateString()}</p>
                 </div>
                 <div className="flex flex-col md:items-end w-full md:w-auto gap-2">
                   <span className={`px-2 py-1 rounded text-xs font-bold inline-block w-fit ${getStatusStyle(job.status).replace('border-l-4 border-', '')}`}>

@@ -25,15 +25,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // If the backend says the token is invalid/expired (401), automatically log the user out
-    if (error.response && error.response.status === 401) {
-      console.warn('Unauthorized (401) detected. Clearing old token.');
-      localStorage.removeItem('token');
-      // If we are not already on the login page, redirect to it
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
-      }
-    }
+    // Pass all errors through without auto-logout.
+    // Users are only logged out when they explicitly click the Logout button.
     return Promise.reject(error);
   }
 );

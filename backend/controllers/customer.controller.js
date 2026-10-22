@@ -93,11 +93,26 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { firstName, lastName, phone, gender, dateOfBirth, nicNumber, province, district, city, streetAddress, postalCode, landmark, preferredLanguage } = req.body;
+    const { firstName, lastName, phone, email, gender, dateOfBirth, nicNumber, province, district, city, streetAddress, postalCode, landmark, preferredLanguage } = req.body;
     
-    const updatedUser = await User.findByIdAndUpdate(req.user.id, {
-      firstName, lastName, phone, gender, dateOfBirth, nicNumber, province, district, city, streetAddress, postalCode, landmark, preferredLanguage
-    }, { new: true, runValidators: true }).select('-password');
+    const updateObj = {
+      ...(firstName !== undefined && { firstName }),
+      ...(lastName !== undefined && { lastName }),
+      ...(phone !== undefined && { phone }),
+      ...(email !== undefined && { email }),
+      ...(gender !== undefined && { gender }),
+      ...(dateOfBirth !== undefined && { dateOfBirth }),
+      ...(nicNumber !== undefined && { nicNumber }),
+      ...(province !== undefined && { province }),
+      ...(district !== undefined && { district }),
+      ...(city !== undefined && { city }),
+      ...(streetAddress !== undefined && { streetAddress }),
+      ...(postalCode !== undefined && { postalCode }),
+      ...(landmark !== undefined && { landmark }),
+      ...(preferredLanguage !== undefined && { preferredLanguage })
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, updateObj, { new: true, runValidators: true }).select('-password');
     
     res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {

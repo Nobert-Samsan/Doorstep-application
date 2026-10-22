@@ -7,6 +7,21 @@ import {
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 
+const ROLE_MAP = {
+  'Plumbing': 'Plumber',
+  'Electrical': 'Electrician',
+  'Carpentry': 'Carpenter',
+  'Painting': 'Painter',
+  'Masonry': 'Mason',
+  'Cleaning': 'Cleaner',
+  'AC Repair': 'AC Technician',
+  'Gardening': 'Gardener',
+  'Pest Control': 'Pest Exterminator',
+  'Roofing': 'Roofer',
+  'Appliance Repair': 'Appliance Technician',
+  'CCTV Installation': 'CCTV Technician'
+};
+
 const WorkerProfile = () => {
   const { id } = useParams();
 
@@ -87,12 +102,14 @@ const WorkerProfile = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 pt-6 sm:pt-8 md:pt-10 pb-12 px-4 sm:px-6 lg:px-8">
       
       {/* Back button */}
-      <Link to="/customer/dashboard" className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-primary transition-colors">
-        <ChevronLeft size={20} className="mr-1" /> Back
-      </Link>
+      <div className="pt-1">
+        <Link to="/customer/dashboard" className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-primary transition-colors">
+          <ChevronLeft size={20} className="mr-1" /> Back
+        </Link>
+      </div>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         
@@ -101,41 +118,42 @@ const WorkerProfile = () => {
           
           {/* Main Profile Header */}
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            {/* Cover Photo */}
-            <div className="h-48 bg-gradient-to-r from-amber-500 to-primary relative">
+            {/* Cover Photo - Profile Picture, Name, and Details totally inside */}
+            <div className="bg-gradient-to-r from-amber-500 to-primary relative p-6 sm:p-8 flex items-center">
               <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-            </div>
-            
-            <div className="px-8 pb-8">
-              <div className="flex flex-col sm:flex-row sm:items-end gap-6 -mt-24 relative z-10">
-                  {/* Profile Avatar */}
-                  <div className="w-32 h-32 bg-gray-100 rounded-2xl border-4 border-white shadow-xl flex items-center justify-center overflow-hidden flex-shrink-0 bg-white sm:translate-y-8">
-                    {worker.profilePhoto ? (
-                      <img src={worker.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-5xl">👷‍♂️</span>
-                    )}
-                  </div>
+              
+              <div className="flex flex-col sm:flex-row sm:items-center gap-6 relative z-10 w-full">
+                {/* Profile Avatar */}
+                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl border-4 border-white shadow-xl flex items-center justify-center overflow-hidden shrink-0 bg-white">
+                  {worker.profilePhoto ? (
+                    <img src={worker.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-5xl">👷‍♂️</span>
+                  )}
+                </div>
                 
-                <div className="pt-2 sm:pt-0 sm:pb-12">
+                <div className="flex-1">
                   <h1 className="text-3xl font-extrabold text-white flex items-center gap-2 drop-shadow-md">
                     {worker.firstName} {worker.lastName}
                     {worker.verifiedBadge && <ShieldCheck className="text-white w-7 h-7 drop-shadow-md" title="Verified Professional" />}
                   </h1>
-                  <p className="text-lg text-amber-50 font-bold mt-1 drop-shadow-sm">{worker.services[0].serviceTitle}</p>
+                  <p className="text-lg text-amber-50 font-bold mt-1 drop-shadow-sm">
+                    {ROLE_MAP[worker.services[0].serviceTitle] || worker.services[0].serviceTitle}
+                  </p>
+
+                  {/* Chips inside the orange box */}
+                  <div className="flex flex-wrap items-center gap-3 mt-4 text-sm font-medium">
+                    <span className="flex items-center gap-1.5 bg-white/95 text-gray-800 px-3.5 py-1.5 rounded-xl border border-white/40 shadow-sm">
+                      <MapPin size={16} className="text-gray-500" /> {worker.district}
+                    </span>
+                    <span className="flex items-center gap-1.5 bg-white/95 text-amber-800 px-3.5 py-1.5 rounded-xl border border-white/40 shadow-sm">
+                      <Star size={16} className="fill-current text-amber-500" /> {worker.averageRating} ({worker.totalReviews} Reviews)
+                    </span>
+                    <span className="flex items-center gap-1.5 bg-white/95 text-green-800 px-3.5 py-1.5 rounded-xl border border-white/40 shadow-sm">
+                      <CheckCircle size={16} className="text-green-600" /> {worker.totalJobsCompleted} Jobs Completed
+                    </span>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-4 mt-8 sm:mt-12 text-sm font-medium text-gray-600">
-                <span className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
-                  <MapPin size={16} className="text-gray-400" /> {worker.district}
-                </span>
-                <span className="flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-lg border border-amber-100">
-                  <Star size={16} className="fill-current" /> {worker.averageRating} ({worker.totalReviews} Reviews)
-                </span>
-                <span className="flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg border border-green-100">
-                  <CheckCircle size={16} /> {worker.totalJobsCompleted} Jobs Completed
-                </span>
               </div>
             </div>
           </div>
@@ -147,7 +165,7 @@ const WorkerProfile = () => {
               {worker.bio}
             </p>
             
-            <h3 className="text-sm font-bold text-gray-900 mt-8 mb-3 uppercase tracking-wider">Specialized Skills</h3>
+            <h3 className="text-xl font-bold text-gray-900 mt-8 mb-3">Specialized Skills</h3>
             <div className="flex flex-wrap gap-2">
               {worker.skills.map((skill, idx) => (
                 <span key={idx} className="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-bold">
@@ -207,7 +225,7 @@ const WorkerProfile = () => {
 
         {/* RIGHT COLUMN - Simple CTA Widget */}
         <div className="w-full lg:w-80 flex-shrink-0 relative">
-          <div className="lg:fixed lg:w-80 bg-white rounded-3xl shadow-xl border border-gray-100 p-6" style={{ top: '5.5rem' }}>
+          <div className="lg:fixed lg:w-80 bg-white rounded-3xl shadow-xl border border-gray-100 p-6" style={{ top: '11.375rem' }}>
             <h3 className="text-2xl font-extrabold text-gray-900 mb-2">Book Service</h3>
             <p className="text-sm text-gray-500 font-medium mb-6">
               Pricing after inspection. Custom quotes based on your job scope.

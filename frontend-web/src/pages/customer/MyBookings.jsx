@@ -2,6 +2,68 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
+const ROLE_MAP = {
+  'Plumbing': 'Plumber',
+  'plumbing': 'Plumber',
+  'Plumber': 'Plumber',
+  'plumber': 'Plumber',
+  'Electrical': 'Electrician',
+  'electrical': 'Electrician',
+  'Electrician': 'Electrician',
+  'electrician': 'Electrician',
+  'Carpentry': 'Carpenter',
+  'carpentry': 'Carpenter',
+  'Carpenter': 'Carpenter',
+  'carpenter': 'Carpenter',
+  'Cleaning': 'Cleaner',
+  'cleaning': 'Cleaner',
+  'Cleaner': 'Cleaner',
+  'cleaner': 'Cleaner',
+  'Painting': 'Painter',
+  'painting': 'Painter',
+  'Painter': 'Painter',
+  'painter': 'Painter',
+  'AC Repair': 'AC Technician',
+  'ac repair': 'AC Technician',
+  'Masonry': 'Mason',
+  'masonry': 'Mason',
+  'Mason': 'Mason',
+  'mason': 'Mason',
+  'Appliance Repair': 'Appliance Tech',
+  'Pest Control': 'Pest Controller',
+  'Roofing': 'Roofer',
+  'Landscaping': 'Landscaper',
+  'Welding': 'Welder',
+  'Tiling': 'Tiler',
+  'CCTV & Security': 'CCTV Technician',
+  'Solar Installation': 'Solar Tech',
+  'Moving & Packing': 'Mover',
+  'Mechanic': 'Mechanic',
+  'Glass & Aluminum': 'Glass Specialist',
+  'Interior Design': 'Interior Designer',
+  'Locksmith': 'Locksmith',
+  'Event Helper': 'Event Helper',
+  'Handyman': 'Handyman'
+};
+
+const getJobRole = (title, fallback) => {
+  const tryResolve = (str) => {
+    if (!str) return null;
+    const clean = str.replace(/\s*\(custom request\)/i, '').replace(/\s*\(custom service\)/i, '').trim();
+    if (ROLE_MAP[clean]) return ROLE_MAP[clean];
+    const lower = clean.toLowerCase();
+    for (const [k, v] of Object.entries(ROLE_MAP)) {
+      if (k.toLowerCase() === lower) return v;
+    }
+    if (clean && !['other', 'general'].includes(lower)) {
+      return clean;
+    }
+    return null;
+  };
+
+  return tryResolve(title) || tryResolve(fallback) || 'Service';
+};
+
 const MyBookings = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('All Bookings');
@@ -20,16 +82,22 @@ const MyBookings = () => {
         const { data } = await api.get('/bookings');
         
         // Map backend schema to frontend variables
-        const mappedBookings = data.data.map(b => ({
-          id: b._id,
-          serviceTitle: b.serviceTitle,
-          status: b.status,
-          date: new Date(b.scheduledDate).toLocaleDateString(),
-          worker: b.workerId ? `${b.workerId.firstName} ${b.workerId.lastName}` : 'Unassigned',
-          workerId: b.workerId?._id,
-          profession: b.categoryId?.nameEn || 'Professional', // Ideally we populate category
-          amount: b.finalAmount ? `Rs. ${b.finalAmount}` : 'Pending Quote'
-        }));
+        const mappedBookings = data.data.map(b => {
+          const workerSkill = b.workerSkill || b.workerProfile?.serviceTitle || b.workerProfile?.services?.[0]?.serviceTitle;
+          const categoryName = b.categoryId?.nameEn;
+          const jobTitle = getJobRole(b.serviceTitle, workerSkill || categoryName);
+
+          return {
+            id: b._id,
+            serviceTitle: jobTitle,
+            description: b.jobDescription,
+            status: b.status,
+            date: new Date(b.scheduledDate).toLocaleDateString(),
+            worker: b.workerId ? `${b.workerId.firstName} ${b.workerId.lastName}` : 'Unassigned',
+            workerId: b.workerId?._id,
+            amount: b.finalAmount ? `Rs. ${b.finalAmount}` : ""
+          };
+        });
         
         setBookings(mappedBookings);
       } catch (err) {
@@ -88,10 +156,10 @@ const MyBookings = () => {
   const getStatusStyle = (status) => {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-700 border-l-4 border-yellow-500';
-      case 'accepted': 
-      case 'en_route':
-      case 'arrived':
-      case 'quote_provided': return 'bg-blue-100 text-blue-700 border-l-4 border-blue-500';
+      case 'quote_provided': return 'bg-pink-100 text-pink-700 border-l-4 border-pink-500';
+      case 'accepted': return 'bg-teal-100 text-teal-700 border-l-4 border-teal-500';
+      case 'en_route': return 'bg-indigo-100 text-indigo-700 border-l-4 border-indigo-500';
+      case 'arrived': return 'bg-cyan-100 text-cyan-700 border-l-4 border-cyan-500';
       case 'in_progress': return 'bg-blue-100 text-blue-700 border-l-4 border-blue-500';
       case 'completed': return 'bg-green-100 text-green-700 border-l-4 border-green-500';
       case 'cancelled': return 'bg-red-50 text-red-700 border-l-4 border-red-500';
@@ -109,13 +177,13 @@ const MyBookings = () => {
   }
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-text-primary">My Bookings</h2>
-        <Link to="/customer/post-job" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary">Post a Job Request</Link>
+        
       </div>
 
-      <div className="flex space-x-4 mb-6 border-b border-border overflow-x-auto hide-scrollbar">
+      <div className="flex space-x-4 mb-6 overflow-x-auto scrollbar-hide">
         {['All Bookings', 'Pending', 'Active', 'Completed', 'Cancelled', 'Complaint'].map(tab => (
           <button 
             key={tab}
@@ -138,22 +206,30 @@ const MyBookings = () => {
             <div className="p-5 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               
               <div>
-                <h3 className="font-bold text-lg text-text-primary">{booking.serviceTitle}</h3>
-                <p className="text-sm text-text-secondary">{booking.profession}: {booking.worker} • {booking.date}</p>
+                <h3 className="font-bold text-lg text-text-primary capitalize">{booking.serviceTitle}</h3>
+                {booking.description && booking.description.trim() !== '' && booking.description.toLowerCase() !== 'no additional notes provided' && (
+                  <p className="text-xs text-text-muted mt-0.5 max-w-md line-clamp-1 italic">
+                    "{booking.description}"
+                  </p>
+                )}
+                <div className="mt-1.5 space-y-0.5 text-sm text-text-secondary">
+                  <p><span className="font-medium text-text-primary">Professional Name:</span> {booking.worker}</p>
+                  <p><span className="font-medium text-text-primary">Booking Date:</span> {booking.date}</p>
+                </div>
               </div>
 
               <div className="flex flex-col md:items-end w-full md:w-auto gap-2">
                 <div className="flex justify-between w-full md:w-auto gap-4 items-center">
-                  <span className="font-semibold">{booking.amount}</span>
+
                   <span className={`px-2 py-1 rounded text-xs font-bold ${getStatusStyle(booking.status).replace('border-l-4 border-', '')}`}>
                     {getStatusText(booking.status)}
                   </span>
                 </div>
                 <div className="flex gap-2 w-full md:w-auto">
                   <Link to={`/customer/bookings/${booking.id}`} className="flex-1 md:flex-none text-center px-4 py-1.5 border border-primary text-primary rounded text-sm hover:bg-light-accent">View Details</Link>
-                  {['in_progress', 'accepted', 'en_route', 'arrived', 'quote_provided'].includes(booking.status) && <button onClick={() => handleMessage(booking.workerId)} className="flex-1 md:flex-none px-4 py-1.5 bg-primary text-white rounded text-sm hover:bg-secondary">Message</button>}
+
                   {booking.status === 'completed' && <button onClick={() => handleOpenReview(booking)} className="flex-1 md:flex-none px-4 py-1.5 bg-success text-white rounded text-sm hover:bg-green-700">Leave Review</button>}
-                  {booking.status === 'cancelled' && <button onClick={() => navigate(booking.workerId ? `/customer/book/${booking.workerId}` : '/customer/post-job')} className="flex-1 md:flex-none px-4 py-1.5 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200">Rebook</button>}
+
                 </div>
               </div>
 
@@ -200,3 +276,4 @@ const MyBookings = () => {
 };
 
 export default MyBookings;
+ 

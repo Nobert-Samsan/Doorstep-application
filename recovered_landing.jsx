@@ -1,0 +1,1 @@
+import React.*?export default Landing;

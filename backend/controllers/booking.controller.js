@@ -36,9 +36,40 @@ exports.getBookings = async (req, res) => {
       .populate('customerId', 'firstName lastName profilePhoto')
       .populate('workerId', 'firstName lastName phone profilePhoto')
       .populate('categoryId', 'nameEn')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
-    res.status(200).json({ success: true, data: bookings });
+    const WorkerProfile = require('../models/WorkerProfile');
+    const workerUserIds = bookings
+      .map(b => b.workerId?._id || b.workerId)
+      .filter(Boolean);
+
+    const workerProfiles = await WorkerProfile.find({ userId: { $in: workerUserIds } }).lean();
+    const wpMap = {};
+    for (const wp of workerProfiles) {
+      if (wp.userId) wpMap[wp.userId.toString()] = wp;
+    }
+
+    const enhancedBookings = bookings.map(b => {
+      const wId = (b.workerId?._id || b.workerId)?.toString();
+      const wp = wId ? wpMap[wId] : null;
+      const workerSkill = wp?.services?.[0]?.serviceTitle || null;
+      let serviceTitle = b.serviceTitle;
+      if (!serviceTitle || serviceTitle.trim().toLowerCase() === 'other' || serviceTitle.trim().toLowerCase() === 'general') {
+        serviceTitle = workerSkill || b.categoryId?.nameEn || 'Service';
+      }
+      return {
+        ...b,
+        serviceTitle,
+        workerSkill,
+        workerProfile: wp ? {
+          serviceTitle: workerSkill,
+          services: wp.services
+        } : null
+      };
+    });
+
+    res.status(200).json({ success: true, data: enhancedBookings });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -51,6 +82,20 @@ exports.getBookingDetail = async (req, res) => {
       .populate('workerId', 'firstName lastName phone profilePhoto')
       .populate('categoryId', 'nameEn')
       .lean();
+
+    if (booking && booking.workerId) {
+      const WorkerProfile = require('../models/WorkerProfile');
+      const wId = booking.workerId._id || booking.workerId;
+      const wp = await WorkerProfile.findOne({ userId: wId }).lean();
+      if (wp) {
+        const workerSkill = wp.services?.[0]?.serviceTitle;
+        booking.workerProfile = wp;
+        booking.workerSkill = workerSkill;
+        if (!booking.serviceTitle || booking.serviceTitle.trim().toLowerCase() === 'other' || booking.serviceTitle.trim().toLowerCase() === 'general') {
+          booking.serviceTitle = workerSkill || booking.categoryId?.nameEn || 'Service';
+        }
+      }
+    }
       
     if (!booking) {
       // Fallback to JobPost for broadcast jobs
@@ -318,6 +363,7 @@ exports.confirmCashPayment = async (req, res) => {
       workerProfile.totalJobsCompleted = (workerProfile.totalJobsCompleted || 0) + 1;
       workerProfile.totalEarnings = (workerProfile.totalEarnings || 0) + jobAmount;
       workerProfile.commissionDue = (workerProfile.commissionDue || 0) + (jobAmount * 0.10);
+      workerProfile.walletBalance = (workerProfile.walletBalance || 0) + (jobAmount * 0.90);
       await workerProfile.save();
     }
 

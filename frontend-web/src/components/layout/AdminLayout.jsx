@@ -16,7 +16,7 @@ const AdminLayout = () => {
       {/* Sidebar - Dark theme for Admin */}
       <aside className="w-64 bg-gray-900 text-white hidden md:block">
         <div className="p-4 border-b border-gray-800">
-          <h2 className="text-2xl font-bold text-accent">DoorStep</h2>
+          <img src="/logo-new.png" alt="DoorStep Logo" className="h-16 md:h-20 w-auto object-contain" />
           <p className="text-sm mt-1 text-gray-400">Admin Portal</p>
         </div>
         <div className="p-4">

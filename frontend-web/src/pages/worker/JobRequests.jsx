@@ -2,6 +2,69 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
+import { Clock, AlertCircle } from 'lucide-react';
+
+const ROLE_MAP = {
+  'Plumbing': 'Plumber',
+  'plumbing': 'Plumber',
+  'Plumber': 'Plumber',
+  'plumber': 'Plumber',
+  'Electrical': 'Electrician',
+  'electrical': 'Electrician',
+  'Electrician': 'Electrician',
+  'electrician': 'Electrician',
+  'Carpentry': 'Carpenter',
+  'carpentry': 'Carpenter',
+  'Carpenter': 'Carpenter',
+  'carpenter': 'Carpenter',
+  'Cleaning': 'Cleaner',
+  'cleaning': 'Cleaner',
+  'Cleaner': 'Cleaner',
+  'cleaner': 'Cleaner',
+  'Painting': 'Painter',
+  'painting': 'Painter',
+  'Painter': 'Painter',
+  'painter': 'Painter',
+  'AC Repair': 'AC Technician',
+  'ac repair': 'AC Technician',
+  'Masonry': 'Mason',
+  'masonry': 'Mason',
+  'Mason': 'Mason',
+  'mason': 'Mason',
+  'Appliance Repair': 'Appliance Tech',
+  'Pest Control': 'Pest Controller',
+  'Roofing': 'Roofer',
+  'Landscaping': 'Landscaper',
+  'Welding': 'Welder',
+  'Tiling': 'Tiler',
+  'CCTV & Security': 'CCTV Technician',
+  'Solar Installation': 'Solar Tech',
+  'Moving & Packing': 'Mover',
+  'Mechanic': 'Mechanic',
+  'Glass & Aluminum': 'Glass Specialist',
+  'Interior Design': 'Interior Designer',
+  'Locksmith': 'Locksmith',
+  'Event Helper': 'Event Helper',
+  'Handyman': 'Handyman'
+};
+
+const getJobRole = (title, fallback) => {
+  const tryResolve = (str) => {
+    if (!str) return null;
+    const clean = str.replace(/\s*\(custom request\)/i, '').replace(/\s*\(custom service\)/i, '').trim();
+    if (ROLE_MAP[clean]) return ROLE_MAP[clean];
+    const lower = clean.toLowerCase();
+    for (const [k, v] of Object.entries(ROLE_MAP)) {
+      if (k.toLowerCase() === lower) return v;
+    }
+    if (clean && !['other', 'general'].includes(lower)) {
+      return clean;
+    }
+    return null;
+  };
+
+  return tryResolve(title) || tryResolve(fallback) || 'Service';
+};
 
 const JobRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -47,31 +110,64 @@ const JobRequests = () => {
   return (
     <div>
       {requests.length === 0 ? (
-        <div className="bg-white rounded-lg p-8 text-center border border-gray-100 border-dashed">
-          <p className="text-gray-500">No new job requests at the moment.</p>
+        <div className="py-16 flex flex-col items-center justify-center text-center">
+          <div className="relative mb-6">
+            <div className="absolute inset-0 bg-slate-100 rounded-full scale-[2.5] opacity-50 blur-xl"></div>
+            <div className="w-20 h-24 bg-white rounded-lg border-2 border-slate-200 shadow-sm flex flex-col items-center pt-3 relative z-10">
+              <div className="w-10 h-2 rounded-full bg-slate-200 mb-2"></div>
+              <div className="w-12 h-1.5 rounded-full bg-slate-100 mb-1.5"></div>
+              <div className="w-12 h-1.5 rounded-full bg-slate-100 mb-1.5"></div>
+              <div className="w-8 h-1.5 rounded-full bg-slate-100"></div>
+              
+              <div className="absolute -bottom-3 -right-3 w-10 h-10 bg-[#EA580C] rounded-full border-4 border-white flex items-center justify-center text-white shadow-sm">
+                <Clock size={16} />
+              </div>
+            </div>
+          </div>
+          <h3 className="text-gray-900 font-bold text-lg mb-1 relative z-10">No new job requests at the moment.</h3>
+          <p className="text-gray-500 text-sm relative z-10">We'll notify you when a new request comes in.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3.5">
           {requests.map(request => (
-            <div key={request._id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:border-gray-200 transition-colors overflow-hidden">
-              <div className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-bold text-lg text-gray-900">{request.serviceTitle}</h3>
-                    {request.urgency === 'urgent' && <span className="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">Urgent</span>}
-                  </div>
-                  <p className="text-sm text-gray-500">
-                    <span className="font-medium text-gray-700">Customer:</span> {request.customerId?.firstName} {request.customerId?.lastName} &bull; {request.city || 'Location N/A'}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                    <Clock size={14} className="text-gray-400" /> {new Date(request.scheduledDate).toLocaleDateString()} | {request.scheduledTimeSlot}
-                  </p>
+            <div key={request._id} className="job-request-card">
+              <div className="job-card-top">
+                <div className="job-category-badge capitalize">
+                  {getJobRole(request.serviceTitle, request.categoryId?.nameEn)}
                 </div>
-
-                <div className="flex gap-2 w-full md:w-auto mt-4 md:mt-0">
-                  <Link to={`/worker/jobs/${request._id}?from=dashboard`} className="flex-1 md:flex-none text-center px-4 py-2 border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors">View Details</Link>
-                  <button onClick={() => handleAccept(request._id)} className="flex-1 md:flex-none px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">Accept</button>
-                  <button onClick={() => handleDecline(request._id)} className="flex-1 md:flex-none px-4 py-2 border border-red-200 text-red-600 font-medium rounded-lg hover:bg-red-50 transition-colors">Decline</button>
+                {request.urgency === 'urgent' && (
+                  <div className="urgency-badge emergency">Emergency</div>
+                )}
+              </div>
+              
+              {request.urgency === 'urgent' && (
+                <>
+                  <div className="countdown-text">
+                    <AlertCircle size={14} /> Respond immediately
+                  </div>
+                  <div className="countdown-bar">
+                    <div className="countdown-fill"></div>
+                  </div>
+                </>
+              )}
+              
+              <div className="job-card-meta">
+                <div className="meta-item">
+                  <strong>Customer:</strong> {request.customerId?.firstName} {request.customerId?.lastName} &bull; {request.city || 'Location N/A'}
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-2">
+                <div className="meta-item text-[12px] text-gray-500">
+                  <Clock size={13} /> {new Date(request.scheduledDate).toLocaleDateString()} | {request.scheduledTimeSlot}
+                </div>
+                
+                <div className="job-card-actions">
+                  <div className="action-row-buttons">
+                    <button onClick={() => handleDecline(request._id)} className="btn-decline">Decline</button>
+                    <button onClick={() => handleAccept(request._id)} className="btn-accept">Accept</button>
+                  </div>
+                  <Link to={`/worker/jobs/${request._id}?from=dashboard`} className="btn-view" style={{textDecoration: 'none'}}>View Details</Link>
                 </div>
               </div>
             </div>

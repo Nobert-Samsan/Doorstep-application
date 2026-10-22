@@ -41,6 +41,7 @@ import JobRequests from './pages/worker/JobRequests';
 import MyJobs from './pages/worker/MyJobs';
 import WorkerJobDetail from './pages/worker/WorkerJobDetail';
 import Earnings from './pages/worker/Earnings';
+import WorkerMobileProfile from './pages/worker/WorkerMobileProfile';
 
 // Admin Pages
 import AdminLayout from './components/layout/AdminLayout';
@@ -78,7 +79,15 @@ function App() {
     if (token && !user) {
       api.get('/auth/me')
         .then(res => setUser(res.data.data))
-        .catch(() => logout());
+        .catch((err) => {
+          // Only log out on explicit auth errors (token truly invalid).
+          // Network errors or server-down should NOT log the user out.
+          const status = err?.response?.status;
+          if (status === 401 || status === 403) {
+            logout();
+          }
+          // For any other error (network, 5xx, etc.) keep the session alive.
+        });
     }
   }, [token, user, setUser, logout]);
 
@@ -101,13 +110,13 @@ function App() {
 
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<AccountType />} />
         <Route path="/register/customer" element={<CustomerRegister />} />
         <Route path="/register/worker" element={<WorkerRegister />} />
         
         <Route element={<AuthLayout />}>
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/register" element={<AccountType />} />
         </Route>
 
         {/* Customer Routes */}
@@ -140,6 +149,7 @@ function App() {
           <Route path="jobs/:id" element={<WorkerJobDetail />} />
           <Route path="earnings" element={<Earnings />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="profile" element={<WorkerMobileProfile />} />
         </Route>
 
         <Route path="/admin" element={
