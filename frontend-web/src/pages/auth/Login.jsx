@@ -1,5 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
@@ -21,7 +21,9 @@ const FadeIn = ({ children, delay = 0, className = '' }) => {
 };
 
 const Login = () => {
-  const [activeTab, setActiveTab] = useState('customer'); // 'customer' or 'worker'
+  const [searchParams] = useSearchParams();
+  const initialRole = searchParams.get('tab') === 'worker' || searchParams.get('role') === 'worker' ? 'worker' : 'customer';
+  const [activeTab, setActiveTab] = useState(initialRole); // 'customer' or 'worker'
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -71,21 +73,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-white overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white overflow-hidden">
       
-      {/* Mobile Header (Hidden on Desktop) */}
-      <div className="md:hidden w-full bg-[#000000] p-4 flex flex-col items-center justify-center">
-        <Link to="/" className="flex items-center gap-2 mb-2 focus:outline-none focus:ring-2 focus:ring-[#FF7A00] rounded">
-          <img src="/logo-new.png" alt="DoorStep" className="h-8 object-contain" />
-        </Link>
-        <div className="flex items-center gap-1.5 text-white/80 text-[12px]">
-          <ShieldCheck size={14} className="text-[#FF7A00]" />
-          <span>Sri Lanka's trusted platform</span>
-        </div>
-      </div>
+
 
       {/* LEFT BRAND PANEL (Desktop Only) */}
-      <div className="hidden md:flex flex-col w-[38%] lg:w-[45%] relative overflow-hidden p-10 justify-between bg-[#000000]">
+      <div className="hidden lg:flex flex-col lg:w-[45%] relative overflow-hidden p-10 justify-between bg-[#000000]">
         
         {/* Background Image and Overlays */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -103,11 +96,11 @@ const Login = () => {
           ></div>
         </div>
 
-        {/* Top Logo */}
+        {/* Top Logo & Tagline */}
         <FadeIn delay={0} className="relative z-10">
           <Link to="/" className="inline-block focus:outline-none focus:ring-2 focus:ring-[#FF7A00] rounded">
-            <img src="/logo-new.png" alt="DoorStep" className="h-12 md:h-14 object-contain" />
-            <p className="text-white/80 text-[14px] mt-3 font-inter">Sri Lanka's trusted home services platform</p>
+            <img src="/logo-new.png" alt="DoorStep" className="h-10 md:h-12 w-auto object-contain" />
+            <p className="text-white/90 text-[16px] mt-2.5 font-inter font-normal">Sri Lanka's trusted home services platform</p>
           </Link>
         </FadeIn>
 
@@ -124,15 +117,19 @@ const Login = () => {
       </div>
 
       {/* RIGHT FORM PANEL */}
-      <div className="w-full md:w-[62%] lg:w-[55%] relative flex items-center justify-center bg-white">
+      <div className="w-full lg:w-[55%] relative flex items-center justify-center bg-white">
 
         <FadeIn delay={150} className="w-full max-w-[440px] px-6 py-12 md:px-0">
           
-          <div className="text-left mb-8">
+          <div className="text-center lg:text-left mb-8">
             <h2 className="text-[32px] font-poppins font-bold text-[#000000] mb-2 leading-tight">
               Welcome Back
             </h2>
-            <p className="text-[#6B6B6B] font-inter text-[16px]">Sign in to find trusted workers near you</p>
+            <p className="text-[#6B6B6B] font-inter text-[16px]">
+              {activeTab === 'customer' 
+                ? 'Sign in to find trusted workers near you' 
+                : 'Sign in to manage jobs and grow your business'}
+            </p>
           </div>
 
           {/* Role Switcher */}
@@ -240,7 +237,7 @@ const Login = () => {
                 <span className="text-[#3D3D3D] text-[14px] select-none font-inter">Remember me</span>
               </label>
 
-              <Link to="/forgot-password" className="text-[14px] font-semibold text-[#E86100] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FF7A00] rounded px-1 font-inter">
+              <Link to="/forgot-password" className="text-[14px] font-[500] text-[#E86100] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FF7A00] rounded px-1 font-inter">
                 Forgot password?
               </Link>
             </div>
@@ -248,7 +245,7 @@ const Login = () => {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full h-[56px] bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-poppins font-semibold text-[16px] rounded-[12px] transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:ring-offset-2 disabled:opacity-60"
+              className="w-full h-[56px] bg-[#000000] hover:bg-[#1C1917] active:bg-[#2D2A26] text-white font-poppins font-semibold text-[16px] rounded-[12px] transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#000000] focus:ring-offset-2 disabled:opacity-60"
             >
               {isLoading ? (
                 <>
@@ -284,7 +281,7 @@ const Login = () => {
           {/* REGISTER LINK */}
           <div className="text-center mt-8 text-[14px] text-[#3D3D3D] font-inter">
             Don't have an account?{' '}
-            <Link to="/register" className="text-[#E86100] font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-[#FF7A00] rounded px-1">
+            <Link to="/register" className="text-[#E86100] font-[500] hover:underline focus:outline-none focus:ring-2 focus:ring-[#FF7A00] rounded px-1">
               Register here
             </Link>
           </div>

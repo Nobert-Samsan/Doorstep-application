@@ -25,7 +25,8 @@ router.post('/', async (req, res) => {
       workerId,
       customerId: req.user.id,
       rating: Number(rating),
-      comment
+      comment: comment || '',
+      reviewText: comment || ''
     });
 
     // Link review to booking
@@ -49,7 +50,49 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/worker/:workerId', async (req, res) => res.status(200).json({ success: true, data: [] }));
+router.get('/my-reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find({ workerId: req.user.id })
+      .populate('customerId', 'firstName lastName profilePhoto')
+      .populate('bookingId', 'serviceTitle scheduledDate')
+      .sort({ createdAt: -1 });
+
+    const total = reviews.length;
+    const avg = total > 0 ? (reviews.reduce((acc, r) => acc + (r.rating || 0), 0) / total) : 0;
+
+    const breakdown = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    reviews.forEach(r => {
+      const rounded = Math.round(r.rating);
+      if (breakdown[rounded] !== undefined) breakdown[rounded]++;
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        reviews,
+        stats: {
+          averageRating: Number(avg.toFixed(1)),
+          totalReviews: total,
+          breakdown
+        }
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/worker/:workerId', async (req, res) => {
+  try {
+    const reviews = await Review.find({ workerId: req.params.workerId, isPublic: true })
+      .populate('customerId', 'firstName lastName profilePhoto')
+      .populate('bookingId', 'serviceTitle')
+      .sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: reviews });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 router.put('/:reviewId/reply', async (req, res) => res.status(200).json({ success: true, message: 'Reply sent' }));
 router.post('/:reviewId/report', async (req, res) => res.status(200).json({ success: true, message: 'Reported' }));
 

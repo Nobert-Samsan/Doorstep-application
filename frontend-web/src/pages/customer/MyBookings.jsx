@@ -183,14 +183,14 @@ const MyBookings = () => {
         
       </div>
 
-      <div className="flex space-x-4 mb-6 overflow-x-auto scrollbar-hide">
+      <div className="flex space-x-4 sm:space-x-6 mb-6 overflow-x-auto scrollbar-hide pb-1">
         {['All Bookings', 'Pending', 'Active', 'Completed', 'Cancelled', 'Complaint'].map(tab => (
           <button 
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-2 border-b-2 font-medium ${
+            className={`pb-2 border-b-2 font-medium whitespace-nowrap text-sm sm:text-base shrink-0 transition-colors ${
               activeTab === tab 
-                ? 'border-primary text-primary' 
+                ? 'border-primary text-primary font-semibold' 
                 : 'border-transparent text-text-secondary hover:text-text-primary'
             }`}
           >

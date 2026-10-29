@@ -117,18 +117,15 @@ const WorkerLayout = () => {
         <div className="pb-5 mb-5 border-b border-white/[0.08]">
           <Link 
             to="/" 
-            className="flex items-center justify-center lg:justify-start gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#FF7A00]"
+            className="flex items-center justify-center lg:justify-start gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#FF7A00]"
           >
-            <div 
-              className="w-9 h-9 rounded-[10px] flex items-center justify-center font-black text-white text-[17px] shadow-none shrink-0"
-              style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
-            >
-              D
-            </div>
-            <div className="hidden lg:flex items-center gap-2">
-              <h2 className="text-2xl font-bold tracking-tight text-white font-heading">DoorStep</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl font-bold tracking-tight text-white font-heading">
+                <span className="lg:inline hidden">DoorStep</span>
+                <span className="lg:hidden inline font-black text-[#FF9F0A]">D</span>
+              </h2>
               <span 
-                className="text-[11px] font-semibold text-white px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0"
+                className="hidden lg:inline text-[11px] font-semibold text-white px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0"
                 style={{ 
                   background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)',
                   fontFamily: 'Poppins, sans-serif'
@@ -138,50 +135,6 @@ const WorkerLayout = () => {
               </span>
             </div>
           </Link>
-        </div>
-
-        {/* PROFILE CARD */}
-        <div className="bg-[#111111] rounded-[16px] p-2.5 lg:p-[14px] mb-5 border border-white/10 shrink-0">
-          <div className="flex items-center justify-center lg:justify-start gap-3">
-            {/* 44px avatar with 2px orange gradient ring and 2px black gap */}
-            <div 
-              className="w-[44px] h-[44px] p-[2px] rounded-full shrink-0 flex items-center justify-center"
-              style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
-            >
-              <div className="w-full h-full p-[2px] bg-black rounded-full flex items-center justify-center overflow-hidden">
-                {user?.profilePhoto ? (
-                  <img 
-                    src={user.profilePhoto} 
-                    alt={displayName} 
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                ) : (
-                  <div 
-                    className="w-full h-full rounded-full flex items-center justify-center font-bold text-white text-xs"
-                    style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
-                  >
-                    {initials}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Name & Status (Desktop only) */}
-            <div className="min-w-0 flex-1 hidden lg:block">
-              <p className="font-semibold text-white truncate text-[15px] font-heading" title={displayName}>
-                {displayName}
-              </p>
-              <div className="flex items-center gap-1.5 text-[13px] mt-0.5">
-                <span 
-                  className={`w-2 h-2 rounded-full shrink-0 ${isAvailable ? 'bg-[#2E9E5B]' : 'bg-[#9A9A9A]'}`}
-                />
-                <span className="text-white/75 font-normal">
-                  {isAvailable ? 'Online' : 'Offline'}
-                </span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
         {/* NAVIGATION MENU */}
@@ -355,7 +308,7 @@ const WorkerLayout = () => {
         </header>
         
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto overflow-x-hidden bg-[#F8FAFC]">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto transition-opacity duration-150">
             <Outlet />
           </div>
         </main>

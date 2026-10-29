@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // Layouts
 import MainLayout from './components/layout/MainLayout';
@@ -41,12 +42,14 @@ import JobRequests from './pages/worker/JobRequests';
 import MyJobs from './pages/worker/MyJobs';
 import WorkerJobDetail from './pages/worker/WorkerJobDetail';
 import Earnings from './pages/worker/Earnings';
+import WorkerReviews from './pages/worker/WorkerReviews';
 import WorkerMobileProfile from './pages/worker/WorkerMobileProfile';
 
 // Admin Pages
 import AdminLayout from './components/layout/AdminLayout';
 import AdminDashboard from './pages/admin/Dashboard';
 import WorkerApprovals from './pages/admin/WorkerApprovals';
+import BookingsManagement from './pages/admin/Bookings';
 import UserManagement from './pages/admin/UserManagement';
 import Categories from './pages/admin/Categories';
 import Disputes from './pages/admin/Disputes';
@@ -98,6 +101,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Public Routes */}
         <Route element={<MainLayout />}>
@@ -110,12 +114,12 @@ function App() {
 
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/register" element={<AccountType />} />
         <Route path="/register/customer" element={<CustomerRegister />} />
         <Route path="/register/worker" element={<WorkerRegister />} />
         
         <Route element={<AuthLayout />}>
-          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
 
@@ -148,6 +152,7 @@ function App() {
           <Route path="activities" element={<MyJobs />} />
           <Route path="jobs/:id" element={<WorkerJobDetail />} />
           <Route path="earnings" element={<Earnings />} />
+          <Route path="reviews" element={<WorkerReviews />} />
           <Route path="settings" element={<Settings />} />
           <Route path="profile" element={<WorkerMobileProfile />} />
         </Route>
@@ -159,6 +164,7 @@ function App() {
         }>
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="approvals" element={<WorkerApprovals />} />
+          <Route path="bookings" element={<BookingsManagement />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="categories" element={<Categories />} />
           <Route path="disputes" element={<Disputes />} />

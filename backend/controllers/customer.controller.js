@@ -277,13 +277,13 @@ exports.getWorkerProfile = async (req, res) => {
   try {
     // Try to find by WorkerProfile ID first
     let worker = await WorkerProfile.findById(req.params.id)
-      .populate('userId', 'firstName lastName profilePhoto createdAt')
+      .populate('userId', 'firstName lastName profilePhoto district city streetAddress createdAt')
       .populate('services.categoryId', 'nameEn icon');
       
     // If not found, try to find by User ID (useful when routing from Bookings)
     if (!worker) {
       worker = await WorkerProfile.findOne({ userId: req.params.id })
-        .populate('userId', 'firstName lastName profilePhoto createdAt')
+        .populate('userId', 'firstName lastName profilePhoto district city streetAddress createdAt')
         .populate('services.categoryId', 'nameEn icon');
     }
       

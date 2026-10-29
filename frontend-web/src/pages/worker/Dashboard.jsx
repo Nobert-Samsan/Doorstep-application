@@ -29,37 +29,9 @@ import {
   CaretRight 
 } from '@phosphor-icons/react';
 
-const CountUp = ({ end, decimals = 0, duration = 900 }) => {
-  const [val, setVal] = useState(0);
-
-  useEffect(() => {
-    const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const target = Number(end) || 0;
-    if (prefersReduced || target === 0) {
-      setVal(target);
-      return;
-    }
-
-    let startTimestamp = null;
-    let frameId;
-
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      setVal(target * ease);
-      if (progress < 1) {
-        frameId = window.requestAnimationFrame(step);
-      }
-    };
-
-    frameId = window.requestAnimationFrame(step);
-    return () => {
-      if (frameId) window.cancelAnimationFrame(frameId);
-    };
-  }, [end, duration]);
-
-  return <>{val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</>;
+const CountUp = ({ end, decimals = 0 }) => {
+  const target = Number(end) || 0;
+  return <>{target.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</>;
 };
 
 const Dashboard = () => {
@@ -129,11 +101,13 @@ const Dashboard = () => {
   const district = user?.district || 'Colombo';
   const approvalStatus = data?.profile?.approvalStatus || 'pending';
   
-  let specialistRole = 'Home Services Specialist';
-  if (data?.profile?.services && data.profile.services.length > 0) {
-    const firstService = data.profile.services[0]?.serviceTitle || 'Home Services';
-    specialistRole = firstService.toLowerCase().includes('specialist') ? firstService : `${firstService} Specialist`;
-  }
+  // Extract all services offered by worker
+  const workerServices = data?.profile?.services && data.profile.services.length > 0 
+    ? data.profile.services.map(s => {
+        const title = s?.serviceTitle || 'Home Services';
+        return title.toLowerCase().includes('specialist') ? title : `${title} Specialist`;
+      })
+    : ['Home Services Specialist'];
 
   const monthNetEarnings = (data?.stats?.monthEarnings || 0) * 0.9;
   const jobsCompleted = Number(data?.stats?.jobsCompleted || 0);
@@ -409,17 +383,11 @@ const Dashboard = () => {
   }
 }
 
-.stat-card-anim-1 {
-  animation: statFadeUp 350ms cubic-bezier(0.16, 1, 0.3, 1) 0ms both;
-}
-.stat-card-anim-2 {
-  animation: statFadeUp 350ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
-}
-.stat-card-anim-3 {
-  animation: statFadeUp 350ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
-}
+.stat-card-anim-1,
+.stat-card-anim-2,
+.stat-card-anim-3,
 .stat-card-anim-4 {
-  animation: statFadeUp 350ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
+  animation: none !important;
 }
 
 @keyframes statShimmer {
@@ -926,10 +894,12 @@ const Dashboard = () => {
           {/* CHIPS ROW: Single line horizontal scroll with fade */}
           <div className="relative mt-3">
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pr-6">
-              <div className="inline-flex items-center gap-1.5 bg-white border border-[#E8E2DB] rounded-full px-3 py-1.5 text-[#000000] text-[13px] font-medium whitespace-nowrap shrink-0">
-                <Wrench size={16} className="text-[#FF7A00]" />
-                <span>{specialistRole}</span>
-              </div>
+              {workerServices.map((role, idx) => (
+                <div key={idx} className="inline-flex items-center gap-1.5 bg-white border border-[#E8E2DB] rounded-full px-3 py-1.5 text-[#000000] text-[13px] font-medium whitespace-nowrap shrink-0">
+                  <Wrench size={16} className="text-[#FF7A00]" />
+                  <span>{role}</span>
+                </div>
+              ))}
               <div className="inline-flex items-center gap-1.5 bg-white border border-[#E8E2DB] rounded-full px-3 py-1.5 text-[#000000] text-[13px] font-medium whitespace-nowrap shrink-0">
                 <MapPin size={16} className="text-[#FF7A00]" />
                 <span>{district}</span>
@@ -985,9 +955,7 @@ const Dashboard = () => {
                 className={`w-[26px] h-[26px] rounded-full bg-white shadow-md flex items-center justify-center transition-transform duration-200 ease-out ${
                   isAvailable ? 'translate-x-[22px]' : 'translate-x-0'
                 }`}
-              >
-                {isAvailable && <span className="w-2 h-2 rounded-full bg-[#2E9E5B]" />}
-              </span>
+              />
             </div>
           </div>
 
@@ -1063,11 +1031,13 @@ const Dashboard = () => {
 
             {/* Chips row */}
             <div className="flex flex-wrap items-center gap-3 mt-3">
-              <div className="inline-flex items-center gap-2 bg-white border border-[#E8E2DB] rounded-full px-3.5 py-2 text-[#000000] text-[14px] font-medium hover:border-[#FF7A00] hover:bg-[#FFF1E3] hover:text-[#E86100] transition-colors duration-200">
-                <Wrench size={15} className="text-[#E86100]" />
-                <span>{specialistRole}</span>
-              </div>
-              <div className="inline-flex items-center gap-2 bg-white border border-[#E8E2DB] rounded-full px-3.5 py-2 text-[#000000] text-[14px] font-medium hover:border-[#FF7A00] hover:bg-[#FFF1E3] hover:text-[#E86100] transition-colors duration-200">
+              {workerServices.map((role, idx) => (
+                <div key={idx} className="inline-flex items-center gap-2 bg-white border border-[#E8E2DB] rounded-full px-3.5 py-2 text-[#000000] text-[14px] font-medium">
+                  <Wrench size={15} className="text-[#E86100]" />
+                  <span>{role}</span>
+                </div>
+              ))}
+              <div className="inline-flex items-center gap-2 bg-white border border-[#E8E2DB] rounded-full px-3.5 py-2 text-[#000000] text-[14px] font-medium">
                 <MapPin size={15} className="text-[#E86100]" />
                 <span>{district}</span>
               </div>
@@ -1111,33 +1081,13 @@ const Dashboard = () => {
                   className={`w-6 h-6 rounded-full bg-white shadow-md flex items-center justify-center transition-transform duration-200 ease-out ${
                     isAvailable ? 'translate-x-6' : 'translate-x-0'
                   }`}
-                >
-                  {isAvailable && <span className="w-2 h-2 rounded-full bg-[#2E9E5B]" />}
-                </span>
+                />
               </button>
             </div>
 
             {/* Worker ID Caption */}
             <div className="flex items-center gap-2 text-[13px] font-inter text-[#6B6B6B]">
-              <svg className="w-4 h-4 text-[#2E9E5B] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
-              </svg>
               <span className="font-medium text-[#3D3D3D]">Worker ID #{workerId}</span>
-              <button
-                type="button"
-                onClick={handleCopyId}
-                aria-label="Copy worker ID"
-                className="p-1 rounded-md text-[#6B6B6B] hover:text-[#000000] hover:bg-[#E8E2DB]/50 relative transition-colors focus:outline-none focus:ring-2 focus:ring-[#FF7A00]"
-                title="Copy Worker ID"
-              >
-                {copiedId ? <Check size={14} className="text-[#2E9E5B]" /> : <Copy size={13} />}
-                {copiedId && (
-                  <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-[#000000] text-white text-[11px] font-semibold px-2 py-0.5 rounded shadow-md pointer-events-none">
-                    Copied!
-                  </span>
-                )}
-              </button>
             </div>
           </div>
 
@@ -1238,8 +1188,8 @@ const Dashboard = () => {
           <div 
             role="button"
             tabIndex={0}
-            onClick={() => navigate('/worker/settings')}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/worker/settings'); } }}
+            onClick={() => navigate('/worker/reviews')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/worker/reviews'); } }}
             className="stat-card stat-card-anim-3"
             aria-label={`Average Rating: ${avgRating.toFixed(1)} / 5`}
           >
@@ -1354,7 +1304,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="schedule-empty">
-            <div className="schedule-empty-icon">📅</div>
+            <div className="schedule-empty-icon"><Calendar size={28} className="text-[#A8A29E]" /></div>
             <div className="schedule-empty-text">No jobs scheduled for today.<br/>Turn on availability to get new requests.</div>
           </div>
         </div>

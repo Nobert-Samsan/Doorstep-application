@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import api from '../../services/api';
 
 const AdminLayout = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    const fetchBadge = async () => {
+      try {
+        const res = await api.get('/admin/dashboard');
+        setPendingCount(res.data?.data?.pendingApprovals || 0);
+      } catch (e) {
+        // ignore
+      }
+    };
+    fetchBadge();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -16,15 +30,21 @@ const AdminLayout = () => {
       {/* Sidebar - Dark theme for Admin */}
       <aside className="w-64 bg-gray-900 text-white hidden md:block">
         <div className="p-4 border-b border-gray-800">
-          <img src="/logo-new.png" alt="DoorStep Logo" className="h-16 md:h-20 w-auto object-contain" />
+          <img src="/logo-new.png" alt="DoorStep Logo" className="h-8 md:h-9 w-auto object-contain" />
           <p className="text-sm mt-1 text-gray-400">Admin Portal</p>
         </div>
         <div className="p-4">
           <nav className="space-y-2 mt-4">
             <Link to="/admin/dashboard" className="block px-4 py-2 rounded text-gray-300 hover:bg-gray-800 hover:text-white">Overview</Link>
-            <Link to="/admin/approvals" className="block px-4 py-2 rounded text-gray-300 hover:bg-gray-800 hover:text-white">
-              Worker Approvals <span className="bg-danger text-white text-xs px-2 py-0.5 rounded-full ml-2">3</span>
+            <Link to="/admin/approvals" className="block px-4 py-2 rounded text-gray-300 hover:bg-gray-800 hover:text-white flex items-center justify-between">
+              <span>Worker Approvals</span>
+              {pendingCount > 0 && (
+                <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                  {pendingCount}
+                </span>
+              )}
             </Link>
+            <Link to="/admin/bookings" className="block px-4 py-2 rounded text-gray-300 hover:bg-gray-800 hover:text-white">All Bookings</Link>
             <Link to="/admin/users" className="block px-4 py-2 rounded text-gray-300 hover:bg-gray-800 hover:text-white">Users Directory</Link>
             <Link to="/admin/categories" className="block px-4 py-2 rounded text-gray-300 hover:bg-gray-800 hover:text-white">Categories</Link>
             <Link to="/admin/disputes" className="block px-4 py-2 rounded text-gray-300 hover:bg-gray-800 hover:text-white">Disputes</Link>

@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Briefcase, TrendingUp, Calendar, Banknote, DollarSign, Target, Heart, Eye, Handshake,  Search, MapPin, Users, CheckCircle, Clock, Star, Shield, Smartphone, ArrowRight, Wrench, Zap, Droplets, Paintbrush, Truck, Home, ThermometerSnowflake, Leaf, Bug, Hammer, Tv, Video  } from 'lucide-react';
+import { Briefcase, TrendingUp, Calendar, Banknote, DollarSign, ListChecks, Target, Heart, Eye, Handshake,  Search, MapPin, Users, CheckCircle, Clock, Star, Shield, Smartphone, ArrowRight, Wrench, Zap, Droplets, Paintbrush, Truck, Home, ThermometerSnowflake, Leaf, Bug, Hammer, Tv, Video  } from 'lucide-react';
 import api from '../../services/api';
 import WorkerCard from '../../components/worker/WorkerCard';
 
@@ -184,10 +184,10 @@ const Landing = () => {
 
         {/* Image Container */}
         <div className="absolute top-0 right-0 w-full h-[50%] sm:h-[70%] md:h-[85%] lg:h-full z-0">
-          <img src="/hero-ultra.jpg" alt="DoorStep Home Services" className="w-full h-full object-cover lg:object-right " />
+          <img src="/hero-ultra.jpg?v=1793085985420" alt="DoorStep Home Services" className="w-full h-full object-cover lg:object-right " />
           
           {/* Gradient Overlay for Desktop (fades left to right) */}
-          <div className="hidden md:block absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 25%, rgba(0,0,0,0.3) 45%, transparent 65%)' }}></div>
+          <div className="hidden md:block absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.78) 35%, rgba(0,0,0,0.40) 55%, transparent 75%)' }}></div>
 
           {/* Gradient Overlay for Mobile (fades top to bottom) */}
           <div className="block md:hidden absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 70%, #000000 100%)' }}></div>
@@ -196,7 +196,7 @@ const Landing = () => {
         </div>
 
         {/* Content Container */}
-        <div className="max-w-[1200px] mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
           <div className="max-w-[620px] mt-4 sm:mt-8 lg:mt-0">
             
 
@@ -204,7 +204,7 @@ const Landing = () => {
             <h1 className="text-[32px] sm:text-[44px] lg:text-[64px] xl:text-[72px] font-extrabold text-white leading-[1.08] mb-4 lg:mb-6 tracking-tight">
               Every Service, <br className="hidden lg:block" />
               <span className="relative inline-block mt-2 lg:mt-0">
-                <span className="text-[#FF7A00]">Right at Your DoorStep</span>
+                Right at Your DoorStep
                 </span>
             </h1>
 
@@ -215,7 +215,7 @@ const Landing = () => {
 
             {/* Call to Action Buttons */}
             <div className=" flex flex-col sm:flex-row items-center gap-4">
-              <Link to="/register/customer" className="w-full sm:w-auto group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-[16px] px-[32px] rounded-[12px] shadow-[0_4px_12px_rgba(255,122,0,0.20)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
+              <Link to="/login" className="w-full sm:w-auto group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-[16px] px-[32px] rounded-[12px] shadow-[0_4px_14px_rgba(255,122,0,0.30)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
                 Explore Services
                 <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
@@ -315,7 +315,7 @@ const Landing = () => {
                   <Shield className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div className="text-[#FF7A00] font-bold text-[22px] sm:text-[32px] md:text-[52px] leading-tight mb-0.5 sm:mb-1.5 md:mb-3 font-poppins tabular-nums">
-                  <CountUp end={100} suffix="%" />
+                  100%
                 </div>
                 <p className="text-white/85 text-[11px] sm:text-[13px] md:text-[15px] font-inter leading-tight max-w-[130px] md:max-w-[200px]">
                   Verified Professionals
@@ -347,7 +347,7 @@ const Landing = () => {
                   <Wrench className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </div>
                 <div className="text-[#FF7A00] font-bold text-[22px] sm:text-[32px] md:text-[52px] leading-tight mb-0.5 sm:mb-1.5 md:mb-3 font-poppins tabular-nums">
-                  <CountUp end={50} suffix="+" />
+                  50+
                 </div>
                 <p className="text-white/85 text-[11px] sm:text-[13px] md:text-[15px] font-inter leading-tight max-w-[130px] md:max-w-[200px]">
                   Types of home services available
@@ -393,7 +393,7 @@ const Landing = () => {
 
                 {/* Headline */}
                 <h2 className="text-[28px] sm:text-[34px] lg:text-[44px] font-extrabold text-[#000000] leading-[1.2] mb-4 lg:mb-6 tracking-tight">
-                  Satisfy Every Home Need With Our <span className="relative inline-block text-[#E85D00]">Exceptional Services</span>
+                  Satisfy Every Home <br />Need With Our <br /><span className="relative inline-block text-[#E85D00]">Exceptional Services</span>
                 </h2>
 
                 {/* Paragraphs */}
@@ -407,7 +407,7 @@ const Landing = () => {
                   {[
                     { icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5" />, text: 'Verified Professionals' },
                     { icon: <Clock className="w-4 h-4 sm:w-5 sm:h-5" />, text: 'Instant Booking' },
-                    { icon: <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />, text: 'Transparent Pricing' },
+                    { icon: <ListChecks className="w-4 h-4 sm:w-5 sm:h-5" />, text: 'Compare Quotes' },
                     { icon: <Star className="w-4 h-4 sm:w-5 sm:h-5" />, text: 'Trusted Service' }
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-2 sm:gap-3">
@@ -421,7 +421,7 @@ const Landing = () => {
 
                 {/* Call to Action - Same line on mobile */}
                 <div className="flex flex-row items-center gap-2 sm:gap-4 mt-8 sm:mt-10 w-full max-w-full">
-                  <Link to="/register/customer" className="flex-1 min-w-0 sm:flex-initial group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-3 sm:py-3.5 px-2.5 sm:px-8 rounded-xl shadow-[0_4px_12px_rgba(255,122,0,0.20)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 text-[13px] sm:text-[16px] whitespace-nowrap">
+                  <Link to="/login" className="flex-1 min-w-0 sm:flex-initial group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-3 sm:py-3.5 px-2.5 sm:px-8 rounded-xl shadow-[0_4px_12px_rgba(255,122,0,0.20)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 text-[13px] sm:text-[16px] whitespace-nowrap">
                     <span>Explore Services</span>
                     <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1 shrink-0 hidden xs:inline-block" />
                   </Link>
@@ -514,7 +514,7 @@ const Landing = () => {
                 {/* Call to Action - Both buttons on same line */}
                 <div>
                   <div className="flex flex-row items-center gap-2 sm:gap-6 w-full max-w-full">
-                    <Link to="/register/worker" className="flex-1 min-w-0 sm:flex-initial group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-3 sm:py-[14px] px-2.5 sm:px-[28px] rounded-xl shadow-[0_4px_12px_rgba(255,122,0,0.20)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 text-[13px] sm:text-[16px] whitespace-nowrap">
+                    <Link to="/login?tab=worker" className="flex-1 min-w-0 sm:flex-initial group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-3 sm:py-[14px] px-2.5 sm:px-[28px] rounded-xl shadow-[0_4px_12px_rgba(255,122,0,0.20)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1 sm:gap-2 text-[13px] sm:text-[16px] whitespace-nowrap">
                       <span>Partner With Us</span>
                       <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1 shrink-0 hidden xs:inline-block" />
                     </Link>
@@ -598,7 +598,7 @@ const Landing = () => {
               
               <div className="h-56 w-full relative shrink-0">
                 <div className="absolute inset-0 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Instant Booking" />
+                  <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Instant Booking" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent"></div>
                 </div>
                 
@@ -626,7 +626,7 @@ const Landing = () => {
               
               <div className="h-56 w-full relative shrink-0">
                 <div className="absolute inset-0 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Satisfaction Guaranteed" />
+                  <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Satisfaction Guaranteed" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent"></div>
                 </div>
                 

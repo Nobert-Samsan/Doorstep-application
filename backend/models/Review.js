@@ -7,6 +7,7 @@ const reviewSchema = new mongoose.Schema({
   rating: { type: Number, required: true, min: 1, max: 5 },
   quickTags: [{ type: String }],
   reviewText: { type: String },
+  comment: { type: String },
   photos: [{ type: String }],
   isPublic: { type: Boolean, default: true },
   workerReply: { type: String },

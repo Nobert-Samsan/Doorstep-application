@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
-import { CreditCard, Calendar, Zap, CheckCircle, Bell, ArrowRight, BarChart2, Info, Lightbulb, Wallet } from 'lucide-react';
+import { CreditCard, Calendar, Zap, CheckCircle, Bell, ArrowRight, BarChart2, Info, Lightbulb, Wallet, DollarSign } from 'lucide-react';
 
 const Earnings = () => {
   const [data, setData] = useState({
     totalEarnings: 0,
+    totalNet: 0,
     monthlyEarnings: 0,
+    monthlyNet: 0,
+    todayEarnings: 0,
+    todayNet: 0,
+    walletBalance: 0,
     commissionDue: 0,
+    totalCommissionPaid: 0,
+    nextDueDate: null,
+    weeklyChartData: [],
     transactions: []
   });
   const [loading, setLoading] = useState(true);
+  const [filterPeriod, setFilterPeriod] = useState('All');
+  const [chartPeriod, setChartPeriod] = useState('Week');
 
   useEffect(() => {
     const fetchEarnings = async () => {
@@ -26,11 +36,62 @@ const Earnings = () => {
     fetchEarnings();
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading financials...</div>;
+  if (loading) {
+    return (
+      <div className="w-full min-h-[400px] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF7A00]" />
+      </div>
+    );
+  }
 
-  const safeData = data || { totalEarnings: 0, monthlyEarnings: 0, commissionDue: 0, transactions: [] };
-  const totalCommissionPaid = 0; // Derived or hardcoded based on API if missing
-  const todayEarnings = 0; // Derived or hardcoded if missing
+  const safeData = data || { 
+    totalEarnings: 0, 
+    totalNet: 0,
+    monthlyEarnings: 0, 
+    monthlyNet: 0,
+    todayEarnings: 0,
+    todayNet: 0,
+    walletBalance: 0,
+    commissionDue: 0, 
+    totalCommissionPaid: 0,
+    nextDueDate: null,
+    weeklyChartData: [],
+    transactions: [] 
+  };
+
+  const netAllTime = safeData.totalNet !== undefined ? safeData.totalNet : (safeData.totalEarnings * 0.9 || 0);
+  const netMonthly = safeData.monthlyNet !== undefined ? safeData.monthlyNet : (safeData.monthlyEarnings * 0.9 || 0);
+  const netToday = safeData.todayNet !== undefined ? safeData.todayNet : (safeData.todayEarnings * 0.9 || 0);
+  const walletBal = safeData.walletBalance !== undefined ? safeData.walletBalance : netAllTime;
+  const commDue = safeData.commissionDue || 0;
+  const commPaid = safeData.totalCommissionPaid || 0;
+
+  // Chart data
+  const chartDays = safeData.weeklyChartData && safeData.weeklyChartData.length > 0 
+    ? safeData.weeklyChartData 
+    : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => ({ day: d, amount: 0 }));
+  
+  const maxChartVal = Math.max(...chartDays.map(d => d.amount || 0), 100);
+  const hasChartData = chartDays.some(d => d.amount > 0);
+
+  // Filtered transactions
+  const filteredTransactions = (safeData.transactions || []).filter(t => {
+    if (filterPeriod === 'All') return true;
+    const txDate = new Date(t.date);
+    const now = new Date();
+    if (filterPeriod === 'This Month') {
+      return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
+    }
+    if (filterPeriod === 'Last Month') {
+      const lastMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
+      const lastMonthYear = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
+      return txDate.getMonth() === lastMonth && txDate.getFullYear() === lastMonthYear;
+    }
+    if (filterPeriod === 'This Year') {
+      return txDate.getFullYear() === now.getFullYear();
+    }
+    return true;
+  });
 
   return (
     <>
@@ -53,8 +114,8 @@ const Earnings = () => {
           flex-direction: column;
         }
         .page-title {
-          font-size: 22px;
-          font-weight: 800;
+          font-size: 24px;
+          font-weight: 700;
           color: #1C1917;
           letter-spacing: -0.4px;
         }
@@ -103,37 +164,8 @@ const Earnings = () => {
           box-shadow: 0 6px 16px rgba(0,0,0,0.07);
         }
         .stat-card::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 3px;
-          border-radius: 14px 14px 0 0;
+          display: none;
         }
-        .stat-card.all-time::before { background: linear-gradient(90deg, #EA580C, #C2410C); }
-        .stat-card.monthly::before { background: linear-gradient(90deg, #22C55E, #16A34A); }
-        .stat-card.today::before { background: linear-gradient(90deg, #3B82F6, #2563EB); }
-        .stat-card.wallet-balance::before { background: linear-gradient(90deg, #8B5CF6, #7C3AED); }
-
-        .stat-icon-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 12px;
-        }
-        .stat-icon-box {
-          width: 36px;
-          height: 36px;
-          border-radius: 9px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 16px;
-        }
-        .stat-icon-box.orange { background: #FFF7ED; color: #EA580C; }
-        .stat-icon-box.green { background: #F0FDF4; color: #22C55E; }
-        .stat-icon-box.blue { background: #EFF6FF; color: #3B82F6; }
-        .stat-icon-box.purple { background: #F5F3FF; color: #8B5CF6; }
-        .stat-icon-box.red { background: #FEF2F2; color: #DC2626; }
 
         .stat-card-label {
           font-size: 11px;
@@ -141,7 +173,7 @@ const Earnings = () => {
           color: #000000;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          margin-bottom: 4px;
+          margin-bottom: 14px;
         }
         .stat-card-value {
           font-size: 28px;
@@ -149,7 +181,6 @@ const Earnings = () => {
           color: #000000;
           letter-spacing: -1px;
           line-height: 1;
-          margin-bottom: 4px;
         }
         .stat-card-value .rs {
           font-size: 14px;
@@ -658,18 +689,9 @@ const Earnings = () => {
             margin-bottom: 16px;
           }
           .stat-card {
-            padding: 14px 14px;
-            min-height: 100px;
+            padding: 16px 14px;
+            min-height: auto;
             border-radius: 12px;
-          }
-          .stat-icon-row {
-            margin-bottom: 8px;
-          }
-          .stat-icon-box {
-            width: 32px;
-            height: 32px;
-            font-size: 14px;
-            border-radius: 8px;
           }
           .stat-card-label {
             font-size: 10px;
@@ -781,41 +803,23 @@ const Earnings = () => {
 
         <div className="stats-row">
           <div className="stat-card all-time">
-            <div className="stat-icon-row">
-              <div className="stat-icon-box orange">💰</div>
-            </div>
             <div className="stat-card-label">NET EARNINGS ALL TIME</div>
-            <div className="stat-card-value"><span className="rs">Rs.</span> {(safeData.totalEarnings * 0.9 || 0).toFixed(2)}</div>
-            <div className="stat-card-sub">Lifetime total</div>
+            <div className="stat-card-value"><span className="rs">Rs.</span> {netAllTime.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           </div>
 
           <div className="stat-card monthly">
-            <div className="stat-icon-row">
-              <div className="stat-icon-box green">📅</div>
-            </div>
             <div className="stat-card-label">THIS MONTH</div>
-            <div className="stat-card-value"><span className="rs">Rs.</span> {(safeData.monthlyEarnings * 0.9 || 0).toFixed(2)}</div>
-            <div className="stat-card-sub">Current period</div>
+            <div className="stat-card-value"><span className="rs">Rs.</span> {netMonthly.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           </div>
 
           <div className="stat-card today">
-            <div className="stat-icon-row">
-              <div className="stat-icon-box blue">⚡</div>
-            </div>
             <div className="stat-card-label">TODAY'S EARNINGS</div>
-            <div className="stat-card-value"><span className="rs">Rs.</span> {todayEarnings.toFixed(2)}</div>
-            <div className="stat-card-sub">So far today</div>
+            <div className="stat-card-value"><span className="rs">Rs.</span> {netToday.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           </div>
 
           <div className="stat-card wallet-balance">
-            <div className="stat-icon-row">
-              <div className="stat-icon-box purple">
-                <Wallet size={20} strokeWidth={2.5} />
-              </div>
-            </div>
             <div className="stat-card-label">WALLET BALANCE</div>
-            <div className="stat-card-value"><span className="rs">Rs.</span> {((safeData.walletBalance) || 0).toFixed(2)}</div>
-            <div className="stat-card-sub">Available to withdraw</div>
+            <div className="stat-card-value"><span className="rs">Rs.</span> {walletBal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           </div>
         </div>
 
@@ -826,27 +830,38 @@ const Earnings = () => {
               <div className="chart-card-header">
                 <div className="chart-title">Earnings Overview</div>
                 <div className="chart-period-tabs">
-                  <button className="chart-tab active">Week</button>
-                  <button className="chart-tab">Month</button>
-                  <button className="chart-tab">Year</button>
+                  <button className={`chart-tab ${chartPeriod === 'Week' ? 'active' : ''}`} onClick={() => setChartPeriod('Week')}>Week</button>
+                  <button className={`chart-tab ${chartPeriod === 'Month' ? 'active' : ''}`} onClick={() => setChartPeriod('Month')}>Month</button>
+                  <button className={`chart-tab ${chartPeriod === 'Year' ? 'active' : ''}`} onClick={() => setChartPeriod('Year')}>Year</button>
                 </div>
               </div>
               
               <div className="chart-area">
-                <div className="chart-empty-overlay">
-                  <span className="chart-empty-icon">📊</span>
-                  <div className="chart-empty-text">Not enough data to display chart</div>
-                </div>
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                  <div key={day} className="chart-bar-group">
-                    <div className="chart-bar"></div>
+                {!hasChartData && (
+                  <div className="chart-empty-overlay">
+                    <span className="chart-empty-icon"><BarChart2 size={32} /></span>
+                    <div className="chart-empty-text">Not enough data to display chart</div>
                   </div>
-                ))}
+                )}
+                {chartDays.map(item => {
+                  const pct = hasChartData && maxChartVal > 0 ? Math.max((item.amount / maxChartVal) * 85, 6) : 0;
+                  return (
+                    <div key={item.day} className="chart-bar-group" title={`${item.day}: Rs. ${Number(item.amount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`}>
+                      <div 
+                        className="chart-bar" 
+                        style={{ 
+                          height: hasChartData ? `${pct}%` : '4px',
+                          opacity: item.amount > 0 ? 0.9 : 0.15 
+                        }}
+                      ></div>
+                    </div>
+                  );
+                })}
               </div>
               <div style={{ display: 'flex', gap: '6px' }}>
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                  <div key={day} className="chart-bar-group" style={{marginTop: '0'}}>
-                    <div className="chart-bar-label">{day}</div>
+                {chartDays.map(item => (
+                  <div key={item.day} className="chart-bar-group" style={{marginTop: '0'}}>
+                    <div className="chart-bar-label">{item.day}</div>
                   </div>
                 ))}
               </div>
@@ -859,10 +874,15 @@ const Earnings = () => {
                   Recent Transactions
                 </div>
                 <div className="filter-pills">
-                  <div className="filter-pill active">All</div>
-                  <div className="filter-pill">This Month</div>
-                  <div className="filter-pill">Last Month</div>
-                  <div className="filter-pill">This Year</div>
+                  {['All', 'This Month', 'Last Month', 'This Year'].map(pill => (
+                    <div 
+                      key={pill} 
+                      className={`filter-pill ${filterPeriod === pill ? 'active' : ''}`}
+                      onClick={() => setFilterPeriod(pill)}
+                    >
+                      {pill}
+                    </div>
+                  ))}
                 </div>
               </div>
               <div style={{overflowX: 'auto', WebkitOverflowScrolling: 'touch'}}>
@@ -878,18 +898,18 @@ const Earnings = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {safeData.transactions.length === 0 ? (
+                  {filteredTransactions.length === 0 ? (
                     <tr>
                       <td colSpan="6" style={{padding: 0}}>
                         <div className="table-empty-state">
-                          <div className="table-empty-icon">💳</div>
+                          <div className="table-empty-icon"><CreditCard size={28} /></div>
                           <div className="table-empty-title">No transactions yet</div>
                           <div className="table-empty-sub">Your completed job payments and commission records will appear here once you start accepting jobs.</div>
                         </div>
                       </td>
                     </tr>
                   ) : (
-                    safeData.transactions.map((t) => (
+                    filteredTransactions.map((t) => (
                       <tr key={t._id}>
                         <td className="td-date">{new Date(t.date).toLocaleDateString()}</td>
                         <td className="td-description">{t.description}</td>
@@ -924,18 +944,20 @@ const Earnings = () => {
                 </div>
                 <div className="commission-row">
                   <div className="commission-row-label"><div className="commission-row-label-dot" style={{background: '#DC2626'}}></div> Total Due</div>
-                  <div className="commission-row-value due">Rs. {(safeData.commissionDue || 0).toFixed(2)}</div>
+                  <div className="commission-row-value due">Rs. {commDue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 </div>
                 <div className="commission-row">
                   <div className="commission-row-label"><div className="commission-row-label-dot" style={{background: '#16A34A'}}></div> Total Paid</div>
-                  <div className="commission-row-value paid">Rs. {totalCommissionPaid.toFixed(2)}</div>
+                  <div className="commission-row-value paid">Rs. {commPaid.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 </div>
                 <div className="commission-row">
                   <div className="commission-row-label"><div className="commission-row-label-dot" style={{background: '#A8A29E'}}></div> Next Due Date</div>
-                  <div className="commission-row-value">—</div>
+                  <div className="commission-row-value">
+                    {safeData.nextDueDate ? new Date(safeData.nextDueDate).toLocaleDateString() : '—'}
+                  </div>
                 </div>
                 
-                <button className="pay-commission-btn" disabled={!safeData.commissionDue || safeData.commissionDue <= 0}>
+                <button className="pay-commission-btn" disabled={!commDue || commDue <= 0}>
                   Pay Commission Now <ArrowRight size={14} />
                 </button>
               </div>

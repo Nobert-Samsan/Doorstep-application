@@ -176,7 +176,7 @@ const CustomerLayout = () => {
 
   const displayName = formatProperCase(`${user?.firstName || 'Customer'} ${user?.lastName || ''}`.trim());
   const initials = `${user?.firstName?.[0] || 'C'}${user?.lastName?.[0] || ''}`.toUpperCase();
-  const displayLocation = user?.district || user?.city || 'Sri Lanka';
+  const displayLocation = user?.district || user?.city || '';
 
   // Desktop Menu items
   const menuLinks = [
@@ -187,9 +187,8 @@ const CustomerLayout = () => {
 
   // Parsed main categories from ALL_SERVICES for Services sub-menu
   const mainCategories = ALL_SERVICES.map(item => {
-    const match = item.category.match(/^(\S+)\s+(.+)$/);
-    const emoji = match ? match[1] : '🔧';
-    const name = match ? match[2] : item.category;
+    const emoji = item.icon || '🔧';
+    const name = item.category;
     const sampleJobs = item.jobs.slice(0, 2).map(j => {
       const jMatch = j.match(/^(.*?)\s*\(/);
       return jMatch ? jMatch[1].trim() : j.split(' ')[0];
@@ -252,7 +251,7 @@ const CustomerLayout = () => {
               <img 
                 src="/logo-new.png" 
                 alt="DoorStep Logo" 
-                className="h-16 md:h-20 w-auto object-contain" 
+                className="h-8 md:h-9 w-auto object-contain" 
               />
             </Link>
           </div>
@@ -294,7 +293,7 @@ const CustomerLayout = () => {
                         <span 
                           className="absolute -bottom-[6px] left-0 right-0 mx-auto h-[3px] w-full rounded-full animate-scaleIn pointer-events-none"
                           style={{
-                            background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)'
+                            background: '#FF7A00'
                           }}
                         />
                       )}
@@ -384,7 +383,7 @@ const CustomerLayout = () => {
                     <span 
                       className="absolute -bottom-[6px] left-0 right-0 mx-auto h-[3px] w-full rounded-full animate-scaleIn pointer-events-none"
                       style={{
-                        background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)'
+                        background: '#FF7A00'
                       }}
                     />
                   )}
@@ -400,7 +399,7 @@ const CustomerLayout = () => {
               to="/customer/post-job"
               className="hidden md:flex items-center gap-1.5 text-white font-semibold text-[14px] font-['Poppins',sans-serif] px-3 lg:px-[18px] py-[10px] rounded-[12px] shadow-[0_6px_16px_rgba(255,122,0,0.30)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(255,122,0,0.40)] active:translate-y-0 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00]"
               style={{
-                background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)'
+                background: '#FF7A00'
               }}
               title="Post a Job"
             >
@@ -438,7 +437,7 @@ const CustomerLayout = () => {
                 {/* 40px Circle with 2px orange gradient ring and 2px white gap */}
                 <div 
                   className="w-10 h-10 rounded-full p-[2px] shrink-0 transition-transform group-hover:scale-105"
-                  style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
+                  style={{ background: '#FF7A00' }}
                 >
                   <div className="w-full h-full p-[2px] bg-white rounded-full">
                     <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
@@ -447,7 +446,7 @@ const CustomerLayout = () => {
                       ) : (
                         <div 
                           className="w-full h-full flex items-center justify-center text-white font-bold text-xs"
-                          style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
+                          style={{ background: '#FF7A00' }}
                         >
                           {initials}
                         </div>
@@ -461,9 +460,11 @@ const CustomerLayout = () => {
                   <p className="text-black font-semibold text-[14px] font-['Poppins',sans-serif] leading-tight truncate">
                     {displayName}
                   </p>
-                  <p className="text-[#6B6B6B] text-[12px] leading-tight truncate mt-0.5">
-                    {displayLocation}
-                  </p>
+                  {displayLocation && (
+                    <p className="text-[#6B6B6B] text-[12px] leading-tight truncate mt-0.5">
+                      {displayLocation}
+                    </p>
+                  )}
                 </div>
 
                 {/* Rotating Chevron */}
@@ -486,7 +487,7 @@ const CustomerLayout = () => {
                   <div className="p-4 border-b border-[#E8E2DB] flex items-center gap-3">
                     <div 
                       className="w-10 h-10 rounded-full p-[2px] shrink-0"
-                      style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
+                      style={{ background: '#FF7A00' }}
                     >
                       <div className="w-full h-full p-[2px] bg-white rounded-full">
                         <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
@@ -495,7 +496,7 @@ const CustomerLayout = () => {
                           ) : (
                             <div 
                               className="w-full h-full flex items-center justify-center text-white font-bold text-xs"
-                              style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
+                              style={{ background: '#FF7A00' }}
                             >
                               {initials}
                             </div>
@@ -507,10 +508,12 @@ const CustomerLayout = () => {
                       <p className="text-black font-semibold text-[16px] font-['Poppins',sans-serif] leading-tight truncate">
                         {displayName}
                       </p>
-                      <p className="text-[#6B6B6B] text-[13px] flex items-center gap-1 mt-0.5 truncate">
-                        <MapPin size={13} className="shrink-0 text-[#6B6B6B]" />
-                        <span className="truncate">{displayLocation}</span>
-                      </p>
+                      {displayLocation && (
+                        <p className="text-[#6B6B6B] text-[13px] flex items-center gap-1 mt-0.5 truncate">
+                          <MapPin size={13} className="shrink-0 text-[#6B6B6B]" />
+                          <span className="truncate">{displayLocation}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 

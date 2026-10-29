@@ -60,6 +60,19 @@ router.post('/forgot-password', [
   check('email', 'Please include a valid email').isEmail()
 ], validate, authController.forgotPassword);
 
+// @route   POST /api/auth/verify-reset-otp
+router.post('/verify-reset-otp', authLimiter, [
+  check('email', 'Please include a valid email').isEmail(),
+  check('otp', 'Verification code is required').not().isEmpty()
+], validate, authController.verifyResetOtp);
+
+// @route   POST /api/auth/reset-password-otp
+router.post('/reset-password-otp', authLimiter, [
+  check('email', 'Please include a valid email').isEmail(),
+  check('otp', 'Verification code is required').not().isEmpty(),
+  check('password', 'Password must be 6 or more characters').isLength({ min: 6 })
+], validate, authController.resetPasswordWithOtp);
+
 // @route   PUT /api/auth/reset-password/:resettoken
 router.put('/reset-password/:resettoken', [
   check('password', 'Password must be 6 or more characters').isLength({ min: 6 })

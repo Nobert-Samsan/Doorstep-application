@@ -1,6 +1,7 @@
 export const ALL_SERVICES = [
   {
-    category: "🏠 Home Repairs & Maintenance",
+    category: "Home Repairs & Maintenance",
+    icon: "🏠",
     jobs: [
       "Plumbing (pipe repairs, leaks, tap fitting, drain cleaning, water pump)",
       "Electrical work (wiring, switches, circuit breakers, fuse box, CCTV installation)",
@@ -15,7 +16,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "❄️ Appliance & Equipment Services",
+    category: "Appliance & Equipment Services",
+    icon: "❄️",
     jobs: [
       "AC installation, repair and servicing",
       "Refrigerator repair",
@@ -30,7 +32,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🧹 Cleaning Services",
+    category: "Cleaning Services",
+    icon: "🧹",
     jobs: [
       "Home deep cleaning",
       "Kitchen deep cleaning",
@@ -47,7 +50,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🌿 Outdoor & Garden Services",
+    category: "Outdoor & Garden Services",
+    icon: "🌿",
     jobs: [
       "Garden maintenance and landscaping",
       "Lawn mowing and grass cutting",
@@ -62,7 +66,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "📚 Education & Tutoring",
+    category: "Education & Tutoring",
+    icon: "📚",
     jobs: [
       "English tutoring (spoken, O/L, A/L, IELTS, TOEFL)",
       "Mathematics tutoring (primary, O/L, A/L)",
@@ -79,7 +84,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🍳 Food & Cooking Services",
+    category: "Food & Cooking Services",
+    icon: "🍳",
     jobs: [
       "Home cooking and meal preparation",
       "Event catering (birthday parties, weddings, family events)",
@@ -91,7 +97,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "👶 Childcare & Elder Care",
+    category: "Childcare & Elder Care",
+    icon: "👶",
     jobs: [
       "Babysitting and childcare",
       "Nanny services (full time, part time)",
@@ -102,7 +109,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🐾 Pet Services",
+    category: "Pet Services",
+    icon: "🐾",
     jobs: [
       "Dog walking",
       "Pet grooming (bathing, trimming, nail cutting)",
@@ -113,7 +121,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🚗 Vehicle Services",
+    category: "Vehicle Services",
+    icon: "🚗",
     jobs: [
       "Car washing and detailing",
       "Car interior cleaning",
@@ -125,7 +134,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🏋️ Health & Wellness",
+    category: "Health & Wellness",
+    icon: "🏋️",
     jobs: [
       "Personal fitness training at home",
       "Yoga instructor at home",
@@ -138,7 +148,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🎨 Creative & Events",
+    category: "Creative & Events",
+    icon: "🎨",
     jobs: [
       "Photography (events, portraits, products)",
       "Videography and editing",
@@ -152,7 +163,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🖥️ IT & Technology Services",
+    category: "IT & Technology Services",
+    icon: "🖥️",
     jobs: [
       "Computer and laptop repair",
       "Data recovery",
@@ -166,7 +178,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🚚 Moving & Logistics",
+    category: "Moving & Logistics",
+    icon: "🚚",
     jobs: [
       "Home moving and relocation",
       "Furniture assembly and installation",
@@ -177,7 +190,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🔐 Security Services",
+    category: "Security Services",
+    icon: "🔐",
     jobs: [
       "Security guard services (events, homes, offices)",
       "Lock installation and repair (locksmith)",
@@ -188,7 +202,8 @@ export const ALL_SERVICES = [
     ]
   },
   {
-    category: "🏢 Specialized Professional Services",
+    category: "Specialized Professional Services",
+    icon: "🏢",
     jobs: [
       "Interior design consultation",
       "Architectural drawing and planning",

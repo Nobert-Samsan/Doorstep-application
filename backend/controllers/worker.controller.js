@@ -9,14 +9,57 @@ exports.getDashboard = async (req, res) => {
     const workerProfile = await WorkerProfile.findOne({ userId: req.user.id });
     if (!workerProfile) return res.status(404).json({ success: false, message: 'Worker profile not found' });
 
-    // Mocked stats
+    // Calculate real dynamic stats from MongoDB collections
+    const completedBookings = await Booking.find({ workerId: req.user.id, status: 'completed' });
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    let totalGross = 0;
+    let monthGross = 0;
+    let todayGross = 0;
+
+    completedBookings.forEach(b => {
+      const amt = Number(b.finalAmount || b.fixedRate || 0);
+      const createdAt = new Date(b.createdAt);
+
+      totalGross += amt;
+      if (createdAt >= startOfMonth) {
+        monthGross += amt;
+      }
+      if (createdAt >= startOfToday) {
+        todayGross += amt;
+      }
+    });
+
+    const jobsCompletedCount = completedBookings.length;
+    const netEarningsMonth = monthGross * 0.90;
+    const netEarningsTotal = totalGross * 0.90;
+    const todayNet = todayGross * 0.90;
+
+    // Real reviews count and average rating
+    const reviews = await Review.find({ workerId: req.user.id });
+    const totalReviewsCount = reviews.length;
+    const averageRatingCalc = totalReviewsCount > 0
+      ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviewsCount
+      : (workerProfile.averageRating || 0);
+
+    const commissionDueCalc = totalGross * 0.10;
+    const walletBalanceCalc = workerProfile.walletBalance > 0 ? workerProfile.walletBalance : netEarningsTotal;
+
     const stats = {
-      todayEarnings: 0,
-      monthEarnings: workerProfile.totalEarnings,
-      jobsCompleted: workerProfile.totalJobsCompleted,
-      avgRating: workerProfile.averageRating,
-      commissionDue: workerProfile.commissionDue,
-      walletBalance: workerProfile.walletBalance !== undefined ? workerProfile.walletBalance : 0
+      todayEarnings: todayGross,
+      todayNet: todayNet,
+      monthEarnings: monthGross,
+      monthNet: netEarningsMonth,
+      totalEarnings: totalGross,
+      totalNet: netEarningsTotal,
+      jobsCompleted: jobsCompletedCount,
+      avgRating: Number(averageRatingCalc.toFixed(1)),
+      totalReviews: totalReviewsCount,
+      commissionDue: commissionDueCalc,
+      walletBalance: walletBalanceCalc
     };
 
     const incomingRequests = await Booking.find({ workerId: req.user.id, status: 'pending' })
@@ -184,28 +227,121 @@ exports.toggleAvailability = async (req, res) => {
 exports.getEarnings = async (req, res) => {
   try {
     const WorkerProfile = require('../models/WorkerProfile');
+    const Commission = require('../models/Commission');
     const workerProfile = await WorkerProfile.findOne({ userId: req.user.id });
     
+    // Find all completed bookings for this worker
     const bookings = await Booking.find({ workerId: req.user.id, status: 'completed' })
       .populate('customerId', 'firstName lastName')
       .sort({ createdAt: -1 });
-      
-    const formattedTransactions = bookings.map(b => ({
-      _id: b._id,
-      date: b.createdAt,
-      description: `Job completed for ${b.customerId?.firstName || 'Customer'}`,
-      jobAmount: b.finalAmount || 0,
-      commissionAmount: (b.finalAmount || 0) * 0.10,
-      status: 'UNPAID'
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Dynamic calculations from completed bookings
+    let totalGross = 0;
+    let monthlyGross = 0;
+    let todayGross = 0;
+
+    // Track weekly days: Monday to Sunday of current week
+    const currentDay = now.getDay(); // 0 is Sunday, 1 is Monday...
+    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
+    const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + mondayOffset);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const weeklyDataMap = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
+
+    bookings.forEach(b => {
+      const amount = Number(b.finalAmount || b.fixedRate || 0);
+      const createdAt = new Date(b.createdAt);
+
+      totalGross += amount;
+
+      if (createdAt >= startOfMonth) {
+        monthlyGross += amount;
+      }
+
+      if (createdAt >= startOfToday) {
+        todayGross += amount;
+      }
+
+      if (createdAt >= startOfWeek) {
+        const dayIdx = createdAt.getDay(); // 0: Sun, 1: Mon, ...
+        const dayKey = dayIdx === 0 ? 'Sun' : dayLabels[dayIdx - 1];
+        if (weeklyDataMap[dayKey] !== undefined) {
+          weeklyDataMap[dayKey] += amount * 0.90; // net earnings
+        }
+      }
+    });
+
+    const weeklyChartData = dayLabels.map(label => ({
+      day: label,
+      amount: weeklyDataMap[label]
     }));
+
+    // Find commissions recorded for this worker
+    const commissions = await Commission.find({ workerId: req.user.id });
+    let totalCommissionPaid = 0;
+    let commissionDue = 0;
+    let nextDueDate = null;
+
+    if (commissions.length > 0) {
+      commissions.forEach(c => {
+        if (c.status === 'paid') {
+          totalCommissionPaid += (c.commissionAmount || 0);
+        } else {
+          commissionDue += (c.commissionAmount || 0);
+          if (c.dueDate && (!nextDueDate || new Date(c.dueDate) < new Date(nextDueDate))) {
+            nextDueDate = c.dueDate;
+          }
+        }
+      });
+    } else {
+      // Default: Doorstep commission is 10% of total gross
+      commissionDue = totalGross * 0.10;
+      if (totalGross > 0) {
+        const d = new Date(bookings[0]?.createdAt || now);
+        d.setDate(d.getDate() + 7);
+        nextDueDate = d;
+      }
+    }
+
+    const netEarningsAllTime = totalGross * 0.90;
+    const monthlyNet = monthlyGross * 0.90;
+    const todayNet = todayGross * 0.90;
+    const walletBalance = workerProfile?.walletBalance > 0 ? workerProfile.walletBalance : netEarningsAllTime;
+      
+    const formattedTransactions = bookings.map(b => {
+      const jobAmount = Number(b.finalAmount || b.fixedRate || 0);
+      const commissionAmount = jobAmount * 0.10;
+      const netAmount = jobAmount - commissionAmount;
+      return {
+        _id: b._id,
+        date: b.createdAt,
+        description: `Job completed for ${b.customerId?.firstName || 'Customer'}`,
+        jobAmount: jobAmount,
+        commissionAmount: commissionAmount,
+        netAmount: netAmount,
+        status: b.paymentStatus === 'paid_cash' || b.paymentStatus === 'paid_online' ? 'PAID' : 'UNPAID'
+      };
+    });
       
     res.status(200).json({ 
       success: true, 
       data: {
-        totalEarnings: workerProfile ? workerProfile.totalEarnings : 0,
-        monthlyEarnings: workerProfile ? workerProfile.totalEarnings : 0, // Mocked to total for now
-        walletBalance: workerProfile ? (workerProfile.walletBalance || 0) : 0,
-        commissionDue: workerProfile ? workerProfile.commissionDue : 0,
+        totalEarnings: totalGross,
+        totalNet: netEarningsAllTime,
+        monthlyEarnings: monthlyGross,
+        monthlyNet: monthlyNet,
+        todayEarnings: todayGross,
+        todayNet: todayNet,
+        walletBalance: walletBalance,
+        commissionDue: commissionDue,
+        totalCommissionPaid: totalCommissionPaid,
+        nextDueDate: nextDueDate,
+        weeklyChartData: weeklyChartData,
         transactions: formattedTransactions
       } 
     });

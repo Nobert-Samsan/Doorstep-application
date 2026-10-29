@@ -327,24 +327,39 @@ button:focus-visible, a:focus-visible {
 }
 .services-title-group { }
 
-.services-section-title {
-  font-size: 28px;
+.services-section-title,
+.category-block-title {
+  font-size: 30px;
   font-weight: 800;
   color: #1C1917;
   letter-spacing: -0.8px;
   line-height: 1.2;
 }
+
+@media (max-width: 1023px) {
+  .services-section-title,
+  .category-block-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .services-section-title,
+  .category-block-title {
+    font-size: 22px;
+  }
+}
 .services-section-right,
 .btn-view-all {
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #000000;
   background: #FFFFFF;
   border: 1.5px solid #000000;
-  border-radius: 12px;
-  padding: 10px 20px;
-  min-height: 44px;
+  border-radius: 10px;
+  padding: 7px 16px;
+  min-height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -354,6 +369,23 @@ button:focus-visible, a:focus-visible {
   cursor: pointer;
   box-sizing: border-box;
   transition: background 220ms ease, color 220ms ease, transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+@media (max-width: 767px) {
+  .services-section-right,
+  .btn-view-all {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-section-right,
+  .btn-view-all {
+    font-size: 18px;
+    padding: 8px 20px;
+    min-height: 42px;
+  }
 }
 .services-section-right .btn-arrow,
 .btn-view-all .btn-arrow {
@@ -390,13 +422,7 @@ button:focus-visible, a:focus-visible {
   margin: 0 auto;
 }
 
-@media (max-width: 1024px) {
-  .services-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1279px) {
   .services-section {
     padding: 36px 0 !important;
     overflow: hidden;

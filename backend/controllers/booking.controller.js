@@ -33,21 +33,34 @@ exports.getBookings = async (req, res) => {
     else if (req.user.role === 'admin') query = {};
 
     const bookings = await Booking.find(query)
-      .populate('customerId', 'firstName lastName profilePhoto')
-      .populate('workerId', 'firstName lastName phone profilePhoto')
+      .populate('customerId', 'firstName lastName phone email profilePhoto')
+      .populate('workerId', 'firstName lastName phone email profilePhoto')
       .populate('categoryId', 'nameEn')
       .sort({ createdAt: -1 })
       .lean();
 
     const WorkerProfile = require('../models/WorkerProfile');
+    const Commission = require('../models/Commission');
+
     const workerUserIds = bookings
       .map(b => b.workerId?._id || b.workerId)
       .filter(Boolean);
 
-    const workerProfiles = await WorkerProfile.find({ userId: { $in: workerUserIds } }).lean();
+    const bookingIds = bookings.map(b => b._id);
+
+    const [workerProfiles, commissions] = await Promise.all([
+      WorkerProfile.find({ userId: { $in: workerUserIds } }).lean(),
+      Commission.find({ bookingId: { $in: bookingIds } }).lean()
+    ]);
+
     const wpMap = {};
     for (const wp of workerProfiles) {
       if (wp.userId) wpMap[wp.userId.toString()] = wp;
+    }
+
+    const commMap = {};
+    for (const comm of commissions) {
+      if (comm.bookingId) commMap[comm.bookingId.toString()] = comm;
     }
 
     const enhancedBookings = bookings.map(b => {
@@ -58,10 +71,22 @@ exports.getBookings = async (req, res) => {
       if (!serviceTitle || serviceTitle.trim().toLowerCase() === 'other' || serviceTitle.trim().toLowerCase() === 'general') {
         serviceTitle = workerSkill || b.categoryId?.nameEn || 'Service';
       }
+
+      // Check existing commission record, or calculate 10% expected commission
+      const existingComm = commMap[b._id.toString()];
+      const jobAmount = b.finalAmount || b.fixedRate || 0;
+      const commissionAmount = existingComm?.commissionAmount ?? (jobAmount > 0 ? Math.round(jobAmount * 0.10) : 0);
+      const commissionStatus = existingComm?.status || (b.paymentStatus === 'paid_cash' || b.paymentStatus === 'paid_online' ? (existingComm?.status || 'pending') : 'pending');
+
       return {
         ...b,
         serviceTitle,
         workerSkill,
+        commission: {
+          rate: existingComm?.commissionRate || 10,
+          amount: commissionAmount,
+          status: existingComm?.status || (b.status === 'completed' ? 'due' : 'pending')
+        },
         workerProfile: wp ? {
           serviceTitle: workerSkill,
           services: wp.services

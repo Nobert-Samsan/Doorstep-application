@@ -102,12 +102,7 @@ const CategoryService = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/20 flex flex-col justify-end p-5 sm:p-8 md:p-16 lg:p-24 pb-8 sm:pb-12 md:pb-20">
           <div className="max-w-7xl mx-auto w-full">
-            <button 
-              onClick={() => navigate('/customer/dashboard')}
-              className="mb-6 text-white/90 hover:text-white flex items-center gap-2 text-sm font-semibold bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2 rounded-full w-fit backdrop-blur-md transition-all shadow-sm"
-            >
-              &larr; Back to Dashboard
-            </button>
+
             <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-poppins font-extrabold text-white mb-2 sm:mb-4 tracking-tight drop-shadow-lg">
               {displayCategoryTitle}
             </h1>
@@ -152,10 +147,6 @@ const CategoryService = () => {
         {/* If matchedCategory exists: Display the Services Grid matching Home Page UI pattern */}
         {matchedCategory && (
           <div className="category-block category-page-block mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#292524] mb-6 flex items-center gap-3 border-b-2 border-[#F5F5F4] pb-4">
-              {matchedCategory.category}
-            </h2>
-
             <div className="services-grid category-vertical-grid">
               {matchedCategory.jobs.map((jobStr, jIndex) => {
                 const match = jobStr.match(/^(.*?)\s*\((.*?)\)$/);
@@ -235,13 +226,7 @@ const CategoryService = () => {
                       Clear Location Filter
                     </button>
                   )}
-                  <button 
-                    type="button" 
-                    onClick={() => navigate('/customer/post-job')}
-                    className="bg-primary text-white font-bold px-8 py-3 rounded-xl hover:bg-amber-600 transition-colors shadow-md"
-                  >
-                    Post a Job
-                  </button>
+
                 </div>
               </div>
             )}

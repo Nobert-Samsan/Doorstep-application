@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   Star, MapPin, CheckCircle, Clock, ShieldCheck, 
-  MessageSquare, Calendar, ChevronLeft 
+  MessageSquare, Calendar, ChevronLeft, User 
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
@@ -26,6 +26,7 @@ const WorkerProfile = () => {
   const { id } = useParams();
 
   const [worker, setWorker] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,25 +36,59 @@ const WorkerProfile = () => {
         const { data } = await api.get(`/customer/worker/${id}`);
         const dbWorker = data.data;
         
+        // Aggregate skills and service titles from all services registered
+        const allServices = dbWorker.services && dbWorker.services.length > 0 
+          ? dbWorker.services 
+          : [{ serviceTitle: 'Professional', serviceDescription: '' }];
+        
+        const extractedSkills = allServices.reduce((acc, s) => {
+          if (s.specificSkills && Array.isArray(s.specificSkills)) {
+            acc.push(...s.specificSkills);
+          } else if (s.serviceTitle) {
+            acc.push(s.serviceTitle);
+          }
+          return acc;
+        }, []);
+        // Remove duplicates
+        const uniqueSkills = [...new Set(extractedSkills)];
+
+        // Compute location string from worker registration (city, district)
+        const locationStr = [
+          dbWorker.userId?.city || dbWorker.city,
+          dbWorker.userId?.district || dbWorker.serviceDistricts?.[0]
+        ].filter(Boolean).join(', ') || dbWorker.serviceDistricts?.[0] || 'Sri Lanka';
+
+        const workerUserId = dbWorker.userId?._id || dbWorker.userId;
+
         setWorker({
           id: dbWorker._id,
-          userId: dbWorker.userId._id || dbWorker.userId,
-          firstName: dbWorker.userId.firstName,
-          lastName: dbWorker.userId.lastName,
-          profilePhoto: dbWorker.userId.profilePhoto,
-          services: [{
-            serviceTitle: dbWorker.services?.[0]?.serviceTitle || 'Professional',
-            description: dbWorker.services?.[0]?.serviceDescription || 'Ready to help with your project.'
-          }],
-          district: dbWorker.city || dbWorker.serviceDistricts?.[0] || 'Anywhere',
-          averageRating: dbWorker.averageRating || 0,
+          userId: workerUserId,
+          firstName: dbWorker.userId?.firstName || 'Worker',
+          lastName: dbWorker.userId?.lastName || '',
+          profilePhoto: dbWorker.userId?.profilePhoto || null,
+          services: allServices,
+          district: locationStr,
+          averageRating: typeof dbWorker.averageRating === 'number' ? dbWorker.averageRating : 0,
           totalReviews: dbWorker.totalReviews || 0,
-          verifiedBadge: dbWorker.verifiedBadge || false,
+          verifiedBadge: dbWorker.verifiedBadge || dbWorker.isVerified || false,
           isAvailable: dbWorker.isAvailable || false,
-          bio: dbWorker.bio || 'I am a highly skilled professional with a passion for delivering quality service.',
-          totalJobsCompleted: 12, // Keeping mock value as placeholder until job history is built
-          skills: dbWorker.services?.[0]?.specificSkills || []
+          bio: dbWorker.bio && dbWorker.bio.trim().length > 0 
+            ? dbWorker.bio 
+            : `Experienced professional specializing in ${allServices.map(s => s.serviceTitle).join(', ')}. Committed to high quality workmanship and customer satisfaction.`,
+          totalJobsCompleted: dbWorker.totalJobsCompleted || 0,
+          skills: uniqueSkills.length > 0 ? uniqueSkills : allServices.map(s => s.serviceTitle)
         });
+
+        // Fetch real reviews for this worker
+        try {
+          if (workerUserId) {
+            const revRes = await api.get(`/reviews/worker/${workerUserId}`);
+            setReviews(revRes.data?.data || []);
+          }
+        } catch (rErr) {
+          console.warn("Could not fetch worker reviews", rErr);
+        }
+
         setLoading(false);
       } catch (err) {
         toast.error("Failed to load worker profile");
@@ -128,7 +163,7 @@ const WorkerProfile = () => {
                   {worker.profilePhoto ? (
                     <img src={worker.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-5xl">👷‍♂️</span>
+                    <User size={48} className="text-[#FF7A00]" />
                   )}
                 </div>
                 
@@ -175,50 +210,63 @@ const WorkerProfile = () => {
             </div>
           </div>
 
-          {/* Service Pricing Details */}
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Service & Pricing</h2>
-            <div className="border border-gray-100 rounded-2xl p-6 bg-gray-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:border-primary/30 transition-colors">
-              <div>
-                <h4 className="font-extrabold text-gray-900 text-lg">{worker.services[0].serviceTitle}</h4>
-                <p className="text-gray-500 mt-1 max-w-md">{worker.services[0].description}</p>
-              </div>
-              <div className="bg-white px-6 py-4 rounded-xl shadow-sm border border-gray-100 text-center flex-shrink-0">
-                <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Estimated Pricing</span>
-                <span className="text-lg font-extrabold text-primary">
-                  After Inspection
-                </span>
-                <span className="block text-xs text-gray-500 font-medium mt-1">Custom Quote</span>
-              </div>
-            </div>
-          </div>
+
 
           {/* Reviews */}
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">Customer Reviews</h2>
+              <span className="text-sm font-medium text-gray-500">
+                {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
+              </span>
             </div>
             
-            <div className="space-y-6">
-              {/* Single Review Mock */}
-              <div className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">
-                      N
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-900">Nimal Dissanayake</p>
-                      <div className="flex text-amber-400 text-sm">
-                        <Star size={14} className="fill-current" /><Star size={14} className="fill-current" /><Star size={14} className="fill-current" /><Star size={14} className="fill-current" /><Star size={14} className="fill-current" />
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-sm font-medium text-gray-400">2 days ago</span>
-                </div>
-                <p className="text-gray-600 mt-3 pl-13">Kamal was very professional and fixed the leak quickly. He cleaned up after himself and the price was exactly what was quoted. Highly recommended!</p>
+            {reviews.length === 0 ? (
+              <div className="text-center py-10 bg-gray-50 rounded-2xl border border-gray-100">
+                <p className="text-gray-500 text-sm font-medium">No customer reviews yet.</p>
+                <p className="text-gray-400 text-xs mt-1">Be the first to review after completing a job with {worker.firstName}!</p>
               </div>
-            </div>
+            ) : (
+              <div className="space-y-6">
+                {reviews.map((rev) => {
+                  const customerName = rev.customerId 
+                    ? `${rev.customerId.firstName || ''} ${rev.customerId.lastName || ''}`.trim() 
+                    : 'Verified Customer';
+                  const initial = customerName.charAt(0).toUpperCase() || 'C';
+                  const timeAgo = rev.createdAt 
+                    ? new Date(rev.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+                    : '';
+
+                  return (
+                    <div key={rev._id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-amber-100 text-[#FF7A00] rounded-full flex items-center justify-center font-bold text-sm">
+                            {initial}
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900 text-sm">{customerName}</p>
+                            <div className="flex text-amber-400 text-xs mt-0.5">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star 
+                                  key={star} 
+                                  size={13} 
+                                  className={rev.rating >= star ? "fill-current text-amber-500" : "text-gray-200"} 
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        {timeAgo && <span className="text-xs font-medium text-gray-400">{timeAgo}</span>}
+                      </div>
+                      <p className="text-gray-600 text-sm mt-2 pl-13 leading-relaxed">
+                        {rev.comment || rev.reviewText || 'Service completed successfully.'}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
         </div>

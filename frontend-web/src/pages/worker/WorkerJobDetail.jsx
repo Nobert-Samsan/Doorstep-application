@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
 import { 
@@ -40,6 +40,143 @@ const customStyles = `
     from { height: 0; }
     to { height: 100%; }
   }
+
+  /* ── Mobile Job Summary Card (max-width 767px) ── */
+  @media (max-width: 767px) {
+    .job-summary-mobile {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #E8E2DB;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      animation: fadeUp 0.2s ease-out forwards;
+    }
+    .job-summary-mobile::before {
+      display: none;
+    }
+    .jsm-icon-box {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      background: #D97706;
+      display: flex; align-items: center; justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(217,119,6,0.25);
+      flex-shrink: 0;
+    }
+    .jsm-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px;
+    }
+    .jsm-header-left {
+      display: flex; align-items: center; gap: 12px; min-width: 0;
+    }
+    .jsm-title {
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      color: #000000;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .jsm-track-btn-top {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      height: 36px; min-height: 36px;
+      padding: 0 14px;
+      background: #000000;
+      color: #ffffff;
+      font-family: "Poppins", sans-serif; font-weight: 600; font-size: 13px;
+      border: none; border-radius: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .jsm-track-btn-top:active {
+      transform: scale(0.96);
+    }
+    .jsm-track-btn-top.disabled {
+      background: #E8E2DB; color: #6B6B6B; cursor: default;
+    }
+    .jsm-details {
+      display: flex; flex-direction: column; margin-bottom: 16px;
+    }
+    .jsm-detail-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 0;
+    }
+    .jsm-detail-row + .jsm-detail-row {
+      border-top: 1px solid #E8E2DB;
+    }
+    .jsm-detail-icon {
+      width: 40px; height: 40px; min-width: 40px;
+      border-radius: 12px;
+      background: #FFF8F1;
+      border: 1px solid #E8E2DB;
+      display: flex; align-items: center; justify-content: center;
+      color: #E86100;
+    }
+    .jsm-detail-label {
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      color: #6B6B6B;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .jsm-detail-value {
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: #000000;
+      line-height: 1.35;
+    }
+    .jsm-date-row {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .jsm-tag-asap {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #FDECEC; color: #B42318;
+      font-family: "Poppins", sans-serif; font-weight: 600; font-size: 12px;
+      padding: 4px 10px; border-radius: 999px;
+    }
+    .jsm-tag-neutral {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #F3EFEA; color: #3D3D3D;
+      font-family: "Poppins", sans-serif; font-weight: 600; font-size: 12px;
+      padding: 4px 10px; border-radius: 999px;
+    }
+    .jsm-notes {
+      background: #FFF8F1;
+      border: 1px solid #E8E2DB;
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 16px;
+    }
+    .jsm-notes-icon { color: #6B6B6B; flex-shrink: 0; margin-top: 1px; }
+    .jsm-notes-text {
+      font-style: italic;
+      font-size: 14px;
+      color: #6B6B6B;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .jsm-notes-text.has-notes {
+      font-style: normal; color: #3D3D3D;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .job-summary-mobile { animation: none !important; opacity: 1 !important; }
+  }
+
 `;
 
 const ROLE_MAP = {
@@ -137,7 +274,7 @@ const getStatusMessage = (status) => {
 
 const Card = ({ children, className = '', index = 0 }) => (
   <div 
-    className={`relative bg-white rounded-[24px] border border-[#E8E2DB] p-5 sm:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
+    className={`relative bg-white rounded-[8px] md:rounded-[12px] border border-[#E8E2DB] p-6 md:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
     style={{ 
       animation: 'fadeUp 0.3s ease-out forwards',
       opacity: 0,
@@ -199,8 +336,15 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
   return (
     <Card index={index}>
       <div className="flex items-center justify-between gap-4 mb-5">
-        <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
-          Customer Details
+        <div>
+          <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Customer Details
+          </div>
+          {refId && (
+            <div className="text-[#6B6B6B] font-bold text-[14px] mt-0.5" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              ID: #{refId}
+            </div>
+          )}
         </div>
         <StatusBadge status={job.status} />
       </div>
@@ -228,13 +372,11 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
                 {cName}
               </h3>
             </div>
-            {refId && (
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-black text-[16px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  #{refId}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-[#6B6B6B] text-[15px] capitalize" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                {job.serviceTitle || roleName}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -323,91 +465,141 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
 const JobDetailsCard = ({ job, index }) => {
   const timeSlot = job.scheduledTimeSlot || '';
   const isEmergency = job.urgency === 'urgent' || timeSlot.toLowerCase().includes('asap') || timeSlot.toLowerCase().includes('emergency');
-  const roleName = getJobRole(job.serviceTitle, job.workerSkill || job.categoryId?.nameEn);
-  const isAddressRevealed = ['accepted', 'en_route', 'arrived', 'in_progress', 'quote_provided', 'completed'].includes(job.status);
+  const isAddressRevealed = ['accepted', 'en_route', 'arrived', 'quote_provided', 'in_progress', 'completed'].includes(job.status);
+  const locationText = isAddressRevealed 
+    ? [job.streetAddress, job.city].filter(Boolean).join(', ')
+    : (job.city || 'Location area');
+  const hasNotes = job.jobDescription && job.jobDescription.trim().length > 0;
 
   return (
-    <Card index={index}>
-      <div className="flex flex-col gap-7">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-[14px] bg-[#D97706] flex items-center justify-center text-white shadow-md shadow-[#D97706]/20 shrink-0">
-            <Wrench size={24} />
+    <>
+      {/* ── MOBILE view (< 768px) ── */}
+      <div className="job-summary-mobile md:hidden">
+        {/* Header with Title on Left and Track Job Button on Right */}
+        <div className="jsm-header">
+          <div className="jsm-header-left">
+            <span className="jsm-title">Booking Details</span>
           </div>
-          <div>
-            <h3 className="text-black font-semibold text-[22px] capitalize" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              {roleName}
-            </h3>
-            <p className="text-[#6B6B6B] text-[14px]">
-              {roleName} Service
-            </p>
-          </div>
+          <Link
+            to={`/worker/activities/${job._id}?view=timeline`}
+            className={`jsm-track-btn-top${!job._id ? ' disabled' : ''}`}
+            aria-label="Track Job"
+          >
+            Track Job
+          </Link>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex items-start gap-4">
-            <div className="w-11 h-11 rounded-[14px] bg-amber-50 flex items-center justify-center text-[#D97706] shrink-0">
-              <Calendar size={20} />
-            </div>
+
+        {/* Detail rows */}
+        <div className="jsm-details">
+          <div className="jsm-detail-row">
+            <div className="jsm-detail-icon"><Calendar size={18} strokeWidth={2} /></div>
             <div>
-              <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold mb-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                Schedule
-              </div>
-              <div className="flex items-center gap-2 flex-wrap mb-1">
-                <span className="text-black font-semibold text-[17px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  {formatScheduleDate(job.scheduledDate)}
-                </span>
+              <div className="jsm-detail-label">Schedule</div>
+              <div className="jsm-date-row jsm-detail-value">
+                <span>{formatScheduleDate(job.scheduledDate)}</span>
                 {isEmergency ? (
-                  <span className="flex items-center gap-1 bg-[#FDECEC] text-[#B42318] px-2 py-0.5 rounded-full text-[12px] font-semibold">
-                    <Zap size={12} fill="currentColor" /> ASAP
+                  <span className="jsm-tag-asap">
+                    <Zap size={11} fill="currentColor" /> ASAP
                   </span>
-                ) : (
-                  <span className="bg-[#F3EFEA] text-[#3D3D3D] px-2 py-0.5 rounded-full text-[12px] font-semibold">
-                    {timeSlot}
-                  </span>
-                )}
+                ) : timeSlot ? (
+                  <span className="jsm-tag-neutral">{timeSlot}</span>
+                ) : null}
               </div>
             </div>
           </div>
-
-          <div className="flex items-start gap-4">
-            <div className="w-11 h-11 rounded-[14px] bg-amber-50 flex items-center justify-center text-[#D97706] shrink-0">
-              <MapPin size={20} />
-            </div>
+          <div className="jsm-detail-row">
+            <div className="jsm-detail-icon"><MapPin size={18} strokeWidth={2} /></div>
             <div>
-              <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold mb-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                Location
-              </div>
-              <p className="text-black font-semibold text-[17px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                {isAddressRevealed 
-                  ? [job.streetAddress, job.city].filter(Boolean).join(', ')
-                  : (job.city || 'Location area')}
-              </p>
+              <div className="jsm-detail-label">Location</div>
+              <div className="jsm-detail-value">{locationText || '-'}</div>
             </div>
           </div>
         </div>
 
-        <div className="bg-[#F8F9FA] rounded-[16px] border border-[#E8E2DB] py-4 px-5 text-[#6B6B6B] italic text-[14px] flex gap-3 items-start">
-          <Tag size={16} className="mt-0.5 shrink-0 text-[#D97706]" />
-          <p>{job.jobDescription || 'No additional notes provided'}</p>
+        {/* Notes */}
+        <div className="jsm-notes" style={{ marginBottom: 0 }}>
+          <FileText size={15} className="jsm-notes-icon" />
+          <p className={`jsm-notes-text${hasNotes ? ' has-notes' : ''}`}>
+            {hasNotes ? job.jobDescription : 'No additional notes provided'}
+          </p>
         </div>
-
-        {isAddressRevealed && (
-          <div className="bg-[#F0FDF4] border border-[#BBF7D0] rounded-[16px] p-4 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A] shrink-0">
-              <MapPin size={16} />
-            </div>
-            <div>
-              <div className="text-[11px] font-bold text-[#166534] uppercase tracking-wider">
-                Full Address Revealed
-              </div>
-              <div className="text-[14px] font-semibold text-[#14532D]">
-                {[job.streetAddress, job.city].filter(Boolean).join(', ')}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </Card>
+
+      {/* ── TABLET / DESKTOP view (>= 768px) ── */}
+      <Card index={index} className="hidden md:block">
+        <div className="flex flex-col gap-7">
+          <div className="flex items-center gap-4">
+            <div>
+              <h3 className="text-black font-semibold text-[20px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                Booking Details
+              </h3>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-[14px] bg-amber-50 flex items-center justify-center text-[#D97706] shrink-0">
+                <Calendar size={20} />
+              </div>
+              <div>
+                <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold mb-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Schedule
+                </div>
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <span className="text-black font-normal text-[17px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    {formatScheduleDate(job.scheduledDate)}
+                  </span>
+                  {isEmergency ? (
+                    <span className="flex items-center gap-1 bg-[#FDECEC] text-[#B42318] px-2 py-0.5 rounded-full text-[12px] font-semibold">
+                      <Zap size={12} fill="currentColor" /> ASAP
+                    </span>
+                  ) : (
+                    <span className="bg-[#F3EFEA] text-[#3D3D3D] px-2 py-0.5 rounded-full text-[12px] font-semibold">
+                      {timeSlot}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-[14px] bg-amber-50 flex items-center justify-center text-[#D97706] shrink-0">
+                <MapPin size={20} />
+              </div>
+              <div>
+                <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold mb-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Location
+                </div>
+                <p className="text-black font-normal text-[17px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  {locationText}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#F8F9FA] rounded-[10px] border border-[#E8E2DB] py-4 px-5 text-[#6B6B6B] italic text-[14px] flex gap-3 items-start">
+            <Tag size={16} className="mt-0.5 shrink-0 text-[#D97706]" />
+            <p>{job.jobDescription || 'No additional notes provided'}</p>
+          </div>
+
+          {isAddressRevealed && (
+            <div className="bg-[#F0FDF4] border border-[#BBF7D0] rounded-[16px] p-4 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#DCFCE7] flex items-center justify-center text-[#16A34A] shrink-0">
+                <MapPin size={16} />
+              </div>
+              <div>
+                <div className="text-[11px] font-bold text-[#166534] uppercase tracking-wider">
+                  Full Address Revealed
+                </div>
+                <div className="text-[14px] font-semibold text-[#14532D]">
+                  {[job.streetAddress, job.city].filter(Boolean).join(', ')}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </Card>
+    </>
   );
 };
 
@@ -425,7 +617,7 @@ const TimelineCard = ({ timeline, updateStatus, index }) => {
       </div>
       <div className="w-full h-[6px] bg-[#E8E2DB] rounded-full mb-8 overflow-hidden relative">
         <div 
-          className="absolute top-0 bottom-0 left-0 bg-[#D97706] transition-all duration-1000 ease-out" 
+          className={`absolute top-0 bottom-0 left-0 ${doneCount === totalCount ? 'bg-[#2E9E5B]' : 'bg-[#D97706]'} transition-all duration-1000 ease-out`} 
           style={{ width: `${(doneCount / totalCount) * 100}%` }}
         />
       </div>
@@ -434,7 +626,9 @@ const TimelineCard = ({ timeline, updateStatus, index }) => {
         {timeline.map((step, idx) => {
           const isLast = idx === timeline.length - 1;
           const isDone = step.done;
-          const isCurrent = isDone && (isLast || !timeline[idx+1].done);
+          // When a step is 'completed', it has reached the finished milestone and should be green!
+          const isCompletedStep = step.status === 'completed' && isDone;
+          const isCurrent = isDone && !isCompletedStep && (isLast || !timeline[idx+1].done);
           const isNextDone = !isLast && timeline[idx+1].done;
 
           return (
@@ -465,15 +659,20 @@ const TimelineCard = ({ timeline, updateStatus, index }) => {
               <div className="pt-1 flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <p className={`${
-                    isCurrent ? 'text-black font-bold text-[16px]' : 
+                    isCurrent || isCompletedStep ? 'text-black font-bold text-[16px]' : 
                     isDone ? 'text-black font-semibold text-[15px]' : 
                     'text-[#6B6B6B] text-[15px]'
-                  }`} style={isCurrent ? { fontFamily: 'Poppins, sans-serif' } : {}}>
+                  }`} style={isCurrent || isCompletedStep ? { fontFamily: 'Poppins, sans-serif' } : {}}>
                     {step.label}
                   </p>
                   {isCurrent && (
                     <span className="bg-amber-50 text-[#B45309] px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
                       NOW
+                    </span>
+                  )}
+                  {isCompletedStep && (
+                    <span className="bg-[#E9F5ED] text-[#1F7A44] px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                      COMPLETED
                     </span>
                   )}
                 </div>
@@ -521,8 +720,12 @@ const TimelineCard = ({ timeline, updateStatus, index }) => {
 };
 
 const PaymentCard = ({ job, index }) => {
-  const isPaid = job.paymentStatus === 'paid';
-  const totalAmount = job.finalAmount || (job.pricingType === 'fixed' ? job.fixedRate : null);
+  // Show Payment Summary ONLY once the job is completed
+  const isJobDone = job?.status === 'completed';
+  if (!isJobDone) return null;
+
+  const isPaid = ['paid', 'paid_online', 'paid_cash'].includes(job?.paymentStatus);
+  const totalAmount = job?.finalAmount || (job?.pricingType === 'fixed' ? job?.fixedRate : 0);
   
   return (
     <Card index={index}>
@@ -530,46 +733,62 @@ const PaymentCard = ({ job, index }) => {
         Payment Summary
       </h3>
       
-      <div className="flex justify-between items-center pb-4 border-b border-[#E8E2DB]">
-        <span className="text-[#6B6B6B] text-[15px]">Status</span>
-        {isPaid ? (
-          <span className="bg-[#E9F5ED] text-[#1F7A44] px-3 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
-            Paid
+      <div className="flex flex-col gap-4 pb-6 border-b border-[#E8E2DB]">
+        {/* Payment Status Row */}
+        <div className="flex items-center justify-between">
+          <span className="text-[#6B6B6B] text-[15px] font-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Payment Status
           </span>
-        ) : (
-          <span className="bg-[#F3EFEA] text-[#3D3D3D] px-3 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
-            {job.paymentStatus ? job.paymentStatus.replace('_', ' ') : 'UNPAID'}
-          </span>
-        )}
-      </div>
-
-      <div className="pt-4 pb-5 flex flex-col gap-1">
-        <div className="flex justify-between items-start">
-          <span className="text-[#6B6B6B] text-[15px] pt-1">Total</span>
-          <div className="text-right flex flex-col items-end">
-            {(job.status === 'completed' && job.finalAmount) || (job.pricingType === 'fixed' && job.fixedRate) ? (
-              <span className="text-black font-bold text-[28px] leading-none" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                Rs. {Number(job.finalAmount || job.fixedRate).toLocaleString()}
+          <div>
+            {isPaid ? (
+              <span className="bg-[#E9F5ED] text-[#1F7A44] px-3.5 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
+                {job.paymentStatus === 'paid_cash' ? 'Paid via Cash' : 'Paid'}
               </span>
             ) : (
-              <div className="flex flex-col items-end gap-1">
-                <span className="text-black font-semibold text-[18px] flex items-center gap-1.5" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  <Info size={16} className="text-[#FF7A00]" /> Pending Inspection
-                </span>
-              </div>
+              <span className="bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA] px-3.5 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
+                Unpaid
+              </span>
             )}
           </div>
         </div>
-        {totalAmount && (
-          <p className="text-[#1F7A44] text-[13px] text-right font-medium mt-1">
-            Your Net Payout (90%): Rs. {(totalAmount * 0.9).toLocaleString()}
-          </p>
-        )}
+
+        {/* Total Amount Row */}
+        <div className="flex items-center justify-between">
+          <span className="text-[#6B6B6B] text-[15px] font-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Total Amount
+          </span>
+          <span className="text-black font-normal text-[20px] leading-none" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Rs. {Number(totalAmount).toLocaleString()}
+          </span>
+        </div>
       </div>
 
-      <div className="pt-4 border-t border-[#E8E2DB] flex items-center justify-center gap-2">
-        <Lock size={14} className="text-[#2E9E5B]" />
-        <span className="text-[#6B6B6B] text-[13px]">Pay securely online or in cash</span>
+      <div className="pt-4 flex items-center justify-center sm:justify-between flex-wrap gap-2">
+        {isPaid ? (
+          <>
+            <div className="flex items-center gap-1.5">
+              <Check size={14} className="text-[#2E9E5B]" />
+              <span className="text-[#2E9E5B] font-medium text-[13px]">Payment received & confirmed</span>
+            </div>
+            {totalAmount > 0 && (
+              <span className="text-[#1F7A44] text-[13px] font-medium">
+                Your Net Payout (90%): Rs. {(totalAmount * 0.9).toLocaleString()}
+              </span>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-1.5">
+              <Lock size={14} className="text-[#FF7A00]" />
+              <span className="text-[#6B6B6B] text-[13px]">Pay the worker directly in cash or online</span>
+            </div>
+            {totalAmount > 0 && (
+              <span className="text-[#1F7A44] text-[13px] font-medium">
+                Your Net Payout (90%): Rs. {(totalAmount * 0.9).toLocaleString()}
+              </span>
+            )}
+          </>
+        )}
       </div>
     </Card>
   );
@@ -578,6 +797,8 @@ const PaymentCard = ({ job, index }) => {
 const WorkerJobDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isTimelineView = searchParams.get('view') === 'timeline';
   const [job, setJob] = useState(null);
   const [quotations, setQuotations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -745,6 +966,50 @@ const WorkerJobDetail = () => {
   const isEmergency = job.urgency === 'urgent';
   const refId = job._id ? job._id.substring(job._id.length - 6).toUpperCase() : '';
 
+  // On mobile, if view=timeline is active, render dedicated Mobile Timeline Screen
+  if (isTimelineView) {
+    const jobRole = getJobRole(job.serviceTitle, job.workerSkill || job.categoryId?.nameEn);
+
+    return (
+      <div className="min-h-screen bg-white font-sans text-[#3D3D3D]">
+        <style>{customStyles}</style>
+        {/* Mobile Dedicated Timeline View (< 768px) */}
+        <div className="md:hidden px-4 py-5 max-w-[500px] mx-auto">
+          {/* Top navigation bar */}
+          <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#E8E2DB]">
+            <button
+              onClick={() => navigate(`/worker/activities/${job._id}`)}
+              className="flex items-center gap-2 text-black font-semibold text-[15px] hover:text-[#D97706] transition-colors py-1.5 pr-3"
+            >
+              <ArrowLeft size={20} strokeWidth={2.5} />
+              <span>Back</span>
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-[12px] font-bold text-[#6B6B6B] uppercase tracking-wider">Job</span>
+              <span className="font-bold text-[#D97706] text-[13px] bg-[#FFF8F1] border border-[#D97706]/30 px-2.5 py-1 rounded-full">
+                #{refId}
+              </span>
+            </div>
+          </div>
+
+          {/* Job Header */}
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h1 className="text-[22px] font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                Track Job
+              </h1>
+              <p className="text-[14px] text-[#6B6B6B] mt-0.5">{jobRole}</p>
+            </div>
+            <StatusBadge status={job.status} />
+          </div>
+
+          {/* Full Timeline Card */}
+          <TimelineCard timeline={timeline} updateStatus={updateStatus} index={0} className="w-full shadow-sm" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="py-4 md:py-8 font-sans text-[#3D3D3D]">
       <style>{customStyles}</style>
@@ -764,8 +1029,8 @@ const WorkerJobDetail = () => {
         {isEmergency && (
           <div className="bg-[#FDECEC] border border-[#FECACA] rounded-[20px] p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="w-9 h-9 rounded-[12px] bg-[#FEE2E2] flex items-center justify-center text-[#B42318] text-lg shrink-0">
-                🚨
+              <span className="w-9 h-9 rounded-[12px] bg-[#FEE2E2] flex items-center justify-center text-[#B42318] shrink-0">
+                <AlertCircle size={20} className="text-[#B42318]" />
               </span>
               <div>
                 <h4 className="font-bold text-[#B42318] text-[15px]">Emergency Job Request</h4>
@@ -781,7 +1046,7 @@ const WorkerJobDetail = () => {
         )}
 
         {/* Main Grid: 2 Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-[64%_calc(36%-24px)] gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[64%_calc(36%-24px)] gap-6 items-stretch">
           
           {/* Left Column Container */}
           <div className="flex flex-col gap-6 order-1">
@@ -795,7 +1060,23 @@ const WorkerJobDetail = () => {
               index={0} 
             />
 
-            {/* Active Quotations (if any) */}
+
+
+            {/* Job Details Card (Service, Schedule, Location, Notes) */}
+            <JobDetailsCard job={job} index={3} />
+
+          </div>
+
+          {/* Right Column Container (Desktop Only) */}
+          <div className="hidden md:flex flex-col h-full order-2">
+            <TimelineCard timeline={timeline} updateStatus={updateStatus} index={2} className="h-full" />
+          </div>
+
+        </div>
+
+        {/* Quotations (Full-width above Payment Summary) */}
+        {quotations.length > 0 && (
+          <div className="mt-6 w-full space-y-6">
             {quotations.map(quote => (
               <Card key={quote._id} className="!bg-white !border-[#D97706]/30" index={1}>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -816,7 +1097,7 @@ const WorkerJobDetail = () => {
                   </span>
                 </div>
                 
-                <div className="bg-white rounded-[16px] border border-[#E8E2DB] p-5 mb-2 space-y-3">
+                <div className="bg-white rounded-[10px] border border-[#E8E2DB] p-5 mb-2 space-y-3">
                   {quote.lineItems?.map((item, idx) => (
                     <div key={idx} className="flex justify-between text-[15px]">
                       <span className="text-[#6B6B6B]">{item.description}</span>
@@ -838,29 +1119,12 @@ const WorkerJobDetail = () => {
                 </div>
               </Card>
             ))}
-
-            {/* Mobile-only TimelineCard */}
-            <div className="md:hidden">
-              <TimelineCard timeline={timeline} updateStatus={updateStatus} index={2} />
-            </div>
-
-            {/* Job Details Card (Service, Schedule, Location, Notes) */}
-            <JobDetailsCard job={job} index={3} />
-
-            {/* Mobile-only PaymentCard */}
-            <div className="md:hidden">
-              <PaymentCard job={job} index={4} />
-            </div>
-
-            
           </div>
+        )}
 
-          {/* Right Column Container (Desktop Only, Sticky) */}
-          <div className="hidden md:flex flex-col gap-6 sticky top-8 order-2">
-            <TimelineCard timeline={timeline} updateStatus={updateStatus} index={2} />
-            <PaymentCard job={job} index={4} />
-          </div>
-
+        {/* Full-width Payment Summary */}
+        <div className="mt-6 w-full">
+          <PaymentCard job={job} index={4} />
         </div>
       </div>
 

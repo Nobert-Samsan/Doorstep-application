@@ -141,7 +141,7 @@ const Notifications = () => {
     <>
       <style>{`
         .notifications-page {
-          background: #F8F6F3;
+          background: #FFFFFF;
           min-height: 100vh;
           width: 100%;
           box-sizing: border-box;
@@ -219,9 +219,9 @@ const Notifications = () => {
         }
 
         .unread-banner {
-          background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
-          border: 1px solid #FED7AA;
-          border-left: 4px solid #EA580C;
+          background: #FFFFFF;
+          border: 1px solid #E8E2DB;
+          /* border-left removed */
           border-radius: 12px;
           padding: 14px 18px;
           margin-bottom: 20px;
@@ -422,19 +422,11 @@ const Notifications = () => {
           transform: translateX(2px);
         }
         .notification-item.unread {
-          background: linear-gradient(135deg, #FFFAF7, white);
-          border-left: 3px solid #EA580C;
+          background: #FFFFFF;
+          /* border-left removed */
         }
         .notification-item.unread::after {
-          content: '';
-          position: absolute;
-          top: 14px;
-          right: 14px;
-          width: 8px;
-          height: 8px;
-          background: #EA580C;
-          border-radius: 50%;
-          box-shadow: 0 0 0 3px rgba(234,88,12,0.15);
+          display: none;
         }
         .notification-item.read {
           opacity: 0.85;
@@ -759,7 +751,7 @@ const Notifications = () => {
                         <div className="notif-message">{notif.message}</div>
                         <div className="notif-footer">
                           <div className="notif-time">
-                            🕐 {new Date(notif.createdAt).toLocaleString()}
+                            {new Date(notif.createdAt).toLocaleString()}
                           </div>
 
 

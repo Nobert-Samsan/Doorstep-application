@@ -105,7 +105,13 @@ const JobRequests = () => {
     }
   };
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading incoming requests...</div>;
+  if (loading) {
+    return (
+      <div className="w-full min-h-[160px] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#FF7A00]" />
+      </div>
+    );
+  }
 
   return (
     <div>

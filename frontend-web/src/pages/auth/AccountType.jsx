@@ -47,16 +47,6 @@ const AccountType = () => {
   return (
     <div className="min-h-screen w-full flex flex-col justify-center items-center bg-white relative py-12 px-6 sm:px-8 overflow-x-hidden">
       
-      {/* Subtle Warm Ambient Glows */}
-      <div 
-        className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: 'rgba(255,122,0,0.05)' }}
-      ></div>
-      <div 
-        className="absolute bottom-0 left-1/4 w-[450px] h-[450px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: 'rgba(255,122,0,0.04)' }}
-      ></div>
-
       {/* Main Centered Container */}
       <div className="w-full max-w-[540px] relative z-10 flex flex-col my-auto">
         
@@ -101,14 +91,18 @@ const AccountType = () => {
               onClick={() => setSelectedRole('customer')}
               onDoubleClick={() => navigate('/register/customer')}
               onKeyDown={(e) => handleKeyDown(e, 'customer')}
-              className={`group w-full text-left rounded-[20px] p-5 sm:p-6 transition-all duration-200 cursor-pointer flex items-start gap-4 sm:gap-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#FF7A00] ${
+              className={`group w-full text-left rounded-[20px] p-5 sm:p-6 transition-all duration-200 cursor-pointer flex items-start gap-4 sm:gap-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
                 selectedRole === 'customer'
-                  ? 'border-2 border-[#FF7A00] bg-[#FFF8F1] shadow-[0_14px_36px_rgba(255,122,0,0.12)] ring-4 ring-[#FF7A00]/15'
-                  : 'bg-white border-[1.5px] border-[#E8E2DB] shadow-[0_8px_24px_rgba(0,0,0,0.04)] hover:border-[#FF7A00]/50 hover:-translate-y-[3px] hover:shadow-[0_14px_36px_rgba(0,0,0,0.08)]'
+                  ? 'border-2 border-black bg-white shadow-[0_14px_36px_rgba(0,0,0,0.08)] ring-2 ring-black/10'
+                  : 'bg-white border-[1.5px] border-[#E8E2DB] shadow-[0_8px_24px_rgba(0,0,0,0.04)] hover:border-black/40 hover:-translate-y-[3px] hover:shadow-[0_14px_36px_rgba(0,0,0,0.08)]'
               }`}
             >
-              {/* 56px Orange Gradient Icon Tile */}
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[14px] sm:rounded-[16px] bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] flex items-center justify-center flex-shrink-0 text-white shadow-[0_8px_20px_rgba(255,122,0,0.30)] transition-transform duration-200 group-hover:scale-105">
+              {/* 56px Icon Tile */}
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-[14px] sm:rounded-[16px] flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-105 ${
+                selectedRole === 'customer' 
+                  ? 'bg-black text-white' 
+                  : 'bg-black text-white'
+              }`}>
                 <Home size={26} strokeWidth={2} />
               </div>
 
@@ -136,8 +130,8 @@ const AccountType = () => {
               <div className="pt-0.5">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${
                   selectedRole === 'customer'
-                    ? 'bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] border-none shadow-[0_2px_8px_rgba(255,122,0,0.35)]'
-                    : 'border-2 border-[#E8E2DB] bg-white group-hover:border-[#FF7A00]/50'
+                    ? 'bg-black border-none'
+                    : 'border-2 border-[#E8E2DB] bg-white group-hover:border-black/50'
                 }`}>
                   {selectedRole === 'customer' && <Check size={14} className="text-white" strokeWidth={3} />}
                 </div>
@@ -153,14 +147,18 @@ const AccountType = () => {
               onClick={() => setSelectedRole('worker')}
               onDoubleClick={() => navigate('/register/worker')}
               onKeyDown={(e) => handleKeyDown(e, 'worker')}
-              className={`group w-full text-left rounded-[20px] p-5 sm:p-6 transition-all duration-200 cursor-pointer flex items-start gap-4 sm:gap-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#FF7A00] ${
+              className={`group w-full text-left rounded-[20px] p-5 sm:p-6 transition-all duration-200 cursor-pointer flex items-start gap-4 sm:gap-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
                 selectedRole === 'worker'
-                  ? 'border-2 border-[#FF7A00] bg-[#FFF8F1] shadow-[0_14px_36px_rgba(255,122,0,0.12)] ring-4 ring-[#FF7A00]/15'
-                  : 'bg-white border-[1.5px] border-[#E8E2DB] shadow-[0_8px_24px_rgba(0,0,0,0.04)] hover:border-[#FF7A00]/50 hover:-translate-y-[3px] hover:shadow-[0_14px_36px_rgba(0,0,0,0.08)]'
+                  ? 'border-2 border-black bg-white shadow-[0_14px_36px_rgba(0,0,0,0.08)] ring-2 ring-black/10'
+                  : 'bg-white border-[1.5px] border-[#E8E2DB] shadow-[0_8px_24px_rgba(0,0,0,0.04)] hover:border-black/40 hover:-translate-y-[3px] hover:shadow-[0_14px_36px_rgba(0,0,0,0.08)]'
               }`}
             >
-              {/* 56px Orange Gradient Icon Tile */}
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[14px] sm:rounded-[16px] bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] flex items-center justify-center flex-shrink-0 text-white shadow-[0_8px_20px_rgba(255,122,0,0.30)] transition-transform duration-200 group-hover:scale-105">
+              {/* 56px Icon Tile */}
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-[14px] sm:rounded-[16px] flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-105 ${
+                selectedRole === 'worker' 
+                  ? 'bg-black text-white' 
+                  : 'bg-black text-white'
+              }`}>
                 <Wrench size={26} strokeWidth={2} />
               </div>
 
@@ -188,8 +186,8 @@ const AccountType = () => {
               <div className="pt-0.5">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${
                   selectedRole === 'worker'
-                    ? 'bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] border-none shadow-[0_2px_8px_rgba(255,122,0,0.35)]'
-                    : 'border-2 border-[#E8E2DB] bg-white group-hover:border-[#FF7A00]/50'
+                    ? 'bg-black border-none'
+                    : 'border-2 border-[#E8E2DB] bg-white group-hover:border-black/50'
                 }`}>
                   {selectedRole === 'worker' && <Check size={14} className="text-white" strokeWidth={3} />}
                 </div>
@@ -205,9 +203,9 @@ const AccountType = () => {
             type="button"
             disabled={!selectedRole}
             onClick={handleContinue}
-            className={`group w-full h-[54px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] focus-visible:ring-offset-2 ${
+            className={`group w-full h-[54px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
               selectedRole
-                ? 'bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] text-white shadow-[0_10px_28px_rgba(255,122,0,0.30)] hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(255,122,0,0.40)] cursor-pointer'
+                ? 'bg-[#000000] hover:bg-[#222222] text-white shadow-none cursor-pointer'
                 : 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed shadow-none'
             }`}
           >

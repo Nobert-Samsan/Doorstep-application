@@ -4,6 +4,33 @@ import {    ChevronRight, Target, Telescope, Shield, Lock, Eye, Heart, ArrowRigh
 import api from '../../services/api';
 
 
+const TargetArrow = ({ size = 32, className = "", strokeWidth = 2, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={strokeWidth}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    {...props}
+  >
+    {/* Concentric target circles */}
+    <circle cx="12" cy="12" r="10" />
+    <circle cx="12" cy="12" r="6" />
+    <circle cx="12" cy="12" r="2" />
+    {/* Arrow shaft coming from outside (21, 3) straight into center (12, 12) */}
+    <line x1="21" y1="3" x2="12" y2="12" />
+    {/* Arrowhead pointed directly at the center (12, 12) */}
+    <polyline points="16.5 12 12 12 12 16.5" />
+    {/* Tail fletching on the outside */}
+    <line x1="20" y1="4" x2="21" y2="7" />
+    <line x1="20" y1="4" x2="17" y2="3" />
+  </svg>
+);
+
 const useIntersectionObserver = (ref, options) => {
   const [isIntersecting, setIsIntersecting] = React.useState(false);
   React.useEffect(() => {
@@ -145,9 +172,7 @@ const About = () => {
 
             {/* Headline */}
             <h1 className="text-[32px] sm:text-[44px] lg:text-[72px] font-extrabold text-white leading-[1.1] mb-3 lg:mb-6 font-poppins tracking-tight animate-fade-up-3">
-              About <span className="relative inline-block">
-                <span className="text-[#FF7A00]">DoorStep</span>
-                </span>
+              About DoorStep
             </h1>
 
             {/* Subtitle */}
@@ -277,13 +302,13 @@ const About = () => {
                 
                 {/* Watermark */}
                 <div className="absolute -top-4 -right-4 text-[#FF7A00] opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none">
-                  <Target size={140} strokeWidth={1} />
+                  <TargetArrow size={140} strokeWidth={1} />
                 </div>
 
                 <div className="relative z-10 flex flex-col h-full">
                   <div className="mb-8">
                     <div className="w-[56px] h-[56px] rounded-[16px] bg-[#FF7A00] flex items-center justify-center shadow-[0_4px_12px_rgba(255,122,0,0.20)]">
-                      <Target size={32} className="text-white" strokeWidth={2} />
+                      <TargetArrow size={32} className="text-white" strokeWidth={2} />
                     </div>
                   </div>
                   

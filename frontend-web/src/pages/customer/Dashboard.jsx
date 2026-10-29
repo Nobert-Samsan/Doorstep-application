@@ -8,11 +8,13 @@ import {
   Wind, HardHat, TreePine, Bug, Home, 
   Monitor, ShieldCheck, Truck, Tv, PenTool, 
   Grid, Camera, ChefHat, Sparkles, Dumbbell, 
-  Laptop, BookOpen, ArrowRight
+  Laptop, BookOpen, ArrowRight,
+  ChevronUp
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { ALL_SERVICES } from '../../constants/allServices';
+import { filterJobsByPrefix } from '../../utils/jobSearch';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -28,6 +30,23 @@ const Dashboard = () => {
     searchQuery: ''
   });
   const [postJobInput, setPostJobInput] = useState('');
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  const [activeBooking, setActiveBooking] = useState(null);
+  const [lastCompletedBooking, setLastCompletedBooking] = useState(null);
+  const [expandedCategories, setExpandedCategories] = useState({});
+
+  const toggleCategoryExpand = (catName) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [catName]: !prev[catName]
+    }));
+  };
 
   // 22 Categories total with starting prices and search keywords
   const categories = [
@@ -76,16 +95,8 @@ const Dashboard = () => {
   };
 
   const getSuggestions = (query) => {
-    if (!query || query.trim().length < 2) return [];
-    const q = query.toLowerCase().trim();
-    const scored = categories.map(cat => {
-      // Score: 3 = name match, 2 = keyword includes, 1 = fuzzy match
-      const nameMatch = fuzzyMatch(q, cat.name) || fuzzyMatch(q, cat.id);
-      const keywordMatch = cat.keywords.some(k => k.includes(q) || q.includes(k) || fuzzyMatch(q, k));
-      const score = nameMatch ? 3 : keywordMatch ? 2 : 0;
-      return { ...cat, score };
-    }).filter(c => c.score > 0).sort((a, b) => b.score - a.score);
-    return scored.slice(0, 5); // Top 5
+    if (!query || query.trim().length === 0) return [];
+    return filterJobsByPrefix(query.trim(), 8);
   };
 
   const [suggestions, setSuggestions] = useState([]);
@@ -108,11 +119,14 @@ const Dashboard = () => {
     setHighlightedIdx(-1);
   };
 
-  const handleSuggestionClick = (cat) => {
-    setFilters({ ...filters, searchQuery: cat.name });
+  const handleSuggestionClick = (job) => {
+    const jobTitle = job.title || job.name;
+    setFilters({ ...filters, searchQuery: jobTitle });
     setShowSuggestions(false);
     setSuggestions([]);
-    navigate(`/customer/category/${encodeURIComponent(cat.id)}`);
+    
+    // Redirect directly to the particular job's dedicated page!
+    navigate(`/customer/category/${encodeURIComponent(jobTitle)}`);
   };
 
   const handleSearchKeyDown = (e) => {
@@ -150,7 +164,25 @@ const Dashboard = () => {
       }
     };
     fetchWorkers();
-  }, [activeFilters]); // Refetch when activeFilters change
+  }, [activeFilters]);
+
+  useEffect(() => {
+    const fetchUserBookings = async () => {
+      try {
+        const res = await api.get('/bookings');
+        if (res.data?.data) {
+          const allB = res.data.data;
+          const active = allB.find(b => ['pending', 'accepted', 'en_route', 'arrived', 'in_progress'].includes(b.status));
+          setActiveBooking(active || null);
+          const completed = allB.find(b => b.status === 'completed');
+          setLastCompletedBooking(completed || null);
+        }
+      } catch (err) {
+        console.error('Failed to fetch customer bookings', err);
+      }
+    };
+    fetchUserBookings();
+  }, []); // Refetch when activeFilters change
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -258,7 +290,7 @@ const Dashboard = () => {
             `}} />
 
             {/* Bottom Edge Line */}
-            <div className="absolute bottom-0 left-0 w-full h-[3px] pointer-events-none opacity-80" style={{ background: 'linear-gradient(90deg, transparent 0%, #FF7A00 50%, transparent 100%)' }}></div>
+            
 
             <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12 pt-[140px] sm:pt-[170px] md:pt-0 pb-7 sm:pb-12 flex flex-col">
               
@@ -266,10 +298,9 @@ const Dashboard = () => {
               <div className="w-full max-w-[620px] text-left">
                 
                 {/* Headline */}
-                <h1 className="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[60px] font-poppins font-bold text-white leading-[1.15] mb-2 sm:mb-4">
-                  Hello, <span className="inline-block relative text-transparent bg-clip-text bg-gradient-to-r from-[#FF9F0A] to-[#F94D1A] truncate max-w-[200px] md:max-w-[300px] align-bottom">
+                <h1 className="text-[26px] sm:text-[36px] md:text-[48px] lg:text-[60px] font-poppins font-bold text-white leading-[1.15] mb-2 sm:mb-4">
+                  Hello, <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#FF9F0A] to-[#F94D1A] truncate max-w-[200px] md:max-w-[300px] align-bottom">
                     {user?.firstName || 'Nobert'}
-                    <span className="absolute -bottom-1 left-0 w-full h-[4px] sm:h-[5px] bg-gradient-to-r from-[#FF9F0A] to-[#F94D1A] rounded-full"></span>
                   </span>
                 </h1>
 
@@ -280,14 +311,14 @@ const Dashboard = () => {
 
                 {/* Search Bar with Fuzzy Autocomplete */}
                 <div ref={searchRef} className="relative w-full">
-                  <form onSubmit={handleSearchSubmit} className="relative w-full h-[52px] sm:h-[60px] md:h-[64px] bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_12px_32px_rgba(0,0,0,0.4)] flex items-center p-1.5 sm:p-2 group transition-all duration-300 focus-within:ring-4 focus-within:ring-[#FF7A00]/25">
-                    <div className="pl-3 sm:pl-4 pr-2 sm:pr-3 flex items-center justify-center pointer-events-none">
-                      <Search className="text-[#6B6B6B] w-4 h-4 sm:w-5 sm:h-5 group-focus-within:text-[#FF7A00] transition-colors" />
+                  <form onSubmit={handleSearchSubmit} className="relative w-full h-[54px] sm:h-[60px] md:h-[64px] bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_12px_32px_rgba(0,0,0,0.4)] flex items-center p-1.5 sm:p-2 group transition-all duration-300 focus-within:ring-4 focus-within:ring-[#FF7A00]/25">
+                    <div className="pl-3 sm:pl-4 pr-1.5 sm:pr-3 flex items-center justify-center pointer-events-none">
+                      <Search className="text-[#555555] w-4 h-4 sm:w-5 sm:h-5 group-focus-within:text-[#FF7A00] transition-colors shrink-0" />
                     </div>
                     <input 
                       type="text" 
-                      placeholder="Search any home service (e.g. AC repair, plumbing)..." 
-                      className="flex-1 h-full bg-transparent border-none outline-none font-inter text-[14px] sm:text-[16px] text-[#000000] placeholder-[#6B6B6B]"
+                      placeholder={isMobile ? "Search any home service..." : "Search any home service (e.g. AC repair, plumbing)..."} 
+                      className="flex-1 min-w-0 h-full bg-transparent border-none outline-none font-inter text-[14px] sm:text-[16px] font-medium text-[#111111] placeholder-[#777777] pr-2"
                       value={filters.searchQuery}
                       onChange={handleSearchInputChange}
                       onKeyDown={handleSearchKeyDown}
@@ -295,40 +326,56 @@ const Dashboard = () => {
                       autoComplete="off"
                     />
                     {filters.searchQuery && (
-                      <button type="button" onClick={() => { setFilters({...filters, searchQuery: ''}); setSuggestions([]); setShowSuggestions(false); }} className="px-2 text-[#6B6B6B] hover:text-[#000000]">
+                      <button type="button" onClick={() => { setFilters({...filters, searchQuery: ''}); setSuggestions([]); setShowSuggestions(false); }} className="px-2 text-[#6B6B6B] hover:text-[#000000] shrink-0">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                       </button>
                     )}
-                    <button type="submit" className="h-full px-4 sm:px-6 bg-gradient-to-r from-[#FF9F0A] to-[#F94D1A] text-white font-semibold text-[14px] sm:text-[15px] rounded-[10px] sm:rounded-[12px] flex items-center gap-1.5 sm:gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 group/btn focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:ring-offset-2 focus:ring-offset-white">
-                      Search
+                    <button type="submit" className="h-full px-3.5 sm:px-6 bg-gradient-to-r from-[#FF9F0A] to-[#F94D1A] text-white font-semibold text-[13px] sm:text-[15px] rounded-[10px] sm:rounded-[12px] flex items-center gap-1 sm:gap-2 shrink-0 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 group/btn focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:ring-offset-2 focus:ring-offset-white">
+                      <span>Search</span>
                       <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
                   </form>
 
                   {/* Autocomplete Suggestions Dropdown */}
                   {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute top-[68px] left-0 right-0 bg-white rounded-[14px] shadow-[0_16px_40px_rgba(0,0,0,0.18)] border border-[#E8E2DB] z-50 overflow-hidden">
-                      <div className="px-4 py-2 border-b border-[#F3EDE7]">
-                        <span className="text-[11px] font-semibold text-[#6B6B6B] uppercase tracking-widest">Suggested Services</span>
+                    <div className="absolute top-[68px] left-0 right-0 bg-white rounded-[14px] shadow-[0_16px_40px_rgba(0,0,0,0.18)] border border-[#E8E2DB] z-50 overflow-hidden divide-y divide-[#F3EDE7] animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="px-4 py-2.5 bg-[#FAF8F5] flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-[#6B6B6B] uppercase tracking-wider">Matching Jobs & Services</span>
+                        <span className="text-[11px] text-[#FF7A00] font-semibold">{suggestions.length} found</span>
                       </div>
-                      {suggestions.map((cat, idx) => (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onMouseDown={(e) => { e.preventDefault(); handleSuggestionClick(cat); }}
-                          onMouseEnter={() => setHighlightedIdx(idx)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-100 ${highlightedIdx === idx ? 'bg-[#FFF8F1]' : 'hover:bg-[#FFF8F1]'}`}
-                        >
-                          <div className="w-8 h-8 rounded-[8px] bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] flex items-center justify-center flex-shrink-0">
-                            <Search size={14} className="text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="block text-[15px] font-semibold text-[#000000]">{cat.name}</span>
-                            <span className="block text-[12px] text-[#6B6B6B]">from Rs. {cat.price.toLocaleString()}</span>
-                          </div>
-                          <svg className="w-4 h-4 text-[#6B6B6B] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-                        </button>
-                      ))}
+                      <div className="max-h-[340px] overflow-y-auto">
+                        {suggestions.map((job, idx) => (
+                          <button
+                            key={job.title || idx}
+                            type="button"
+                            onMouseDown={(e) => { e.preventDefault(); handleSuggestionClick(job); }}
+                            onMouseEnter={() => setHighlightedIdx(idx)}
+                            className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors duration-100 ${highlightedIdx === idx ? 'bg-[#FFF8F1]' : 'hover:bg-[#FFF8F1]'}`}
+                          >
+                            <div className="w-8 h-8 rounded-[8px] bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <Briefcase size={14} className="text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="block text-[15px] font-semibold text-[#000000] truncate">
+                                  {job.title}
+                                </span>
+                                {job.category && (
+                                  <span className="text-[11px] font-medium text-[#FF7A00] bg-[#FFF1E3] px-2 py-0.5 rounded-full flex-shrink-0">
+                                    {job.category}
+                                  </span>
+                                )}
+                              </div>
+                              {job.details && (
+                                <span className="block text-[12px] text-[#6B6B6B] truncate mt-0.5">
+                                  {job.details}
+                                </span>
+                              )}
+                            </div>
+                            <svg className="w-4 h-4 text-[#6B6B6B] flex-shrink-0 mt-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+                          </button>
+                        ))}
+                      </div>
                       <div className="px-4 py-2 border-t border-[#F3EDE7] bg-[#FAFAFA]">
                         <span className="text-[12px] text-[#6B6B6B]">Press <kbd className="bg-[#E8E2DB] text-[#3D3D3D] px-1 py-0.5 rounded text-[11px] font-mono">↑↓</kbd> to navigate, <kbd className="bg-[#E8E2DB] text-[#3D3D3D] px-1 py-0.5 rounded text-[11px] font-mono">Enter</kbd> to select</span>
                       </div>
@@ -336,7 +383,7 @@ const Dashboard = () => {
                   )}
 
                   {/* No results hint */}
-                  {showSuggestions && filters.searchQuery.trim().length >= 2 && suggestions.length === 0 && (
+                  {showSuggestions && filters.searchQuery.trim().length >= 1 && suggestions.length === 0 && (
                     <div className="absolute top-[68px] left-0 right-0 bg-white rounded-[14px] shadow-[0_16px_40px_rgba(0,0,0,0.18)] border border-[#E8E2DB] z-50 px-4 py-4 flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#FFF1E3] flex items-center justify-center flex-shrink-0">
                         <Search size={14} className="text-[#FF7A00]" />
@@ -348,14 +395,38 @@ const Dashboard = () => {
                     </div>
                   )}
                 </div>
-
-
+                
+                
 
               </div>
             </div>
 
             
           </section>
+
+          {/* Active Booking Slim Bar */}
+          {activeBooking && (
+            <div className="w-full bg-white border-b border-[#E8E2DB] h-14 flex items-center px-4 sm:px-6 md:px-12">
+              <div className="max-w-[1200px] w-full mx-auto flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <span className="w-2 h-2 rounded-full bg-[#FF7A00] shrink-0 animate-pulse" />
+                  <p className="text-[14px] text-gray-900 truncate">
+                    Active job with <span className="font-semibold">{activeBooking.workerId?.firstName || 'Worker'}</span> for <span className="font-semibold">{activeBooking.serviceTitle}</span>
+                  </p>
+                  <span className="hidden sm:inline-block px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-[#FFF1E3] text-[#E85D00] capitalize shrink-0">
+                    {activeBooking.status?.replace('_', ' ')}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/customer/bookings/${activeBooking._id}`)}
+                  className="text-[#E86100] hover:text-[#CC5200] font-semibold text-[13px] shrink-0 hover:underline"
+                >
+                  View
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Popular Services Section */}
           <section className="services-section bg-white">
@@ -374,7 +445,7 @@ const Dashboard = () => {
                 }} 
                 className="services-section-right"
               >
-                View all services <span className="btn-arrow">&rarr;</span>
+                View all services
               </a>
             </div>
             
@@ -455,10 +526,10 @@ const Dashboard = () => {
                 <div className="relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
                   
                   {/* Content */}
-                  <div className="w-full flex flex-col text-left">
+                  <div className="w-full flex flex-col text-left items-start">
                     
                     {/* Heading */}
-                    <h2 className="text-[28px] md:text-[38px] lg:text-[42px] font-poppins font-bold text-[#000000] leading-[1.15] mb-3">
+                    <h2 className="text-[24px] md:text-[38px] lg:text-[42px] font-poppins font-bold text-[#000000] leading-[1.15] mb-3">
                       Don't know who to hire?
                       <span className="block mt-1 font-bold text-[#000000]">
                         Let the right workers{' '}
@@ -474,46 +545,31 @@ const Dashboard = () => {
                       Describe what you need and get <span className="font-semibold text-black">quotes</span> from verified workers in <span className="font-semibold text-black">minutes</span>.
                     </p>
 
-                    {/* Quick-start Input Bar */}
-                    <form 
-                      onSubmit={handlePostJobQuickSubmit} 
-                      className="relative w-full bg-white rounded-[16px] border border-[#E8E2DB] shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-2 flex flex-col sm:flex-row items-center gap-2 focus-within:border-[#FF7A00] focus-within:ring-4 focus-within:ring-[#FF7A00]/15 transition-all duration-200"
-                    >
-                      <div className="flex items-center flex-1 w-full pl-3 pr-2 h-[44px] sm:h-[48px]">
-                        <svg className="w-5 h-5 text-[#6B6B6B] shrink-0 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                          <path d="m15 5 4 4"/>
-                        </svg>
-                        <input
-                          type="text"
-                          placeholder="What do you need done? e.g. Fix a leaking tap"
-                          className="w-full bg-transparent border-none outline-none font-inter text-[15px] md:text-[16px] text-[#000000] placeholder-[#6B6B6B]"
-                          value={postJobInput}
-                          onChange={(e) => setPostJobInput(e.target.value)}
-                        />
-                      </div>
+                    {/* Post a Job CTA Button */}
+                    <div className="flex flex-col sm:flex-row items-start w-full sm:w-auto gap-4 mb-2">
                       <button
-                        type="submit"
-                        className="w-full sm:w-auto h-[48px] px-6 bg-[#000000] text-white font-poppins font-semibold text-[15px] rounded-[12px] flex items-center justify-center gap-2 shrink-0 hover:bg-[#1C1917] hover:shadow-md transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:ring-offset-2"
+                        type="button"
+                        onClick={() => navigate('/customer/post-job')}
+                        className="w-full sm:w-auto h-[52px] px-8 bg-[#000000] text-white font-poppins font-semibold text-[16px] rounded-[14px] flex items-center justify-center gap-2.5 shadow-md hover:bg-[#1C1917] hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:ring-offset-2"
                       >
-                        <span className="text-lg leading-none font-bold">+</span>
+                        <span className="text-xl leading-none font-bold">+</span>
                         <span>Post a Job</span>
-                        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+                        <ArrowRight size={18} className="transition-transform duration-200 group-hover:translate-x-1" />
                       </button>
-                    </form>
+                    </div>
 
                     {/* Three Mini Steps */}
-                    <div className="relative mt-8 pt-6 border-t border-[#E8E2DB]/60">
+                    <div className="relative mt-8 pt-6 border-t border-[#E8E2DB]/60 w-full">
                       {/* Dashed line on desktop */}
-                      <div className="hidden sm:block absolute top-[42px] left-[36px] right-[36px] h-0 border-t-2 border-dashed border-[#FF7A00]/30 -z-0 pointer-events-none"></div>
+                      
 
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 relative z-10">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 relative z-10 w-full">
                         {/* Step 1 */}
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-center gap-3.5">
                           <div className="w-9 h-9 rounded-full bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] text-white font-poppins font-bold text-[14px] flex items-center justify-center shrink-0 shadow-sm">
                             1
                           </div>
-                          <div>
+                          <div className="text-left">
                             <h4 className="text-[15px] font-poppins font-semibold text-[#000000] leading-tight">
                               Describe the job
                             </h4>
@@ -524,11 +580,11 @@ const Dashboard = () => {
                         </div>
 
                         {/* Step 2 */}
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-center gap-3.5">
                           <div className="w-9 h-9 rounded-full bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] text-white font-poppins font-bold text-[14px] flex items-center justify-center shrink-0 shadow-sm">
                             2
                           </div>
-                          <div>
+                          <div className="text-left">
                             <h4 className="text-[15px] font-poppins font-semibold text-[#000000] leading-tight">
                               Compare quotes
                             </h4>
@@ -539,11 +595,11 @@ const Dashboard = () => {
                         </div>
 
                         {/* Step 3 */}
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-center gap-3.5">
                           <div className="w-9 h-9 rounded-full bg-gradient-to-b from-[#FF9F0A] to-[#F94D1A] text-white font-poppins font-bold text-[14px] flex items-center justify-center shrink-0 shadow-sm">
                             3
                           </div>
-                          <div>
+                          <div className="text-left">
                             <h4 className="text-[15px] font-poppins font-semibold text-[#000000] leading-tight">
                               Choose your worker
                             </h4>
@@ -556,7 +612,7 @@ const Dashboard = () => {
                     </div>
 
                     {/* Caption with Green Check Icon */}
-                    <div className="flex items-center gap-2 mt-5 text-[13px] font-inter text-[#6B6B6B]">
+                    <div className="flex items-center justify-start gap-2 mt-5 text-[13px] font-inter text-[#6B6B6B]">
                       <svg className="w-4 h-4 text-[#2E9E5B] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                         <polyline points="22 4 12 14.01 9 11.01"/>
@@ -581,52 +637,67 @@ const Dashboard = () => {
             </div>
             
             <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '80px' }}>
-              {ALL_SERVICES.map((cat, index) => (
-                <div key={index} className="category-block">
-                  <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #F5F5F4', paddingBottom: '16px' }}>
-                    <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#292524', display: 'flex', alignItems: 'center', gap: '12px', margin: 0 }}>
-                      {cat.category}
-                    </h3>
-                    <button
-                      onClick={() => {
-                        const cleanCat = cat.category.replace(/^[^\w\s]+/, '').trim();
-                        navigate(`/customer/category/${encodeURIComponent(cleanCat)}`);
-                      }}
-                      className="group flex items-center gap-1.5 text-[#FF7A00] hover:text-[#E86100] font-semibold text-[14px] sm:text-[15px] transition-all duration-200 cursor-pointer shrink-0 ml-3"
-                      title="View all services in this category"
-                    >
-                      <span className="hidden sm:inline">View All</span>
-                      <div className="w-8 h-8 rounded-full bg-[#FFF5EB] group-hover:bg-[#FF7A00] flex items-center justify-center transition-colors duration-200 shadow-sm">
-                        <ArrowRight size={16} className="text-[#FF7A00] group-hover:text-white transition-colors duration-200 group-hover:translate-x-0.5" />
-                      </div>
-                    </button>
-                  </div>
-                  
-                  <div className="services-grid">
-                    {cat.jobs.map((jobStr, jIndex) => {
-                      const match = jobStr.match(/^(.*?)\s*\((.*?)\)$/);
-                      const title = match ? match[1] : jobStr;
-                      const desc = match ? match[2] : 'Professional service';
-                      const fallbackImg = `https://picsum.photos/seed/${encodeURIComponent(title)}/600/400`;
-                      
-                      return (
-                        <div key={jIndex} onClick={() => handleCategoryCardClick(title)} className="service-card">
-                          <div className="service-card-image-wrap">
-                            <img src={fallbackImg} alt={title} loading="lazy" />
+              {ALL_SERVICES.map((cat, index) => {
+                const isExpanded = !!expandedCategories[cat.category];
+                const displayedJobs = isExpanded ? cat.jobs : cat.jobs.slice(0, 4);
+
+                return (
+                  <div key={index} className="category-block">
+                    <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #F5F5F4', paddingBottom: '16px' }}>
+                      <h3 className="category-block-title" style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: 0 }}>
+                        {cat.category}
+                      </h3>
+                      {cat.jobs.length > 4 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.innerWidth < 1280) {
+                              navigate(`/customer/category/${encodeURIComponent(cat.category)}`);
+                            } else {
+                              toggleCategoryExpand(cat.category);
+                            }
+                          }}
+                          className="group flex items-center gap-1.5 text-[#FF7A00] hover:text-[#E86100] font-semibold text-[14px] sm:text-[15px] transition-all duration-200 cursor-pointer shrink-0 ml-3"
+                          title={isExpanded ? "Show fewer services" : "View all services in this category"}
+                        >
+                          <span className="hidden sm:inline">{isExpanded ? 'Show Less' : 'View All'}</span>
+                          <div className="w-8 h-8 rounded-full bg-[#FFF5EB] group-hover:bg-[#FF7A00] flex items-center justify-center transition-colors duration-200 shadow-sm">
+                            {isExpanded && !isMobile ? (
+                              <ChevronUp size={16} className="text-[#FF7A00] group-hover:text-white transition-colors duration-200" />
+                            ) : (
+                              <ArrowRight size={16} className="text-[#FF7A00] group-hover:text-white transition-colors duration-200 group-hover:translate-x-0.5" />
+                            )}
                           </div>
-                          <div className="service-card-body">
-                            <h3 className="service-card-title">{title}</h3>
-                            <p className="service-card-desc">{desc}</p>
-                            <div className="service-card-footer">
-                              <span className="book-now-link">Book Now</span>
+                        </button>
+                      )}
+                    </div>
+                    
+                    <div className="services-grid">
+                      {displayedJobs.map((jobStr, jIndex) => {
+                        const match = jobStr.match(/^(.*?)\s*\((.*?)\)$/);
+                        const title = match ? match[1] : jobStr;
+                        const desc = match ? match[2] : 'Professional service';
+                        const fallbackImg = `https://picsum.photos/seed/${encodeURIComponent(title)}/600/400`;
+                        
+                        return (
+                          <div key={jIndex} onClick={() => handleCategoryCardClick(title)} className="service-card">
+                            <div className="service-card-image-wrap">
+                              <img src={fallbackImg} alt={title} loading="lazy" />
+                            </div>
+                            <div className="service-card-body">
+                              <h3 className="service-card-title">{title}</h3>
+                              <p className="service-card-desc">{desc}</p>
+                              <div className="service-card-footer">
+                                <span className="book-now-link">Book Now</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 

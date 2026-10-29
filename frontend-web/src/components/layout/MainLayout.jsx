@@ -14,7 +14,7 @@ const MainLayout = () => {
           <div className="flex justify-between h-20 items-center">
             <div className="flex items-center">
               <Link to="/" className="flex items-center gap-2 group">
-                <img src="/logo-new.png" alt="DoorStep Logo" className="h-16 md:h-20 w-auto object-contain" />
+                <img src="/logo-new.png" alt="DoorStep Logo" className="h-8 md:h-10 w-auto object-contain" />
               </Link>
             </div>
             
@@ -65,7 +65,7 @@ const MainLayout = () => {
             
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3">
-              <img src="/logo-new-3.png" alt="DoorStep Logo" className="h-24 md:h-28 w-auto object-contain" />
+              <img src="/logo-new-3.png" alt="DoorStep Logo" className="h-9 md:h-11 w-auto object-contain" />
             </Link>
 
             {/* App Store Buttons */}

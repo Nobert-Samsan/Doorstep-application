@@ -146,7 +146,7 @@ exports.registerCustomer = async (req, res) => {
 
 exports.registerWorker = async (req, res) => {
   try {
-    let { firstName, lastName, phone, email, password, bio, totalYearsExperience, gender, dateOfBirth, streetAddress, district, city, ...otherDetails } = req.body;
+    let { firstName, lastName, phone, email, password, bio, totalYearsExperience, gender, dateOfBirth, streetAddress, district, city, documents, maxTravelDistance, ...otherDetails } = req.body;
 
     // Generate dummy email if not provided since User schema requires unique email
     if (!email) {
@@ -159,18 +159,43 @@ exports.registerWorker = async (req, res) => {
     }
 
     const user = await User.create({
-      firstName, lastName, phone, email, password, gender, dateOfBirth, streetAddress, district, city, role: 'worker', isPhoneVerified: true
+      firstName,
+      lastName,
+      phone,
+      email,
+      password,
+      gender,
+      dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
+      streetAddress,
+      district,
+      city,
+      role: 'worker',
+      isPhoneVerified: true,
+      isApproved: false
     });
 
-    // Handle files via req.files if using real storage
-    
+    // Format services
+    const services = Array.isArray(otherDetails.services) ? otherDetails.services.map(s => ({
+      serviceTitle: s.serviceTitle || '',
+      yearsExperience: Number(s.yearsExperience) || 0
+    })) : [];
+
+    // Calculate total experience if not explicitly set
+    const calcExperience = totalYearsExperience 
+      ? parseInt(totalYearsExperience) 
+      : services.reduce((max, s) => Math.max(max, s.yearsExperience || 0), 0);
+
     await WorkerProfile.create({
       userId: user._id,
-      bio,
-      totalYearsExperience: parseInt(totalYearsExperience) || 0,
-      services: otherDetails.services || [],
+      bio: bio || '',
+      totalYearsExperience: calcExperience,
+      services,
       serviceDistricts: district ? [district] : [],
-      // Set other details...
+      maxTravelDistance: maxTravelDistance ? Number(maxTravelDistance) : undefined,
+      documents: {
+        nicFront: documents?.nicFront || '',
+        nicBack: documents?.nicBack || ''
+      }
     });
 
     res.status(201).json({
@@ -230,39 +255,118 @@ const crypto = require('crypto');
 
 exports.forgotPassword = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const email = req.body.email ? req.body.email.trim().toLowerCase() : '';
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'There is no user with that email' });
     }
 
-    // Get reset token
-    const resetToken = user.getResetPasswordToken();
-    await user.save({ validateBeforeSave: false });
+    // Generate 6-digit OTP
+    const otp = generateOTP();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    // Create reset url
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
+    // Invalidate previous OTPs for this email
+    await OTP.updateMany({ phoneOrEmail: email, isUsed: false }, { isUsed: true });
 
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
+    // Save OTP to DB
+    await OTP.create({ phoneOrEmail: email, otp, expiresAt });
+
+    // Send formatted Email with 6-digit OTP
+    const message = `Your DoorStep password reset code is: ${otp}\n\nThis code will expire in 10 minutes. If you did not request a password reset, please ignore this email.`;
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #E8E2DB; border-radius: 12px; background: #ffffff;">
+        <h2 style="color: #000000; margin-bottom: 8px;">Reset your password</h2>
+        <p style="color: #6B6B6B; font-size: 15px; margin-bottom: 24px;">Use the verification code below to reset your DoorStep password:</p>
+        <div style="background: #FFF8F1; border: 1px dashed #FF7A00; border-radius: 10px; padding: 18px; text-align: center; margin-bottom: 24px;">
+          <span style="font-size: 32px; font-weight: bold; letter-spacing: 6px; color: #FF7A00;">${otp}</span>
+        </div>
+        <p style="color: #6B6B6B; font-size: 13px; line-height: 1.5;">This code will expire in <strong>10 minutes</strong>. If you did not request this code, you can safely ignore this email.</p>
+      </div>
+    `;
 
     try {
       const result = await sendEmail({
         email: user.email,
-        subject: 'Password reset token',
-        message
+        subject: 'Your DoorStep Password Reset Code',
+        message,
+        html
       });
 
       res.status(200).json({ 
         success: true, 
-        message: 'Email sent',
+        message: 'Password reset code sent to your email',
         previewUrl: result?.previewUrl
       });
     } catch (err) {
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
-      await user.save({ validateBeforeSave: false });
       return res.status(500).json({ success: false, message: 'Email could not be sent' });
     }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.verifyResetOtp = async (req, res) => {
+  try {
+    const email = req.body.email ? req.body.email.trim().toLowerCase() : '';
+    const { otp } = req.body;
+
+    const otpRecord = await OTP.findOne({
+      phoneOrEmail: email,
+      otp,
+      isUsed: false,
+      expiresAt: { $gt: new Date() }
+    });
+
+    if (!otpRecord) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired verification code' });
+    }
+
+    res.status(200).json({ success: true, message: 'Code verified successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.resetPasswordWithOtp = async (req, res) => {
+  try {
+    const email = req.body.email ? req.body.email.trim().toLowerCase() : '';
+    const { otp, password } = req.body;
+
+    if (!password || password.length < 6) {
+      return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
+    }
+
+    const otpRecord = await OTP.findOne({
+      phoneOrEmail: email,
+      otp,
+      isUsed: false,
+      expiresAt: { $gt: new Date() }
+    });
+
+    if (!otpRecord) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired verification code' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Set new password
+    user.password = password;
+    await user.save();
+
+    // Mark OTP as used
+    otpRecord.isUsed = true;
+    await otpRecord.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successfully',
+      token: generateToken(user._id),
+      refreshToken: generateRefreshToken(user._id)
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

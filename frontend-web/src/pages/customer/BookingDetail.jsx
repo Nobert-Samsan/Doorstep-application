@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Star, Copy, Check, MapPin, Calendar, MessageSquare, Phone, Info, Lock, Zap, ShieldCheck, Tag, Wrench, Navigation, ArrowRight, FileText } from 'lucide-react';
+import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Star, Copy, Check, MapPin, Calendar, MessageSquare, Phone, Info, Lock, Zap, ShieldCheck, Tag, Wrench, Navigation, ArrowRight, FileText, ArrowLeft } from 'lucide-react';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 import { io } from 'socket.io-client';
@@ -24,7 +24,7 @@ const customStyles = `
   @media (max-width: 767px) {
     .job-summary-mobile {
       background: #ffffff;
-      border-radius: 24px;
+      border-radius: 8px;
       border: 1px solid #E8E2DB;
       box-shadow: 0 10px 30px rgba(0,0,0,0.06);
       padding: 20px;
@@ -33,13 +33,9 @@ const customStyles = `
       width: 100%;
       animation: fadeUp 0.2s ease-out forwards;
     }
+    /* Top orange border removed as requested */
     .job-summary-mobile::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: #D97706;
-      border-radius: 24px 24px 0 0;
+      display: none;
     }
     .jsm-icon-box {
       width: 44px; height: 44px;
@@ -58,7 +54,7 @@ const customStyles = `
     }
     .jsm-title {
       font-family: "Poppins", sans-serif;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 20px;
       color: #000000;
       line-height: 1.2;
@@ -114,7 +110,7 @@ const customStyles = `
     }
     .jsm-detail-value {
       font-family: "Poppins", sans-serif;
-      font-weight: 600;
+      font-weight: 400;
       font-size: 16px;
       color: #000000;
       line-height: 1.35;
@@ -137,7 +133,7 @@ const customStyles = `
     .jsm-notes {
       background: #FFF8F1;
       border: 1px solid #E8E2DB;
-      border-radius: 14px;
+      border-radius: 8px;
       padding: 12px 14px;
       display: flex; align-items: flex-start; gap: 10px;
       margin-bottom: 16px;
@@ -282,7 +278,7 @@ const getStatusMessage = (status) => {
 
 const Card = ({ children, className = '', index = 0 }) => (
   <div 
-    className={`relative bg-white rounded-[24px] border border-[#E8E2DB] p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
+    className={`relative bg-white rounded-[8px] md:rounded-[12px] border border-[#E8E2DB] p-6 md:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
     style={{ 
       animation: 'fadeUp 0.3s ease-out forwards',
       opacity: 0,
@@ -391,19 +387,15 @@ const JobDetailsCard = ({ booking, index }) => {
         {/* Header with Title on Left and Track Job Button on Right */}
         <div className="jsm-header">
           <div className="jsm-header-left">
-            <div className="jsm-icon-box">
-              <Wrench size={22} strokeWidth={2} />
-            </div>
-            <span className="jsm-title">{jobRole}</span>
+            <span className="jsm-title">Booking Details</span>
           </div>
-          <a
-            href={`/customer/bookings/${booking._id}`}
+          <Link
+            to={`/customer/bookings/${booking._id}?view=timeline`}
             className={`jsm-track-btn-top${!booking._id ? " disabled" : ""}`}
-            onClick={e => { if (!booking._id) e.preventDefault(); }}
             aria-label="Track Job"
           >
             Track Job
-          </a>
+          </Link>
         </div>
 
         {/* Detail rows */}
@@ -445,12 +437,9 @@ const JobDetailsCard = ({ booking, index }) => {
       <Card index={index} className="hidden md:block">
         <div className="flex flex-col gap-7">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-[14px] bg-[#D97706] flex items-center justify-center text-white shadow-md shadow-[#D97706]/20 shrink-0">
-              <Wrench size={24} />
-            </div>
             <div>
-              <h3 className="text-black font-semibold text-[22px] capitalize" style={{ fontFamily: "Poppins, sans-serif" }}>
-                {getJobRole(booking.serviceTitle, booking.workerSkill || booking.categoryId?.nameEn)}
+              <h3 className="text-black font-semibold text-[20px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Booking Details
               </h3>
             </div>
           </div>
@@ -463,7 +452,7 @@ const JobDetailsCard = ({ booking, index }) => {
               <div>
                 <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>Schedule</div>
                 <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="text-black font-semibold text-[17px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <span className="text-black font-normal text-[17px]" style={{ fontFamily: "Poppins, sans-serif" }}>
                     {formatScheduleDate(booking.scheduledDate)}
                   </span>
                   {isEmergency ? (
@@ -485,14 +474,14 @@ const JobDetailsCard = ({ booking, index }) => {
               </div>
               <div>
                 <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold mb-1" style={{ fontFamily: "Poppins, sans-serif" }}>Location</div>
-                <p className="text-black font-semibold text-[17px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <p className="text-black font-normal text-[17px]" style={{ fontFamily: "Poppins, sans-serif" }}>
                   {location || "—"}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-[#F8F9FA] rounded-[16px] border border-[#E8E2DB] py-4 px-5 text-[#6B6B6B] italic text-[14px] flex gap-3 items-start">
+          <div className="bg-[#F8F9FA] rounded-[10px] border border-[#E8E2DB] py-4 px-5 text-[#6B6B6B] italic text-[14px] flex gap-3 items-start">
             <Tag size={16} className="mt-0.5 shrink-0 text-[#D97706]" />
             <p>{booking.jobDescription || "No additional notes provided"}</p>
           </div>
@@ -505,11 +494,18 @@ const JobDetailsCard = ({ booking, index }) => {
 const WorkerCard = ({ booking, navigate, handleCancel, index }) => {
   if (!booking.workerId || typeof booking.workerId === 'string') return null;
 
+  const workerRole = getJobRole(booking.serviceTitle, booking.workerSkill || booking.categoryId?.nameEn || (booking.workerId?.services && booking.workerId.services[0]));
+
   return (
     <Card index={index}>
       <div className="flex items-center justify-between gap-4 mb-5">
-        <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
-          Assigned Worker
+        <div>
+          <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Assigned Worker
+          </div>
+          <div className="text-[#6B6B6B] font-bold text-[14px] mt-0.5" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            ID: #{booking._id ? booking._id.substring(booking._id.length - 6).toUpperCase() : ""}
+          </div>
         </div>
         <StatusBadge status={booking.status} />
       </div>
@@ -538,8 +534,8 @@ const WorkerCard = ({ booking, navigate, handleCancel, index }) => {
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-black text-[16px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  #{booking._id.substring(booking._id.length - 6).toUpperCase()}
+                <span className="font-medium text-[#6B6B6B] text-[15px] capitalize" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  {workerRole}
                 </span>
               </div>
               {booking.workerId.averageRating > 0 && (
@@ -584,34 +580,37 @@ const WorkerCard = ({ booking, navigate, handleCancel, index }) => {
   );
 };
 
-const TimelineCard = ({ timeline, index }) => {
+const TimelineCard = ({ timeline, index, className = '' }) => {
   const doneCount = timeline.filter(s => s.done).length;
   const totalCount = timeline.length;
   
   return (
-    <Card index={index}>
-      <h3 className="text-black font-semibold text-[20px] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-        Booking Timeline
-      </h3>
-      <div className="flex items-center justify-between mb-6">
-        <span className="text-[#6B6B6B] text-[13px]">{doneCount} of {totalCount} steps done</span>
-      </div>
-      <div className="w-full h-[6px] bg-[#E8E2DB] rounded-full mb-8 overflow-hidden relative">
-        <div 
-          className="absolute top-0 bottom-0 left-0 bg-[#D97706] transition-all duration-1000 ease-out" 
-          style={{ width: `${(doneCount / totalCount) * 100}%` }}
-        />
-      </div>
+    <Card index={index} className={`h-full flex flex-col justify-between ${className}`}>
+      <div>
+        <h3 className="text-black font-semibold text-[20px] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          Booking Timeline
+        </h3>
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-[#6B6B6B] text-[13px]">{doneCount} of {totalCount} steps done</span>
+        </div>
+        <div className="w-full h-[6px] bg-[#E8E2DB] rounded-full mb-6 overflow-hidden relative">
+          <div 
+            className={`absolute top-0 bottom-0 left-0 ${doneCount === totalCount ? 'bg-[#2E9E5B]' : 'bg-[#D97706]'} transition-all duration-1000 ease-out`} 
+            style={{ width: `${(doneCount / totalCount) * 100}%` }}
+          />
+        </div>
 
-      <div className="flex flex-col relative">
+        <div className="flex flex-col relative justify-between">
         {timeline.map((step, idx) => {
           const isLast = idx === timeline.length - 1;
           const isDone = step.done;
-          const isCurrent = isDone && (isLast || !timeline[idx+1].done);
+          // When a step is 'completed', it has reached the finished milestone and should be green!
+          const isCompletedStep = (step.key === 'completed' || step.status === 'completed') && isDone;
+          const isCurrent = isDone && !isCompletedStep && (isLast || !timeline[idx+1].done);
           const isNextDone = !isLast && timeline[idx+1].done;
 
           return (
-            <div key={idx} className="relative flex gap-5 pb-8 last:pb-0">
+            <div key={idx} className="relative flex gap-5 pb-5 md:pb-6 last:pb-0">
               {!isLast && (
                 <div 
                   className={`absolute left-[13px] top-[28px] bottom-[-4px] w-[2px] ${
@@ -638,15 +637,20 @@ const TimelineCard = ({ timeline, index }) => {
               <div className="pt-1">
                 <div className="flex items-center gap-2 mb-1">
                   <p className={`${
-                    isCurrent ? 'text-black font-bold text-[16px]' : 
+                    isCurrent || isCompletedStep ? 'text-black font-bold text-[16px]' : 
                     isDone ? 'text-black font-semibold text-[15px]' : 
                     'text-[#6B6B6B] text-[15px]'
-                  }`} style={isCurrent ? { fontFamily: 'Poppins, sans-serif' } : {}}>
+                  }`} style={isCurrent || isCompletedStep ? { fontFamily: 'Poppins, sans-serif' } : {}}>
                     {step.label}
                   </p>
                   {isCurrent && (
                     <span className="bg-amber-50 text-[#B45309] px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
                       NOW
+                    </span>
+                  )}
+                  {isCompletedStep && (
+                    <span className="bg-[#E9F5ED] text-[#1F7A44] px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                      COMPLETED
                     </span>
                   )}
                 </div>
@@ -658,12 +662,18 @@ const TimelineCard = ({ timeline, index }) => {
           );
         })}
       </div>
+      </div>
     </Card>
   );
 };
 
 const PaymentCard = ({ booking, index }) => {
-  const isPaid = booking.paymentStatus === 'paid';
+  // Show Payment Summary ONLY once the job is completed
+  const isJobDone = booking?.status === 'completed';
+  if (!isJobDone) return null;
+
+  const isPaid = ['paid', 'paid_online', 'paid_cash'].includes(booking?.paymentStatus);
+  const totalAmount = booking?.finalAmount || (booking?.pricingType === 'fixed' ? booking?.fixedRate : 0);
   
   return (
     <Card index={index}>
@@ -671,46 +681,48 @@ const PaymentCard = ({ booking, index }) => {
         Payment Summary
       </h3>
       
-      <div className="flex justify-between items-center pb-4 border-b border-[#E8E2DB]">
-        <span className="text-[#6B6B6B] text-[15px]">Status</span>
-        {isPaid ? (
-          <span className="bg-[#E9F5ED] text-[#1F7A44] px-3 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
-            Paid
+      <div className="flex flex-col gap-4 pb-6 border-b border-[#E8E2DB]">
+        {/* Payment Status Row */}
+        <div className="flex items-center justify-between">
+          <span className="text-[#6B6B6B] text-[15px] font-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Payment Status
           </span>
-        ) : (
-          <span className="bg-[#F3EFEA] text-[#3D3D3D] px-3 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
-            {booking.paymentStatus.replace('_', ' ')}
-          </span>
-        )}
-      </div>
-
-      <div className="pt-4 pb-5 flex flex-col gap-1">
-        <div className="flex justify-between items-start">
-          <span className="text-[#6B6B6B] text-[15px] pt-1">Total</span>
-          <div className="text-right flex flex-col items-end">
-            {(booking.status === 'completed' && booking.finalAmount) || (booking.pricingType === 'fixed' && booking.fixedRate) ? (
-              <span className="text-black font-bold text-[28px] leading-none" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                Rs. {booking.finalAmount || booking.fixedRate}
+          <div>
+            {isPaid ? (
+              <span className="bg-[#E9F5ED] text-[#1F7A44] px-3.5 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
+                {booking.paymentStatus === 'paid_cash' ? 'Paid via Cash' : 'Paid'}
               </span>
             ) : (
-              <div className="flex flex-col items-end gap-1">
-                <span className="text-black font-semibold text-[18px] flex items-center gap-1.5" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  <Info size={16} className="text-[#FF7A00]" /> Pending Inspection
-                </span>
-              </div>
+              <span className="bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA] px-3.5 py-1 rounded-full text-[13px] font-semibold uppercase tracking-wider">
+                Unpaid
+              </span>
             )}
           </div>
         </div>
-        {(!booking.finalAmount && booking.pricingType !== 'fixed') && (
-           <p className="text-[#6B6B6B] text-[13px] text-right mt-1">
-             Your final price is confirmed after the worker inspects the job.
-           </p>
-        )}
+
+        {/* Total Amount Row */}
+        <div className="flex items-center justify-between">
+          <span className="text-[#6B6B6B] text-[15px] font-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Total Amount
+          </span>
+          <span className="text-black font-normal text-[20px] leading-none" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Rs. {Number(totalAmount).toLocaleString()}
+          </span>
+        </div>
       </div>
 
-      <div className="pt-4 border-t border-[#E8E2DB] flex items-center justify-center gap-2">
-        <Lock size={14} className="text-[#2E9E5B]" />
-        <span className="text-[#6B6B6B] text-[13px]">Pay securely online or in cash</span>
+      <div className="pt-4 flex items-center justify-center sm:justify-between flex-wrap gap-2">
+        {isPaid ? (
+          <>
+            <Check size={14} className="text-[#2E9E5B]" />
+            <span className="text-[#2E9E5B] font-medium text-[13px]">Payment completed</span>
+          </>
+        ) : (
+          <>
+            <Lock size={14} className="text-[#FF7A00]" />
+            <span className="text-[#6B6B6B] text-[13px]">Pay the worker directly in cash or online</span>
+          </>
+        )}
       </div>
     </Card>
   );
@@ -719,6 +731,8 @@ const PaymentCard = ({ booking, index }) => {
 const BookingDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isTimelineView = searchParams.get('view') === 'timeline';
   const [booking, setBooking] = useState(null);
   const [quotations, setQuotations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -857,6 +871,7 @@ const BookingDetail = () => {
     }
 
     return {
+      key: step.key,
       status: step.key,
       label: step.label,
       time: historyItem ? historyItem.timestamp : null,
@@ -864,12 +879,130 @@ const BookingDetail = () => {
     };
   });
 
+  // On mobile, if view=timeline is active, render the dedicated Mobile Timeline Page
+  if (isTimelineView) {
+    const jobRole = (() => {
+      const r = getJobRole(booking.serviceTitle, booking.workerSkill || booking.categoryId?.nameEn);
+      if (!r || ["other","general","service"].includes(r.toLowerCase())) return "General Service";
+      return r;
+    })();
+
+    return (
+      <div className="min-h-screen bg-white font-sans text-[#3D3D3D]">
+        <style>{customStyles}</style>
+        {/* Mobile Dedicated Timeline View (< 768px) */}
+        <div className="md:hidden px-4 py-5 max-w-[500px] mx-auto">
+          {/* Top navigation bar */}
+          <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#E8E2DB]">
+            <button
+              onClick={() => navigate(`/customer/bookings/${booking._id}`)}
+              className="flex items-center gap-2 text-black font-semibold text-[15px] hover:text-[#D97706] transition-colors py-1.5 pr-3"
+            >
+              <ArrowLeft size={20} strokeWidth={2.5} />
+              <span>Back</span>
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-[12px] font-bold text-[#6B6B6B] uppercase tracking-wider">Booking</span>
+              <span className="font-bold text-[#D97706] text-[13px] bg-[#FFF8F1] border border-[#D97706]/30 px-2.5 py-1 rounded-full">
+                #{booking._id ? booking._id.substring(booking._id.length - 6).toUpperCase() : ""}
+              </span>
+            </div>
+          </div>
+
+          {/* Job Header */}
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h1 className="text-[22px] font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                Track Job
+              </h1>
+              <p className="text-[14px] text-[#6B6B6B] mt-0.5">{jobRole}</p>
+            </div>
+            <StatusBadge status={booking.status} />
+          </div>
+
+          {/* Full Timeline Card */}
+          <TimelineCard timeline={timeline} index={0} className="w-full shadow-sm" />
+        </div>
+
+        {/* Desktop fallback: if opened on desktop with ?view=timeline, render regular layout */}
+        <div className="hidden md:block py-8 md:py-12">
+          <div className="max-w-[1100px] mx-auto px-6 md:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-[64%_calc(36%-24px)] gap-6 items-stretch">
+              <div className="flex flex-col gap-6 order-1">
+                {quotations.map(quote => {
+                  const isFinalBill = booking.statusHistory?.some(h => h.status === 'in_progress') || booking.status === 'in_progress';
+                  return quote.status === 'pending' && (
+                    <Card key={quote._id} className="!bg-white !border-[#D97706]/30" index={0}>
+                      <h3 className="text-[20px] font-bold text-black mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                        {isFinalBill ? "Final Bill Ready for Review" : "Worker Quotation Ready"}
+                      </h3>
+                      <p className="text-[#3D3D3D] mb-5 text-[15px]">
+                        {isFinalBill 
+                           ? "The worker has finished the job and provided the final bill. Please review and accept to complete the service." 
+                          : "The worker has provided an itemized quotation for your job. Please review and accept to proceed."}
+                      </p>
+                      
+                      <div className="bg-white rounded-[10px] border border-[#E8E2DB] p-5 mb-5 space-y-3">
+                        {quote.lineItems.map((item, idx) => (
+                          <div key={idx} className="flex justify-between text-[15px]">
+                            <span className="text-[#3D3D3D] font-medium">{item.description}</span>
+                            <span className="font-bold text-black">Rs. {item.amount.toLocaleString()}</span>
+                          </div>
+                        ))}
+                        <div className="border-t border-[#E8E2DB] pt-3 flex justify-between font-bold text-[16px] text-black">
+                          <span>Total Amount</span>
+                          <span className="text-[#D97706]">Rs. {quote.totalAmount.toLocaleString()}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <button 
+                          onClick={() => handleAcceptQuote(quote._id)}
+                          className="flex-1 py-3 bg-[#D97706] text-white font-semibold rounded-[12px] hover:bg-[#B45309] transition-all shadow-md shadow-[#D97706]/30 focus:ring-2 focus:ring-[#D97706]"
+                        >
+                          {isFinalBill ? "Accept & Complete" : "Accept Quotation"}
+                        </button>
+                        {!isFinalBill && (
+                          <button 
+                            onClick={() => handleDeclineQuote(quote._id)}
+                            className="px-6 py-3 border border-[#E8E2DB] text-[#3D3D3D] font-semibold rounded-[12px] hover:bg-gray-50 transition-all"
+                          >
+                            Decline
+                          </button>
+                        )}
+                      </div>
+                    </Card>
+                  );
+                })}
+
+                <WorkerCard booking={booking} navigate={navigate} handleCancel={handleCancel} index={1} />
+                <JobDetailsCard booking={booking} index={3} />
+
+                {(!booking.workerId || typeof booking.workerId === 'string') && (
+                  <HeaderCard booking={booking} handleCancel={handleCancel} index={5} />
+                )}
+              </div>
+
+              <div className="hidden md:flex flex-col h-full order-2">
+                <TimelineCard timeline={timeline} index={2} className="h-full" />
+              </div>
+            </div>
+
+            <div className="mt-6 w-full">
+              <PaymentCard booking={booking} index={4} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white py-8 md:py-12 font-sans text-[#3D3D3D]">
       <style>{customStyles}</style>
       <div className="max-w-[1100px] mx-auto px-6 md:px-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-[64%_calc(36%-24px)] gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[64%_calc(36%-24px)] gap-6 items-stretch">
           
           {/* Left Column Container */}
           <div className="flex flex-col gap-6 order-1">
@@ -888,7 +1021,7 @@ const BookingDetail = () => {
                       : "The worker has provided an itemized quotation for your job. Please review and accept to proceed."}
                   </p>
                   
-                  <div className="bg-white rounded-[16px] border border-[#E8E2DB] p-5 mb-5 space-y-3">
+                  <div className="bg-white rounded-[10px] border border-[#E8E2DB] p-5 mb-5 space-y-3">
                     {quote.lineItems.map((item, idx) => (
                       <div key={idx} className="flex justify-between text-[15px]">
                         <span className="text-[#6B6B6B]">{item.description}</span>
@@ -962,29 +1095,13 @@ const BookingDetail = () => {
               </Card>
             )}
             
-            {booking.status === 'completed' && booking.reviewId && (
-              <div className="bg-[#E9F5ED] border border-[#2E9E5B]/20 rounded-[24px] p-6 mb-2 flex items-center gap-4" style={{ animation: 'fadeUp 0.3s ease-out forwards' }}>
-                <div className="w-12 h-12 bg-[#2E9E5B] rounded-full flex items-center justify-center text-white shrink-0">
-                  <Star size={20} fill="currentColor" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-[#1F7A44] text-[16px]" style={{ fontFamily: 'Poppins, sans-serif' }}>Review Submitted</h4>
-                  <p className="text-[#2E9E5B] text-[14px]">Thank you for rating {booking.workerId?.firstName}!</p>
-                </div>
-              </div>
-            )}
+            
 
             <WorkerCard booking={booking} navigate={navigate} handleCancel={handleCancel} index={1} />
-            
-            <div className="md:hidden">
-              <TimelineCard timeline={timeline} index={2} />
-            </div>
 
             <JobDetailsCard booking={booking} index={3} />
 
-            <div className="md:hidden">
-              <PaymentCard booking={booking} index={4} />
-            </div>
+            
 
             {(!booking.workerId || typeof booking.workerId === 'string') && (
               <HeaderCard booking={booking} handleCancel={handleCancel} index={5} />
@@ -994,12 +1111,17 @@ const BookingDetail = () => {
           </div>
 
           {/* Right Column Container (Desktop Only) */}
-          <div className="hidden md:flex flex-col gap-6 sticky top-8 order-2">
-            <TimelineCard timeline={timeline} index={2} />
-            <PaymentCard booking={booking} index={5} />
+          <div className="hidden md:flex flex-col h-full order-2">
+            <TimelineCard timeline={timeline} index={2} className="h-full" />
           </div>
 
         </div>
+
+        {/* Full-width Payment Summary */}
+        <div className="mt-6 w-full">
+          <PaymentCard booking={booking} index={4} />
+        </div>
+
       </div>
     </div>
   );

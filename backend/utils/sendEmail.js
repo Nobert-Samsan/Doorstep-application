@@ -32,7 +32,8 @@ const sendEmail = async (options) => {
     from: `${process.env.FROM_NAME || 'DoorStep'} <${process.env.FROM_EMAIL || 'noreply@doorstep.lk'}>`,
     to: options.email,
     subject: options.subject,
-    text: options.message
+    text: options.message,
+    ...(options.html && { html: options.html })
   };
 
   const info = await transporter.sendMail(message);
