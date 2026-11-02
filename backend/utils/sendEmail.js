@@ -1,49 +1,64 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-  // If no real SMTP configured, use ethereal for testing
   let transporter;
-  const isDummyHost = !process.env.SMTP_HOST || process.env.SMTP_HOST === 'your_smtp_host';
+
+  // Retrieve credentials, stripping accidental quotes or whitespace
+  const rawUser = process.env.SMTP_EMAIL || process.env.SMTP_USER || '';
+  const rawPass = process.env.SMTP_PASSWORD || process.env.SMTP_PASS || '';
+  const rawHost = process.env.SMTP_HOST || '';
+
+  const cleanUser = rawUser.replace(/["'\s]/g, '');
+  const cleanPass = rawPass.replace(/["'\s]/g, '');
+  const cleanHost = rawHost.replace(/["'\s]/g, '');
+
+  // Detect if an app password was accidentally passed into SMTP_HOST
+  const isPassInHost = cleanHost.length === 16 && !cleanHost.includes('.');
+
+  const isRealGmail = cleanHost.includes('gmail') || cleanUser.includes('gmail.com') || isPassInHost;
+  const isDummyHost = (!cleanHost && !cleanUser) || cleanHost === 'your_smtp_host';
 
   if (!isDummyHost) {
-    const isGmail = (process.env.SMTP_HOST || '').includes('gmail');
-    const port = parseInt(process.env.SMTP_PORT, 10) || 587;
-    
-    transporter = nodemailer.createTransport(
-      isGmail
-        ? {
-            service: 'gmail',
-            auth: {
-              user: process.env.SMTP_EMAIL || process.env.SMTP_USER,
-              pass: (process.env.SMTP_PASSWORD || process.env.SMTP_PASS || '').replace(/["'\s]/g, '')
-            }
-          }
-        : {
-            host: process.env.SMTP_HOST,
-            port,
-            secure: port === 465,
-            auth: {
-              user: process.env.SMTP_EMAIL || process.env.SMTP_USER,
-              pass: (process.env.SMTP_PASSWORD || process.env.SMTP_PASS || '').replace(/["']/g, '')
-            }
-          }
-    );
+    if (isRealGmail) {
+      // Use official Google direct service
+      transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: cleanUser || 'nobertsam1812@gmail.com',
+          pass: isPassInHost ? cleanHost : (cleanPass || cleanHost)
+        }
+      });
+    } else {
+      const port = parseInt(process.env.SMTP_PORT, 10) || 587;
+      transporter = nodemailer.createTransport({
+        host: cleanHost,
+        port,
+        secure: port === 465,
+        auth: {
+          user: cleanUser,
+          pass: cleanPass
+        }
+      });
+    }
   } else {
     // Generate test account automatically for real-time testing
     const testAccount = await nodemailer.createTestAccount();
     transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
       port: 587,
-      secure: false, // true for 465, false for other ports
+      secure: false,
       auth: {
-        user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass, // generated ethereal password
+        user: testAccount.user,
+        pass: testAccount.pass,
       },
     });
   }
 
+  const senderEmail = process.env.FROM_EMAIL || cleanUser || 'nobertsam1812@gmail.com';
+  const senderName = process.env.FROM_NAME || 'DoorStep';
+
   const message = {
-    from: `${process.env.FROM_NAME || 'DoorStep'} <${process.env.FROM_EMAIL || 'noreply@doorstep.lk'}>`,
+    from: `"${senderName}" <${senderEmail}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,
@@ -51,13 +66,12 @@ const sendEmail = async (options) => {
   };
 
   const info = await transporter.sendMail(message);
-  
+
   if (isDummyHost) {
     console.log(`[REAL-TIME EMAIL] Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
-    // Expose URL to the caller so we can pass it to frontend for easy testing if needed
     return { previewUrl: nodemailer.getTestMessageUrl(info) };
   }
-  
+
   return true;
 };
 
