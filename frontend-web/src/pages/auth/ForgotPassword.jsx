@@ -215,7 +215,7 @@ const ForgotPassword = () => {
       {/* ======================================================== */}
       {/* MOBILE TOP BAR (below 768px: clean flat white page)      */}
       {/* ======================================================== */}
-      <div className="md:hidden w-full h-[56px] border-b border-[#E8E2DB] bg-white px-4 flex items-center justify-between sticky top-0 z-20">
+      <div className="md:hidden w-full h-[46px] sm:h-[56px] border-b border-[#E8E2DB] bg-white px-4 flex items-center justify-between sticky top-0 z-20">
         <button 
           type="button"
           onClick={() => {
@@ -364,7 +364,7 @@ const ForgotPassword = () => {
                       onBlur={() => setTouched(true)}
                       aria-invalid={showEmailError}
                       aria-describedby={showEmailError ? "email-error" : undefined}
-                      className={`w-full h-[56px] pl-12 pr-4 bg-white rounded-[12px] font-inter text-[15px] text-[#000000] placeholder:text-[#6B6B6B] transition-colors focus:outline-none ${
+                      className={`w-full h-[46px] sm:h-[56px] pl-12 pr-4 bg-white rounded-[12px] font-inter text-[15px] text-[#000000] placeholder:text-[#6B6B6B] transition-colors focus:outline-none ${
                         showEmailError
                           ? 'border-2 border-[#B42318]'
                           : 'border border-[#E8E2DB] focus:border-2 focus:border-[#000000]'
@@ -388,7 +388,7 @@ const ForgotPassword = () => {
                   <button
                     type="submit"
                     disabled={!isValidEmail || loading}
-                    className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000] ${
+                    className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000] ${
                       !isValidEmail || loading
                         ? 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
                         : 'bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white cursor-pointer'
@@ -471,7 +471,7 @@ const ForgotPassword = () => {
                   <button
                     type="submit"
                     disabled={!isOtpComplete || loading}
-                    className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000] ${
+                    className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000] ${
                       !isOtpComplete || loading
                         ? 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
                         : 'bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white cursor-pointer'
@@ -532,7 +532,7 @@ const ForgotPassword = () => {
                         if (errorMessage) setErrorMessage('');
                       }}
                       onBlur={() => setPasswordTouched(true)}
-                      className="w-full h-[56px] pl-12 pr-12 bg-white rounded-[12px] border border-[#E8E2DB] font-inter text-[15px] text-[#000000] placeholder:text-[#6B6B6B] transition-colors focus:outline-none focus:border-2 focus:border-[#000000]"
+                      className="w-full h-[46px] sm:h-[56px] pl-12 pr-12 bg-white rounded-[12px] border border-[#E8E2DB] font-inter text-[15px] text-[#000000] placeholder:text-[#6B6B6B] transition-colors focus:outline-none focus:border-2 focus:border-[#000000]"
                     />
                     <button
                       type="button"
@@ -575,7 +575,7 @@ const ForgotPassword = () => {
                         setConfirmPassword(e.target.value);
                         if (errorMessage) setErrorMessage('');
                       }}
-                      className="w-full h-[56px] pl-12 pr-12 bg-white rounded-[12px] border border-[#E8E2DB] font-inter text-[15px] text-[#000000] placeholder:text-[#6B6B6B] transition-colors focus:outline-none focus:border-2 focus:border-[#000000]"
+                      className="w-full h-[46px] sm:h-[56px] pl-12 pr-12 bg-white rounded-[12px] border border-[#E8E2DB] font-inter text-[15px] text-[#000000] placeholder:text-[#6B6B6B] transition-colors focus:outline-none focus:border-2 focus:border-[#000000]"
                     />
                     <button
                       type="button"
@@ -598,7 +598,7 @@ const ForgotPassword = () => {
                   <button
                     type="submit"
                     disabled={!isPasswordValid || !doPasswordsMatch || loading}
-                    className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000] ${
+                    className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000] ${
                       !isPasswordValid || !doPasswordsMatch || loading
                         ? 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
                         : 'bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white cursor-pointer'
@@ -642,7 +642,7 @@ const ForgotPassword = () => {
               <div className="hidden md:block">
                 <Link
                   to="/login"
-                  className="w-full h-[56px] rounded-[12px] bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000]"
+                  className="w-full h-[46px] sm:h-[56px] rounded-[12px] bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#000000]"
                 >
                   Go to login
                 </Link>
@@ -664,7 +664,7 @@ const ForgotPassword = () => {
               type="button"
               onClick={handleSendEmail}
               disabled={!isValidEmail || loading}
-              className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] ${
+              className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] ${
                 !isValidEmail || loading
                   ? 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
                   : 'bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white'
@@ -679,7 +679,7 @@ const ForgotPassword = () => {
               type="button"
               onClick={handleVerifyOtp}
               disabled={!isOtpComplete || loading}
-              className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] ${
+              className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] ${
                 !isOtpComplete || loading
                   ? 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
                   : 'bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white'
@@ -694,7 +694,7 @@ const ForgotPassword = () => {
               type="button"
               onClick={handleResetPassword}
               disabled={!isPasswordValid || !doPasswordsMatch || loading}
-              className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] ${
+              className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center transition-colors min-h-[44px] ${
                 !isPasswordValid || !doPasswordsMatch || loading
                   ? 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
                   : 'bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white'
@@ -707,7 +707,7 @@ const ForgotPassword = () => {
           {step === 4 && (
             <Link
               to="/login"
-              className="w-full h-[56px] rounded-[12px] bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white font-poppins font-semibold text-[16px] flex items-center justify-center min-h-[44px]"
+              className="w-full h-[46px] sm:h-[56px] rounded-[12px] bg-[#000000] hover:bg-[#1A1A1A] active:bg-[#262626] text-white font-poppins font-semibold text-[16px] flex items-center justify-center min-h-[44px]"
             >
               Go to login
             </Link>

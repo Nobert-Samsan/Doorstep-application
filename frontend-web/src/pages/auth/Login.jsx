@@ -133,30 +133,30 @@ const Login = () => {
           </div>
 
           {/* Role Switcher */}
-          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-[14px] p-[5px] flex relative mb-8" role="tablist">
+          <div className="bg-[#F3F4F6] border border-[#E5E7EB] rounded-[12px] sm:rounded-[14px] p-1 sm:p-[5px] flex relative mb-6 sm:mb-8" role="tablist">
             <div 
-              className="absolute top-[5px] bottom-[5px] left-[5px] bg-[#000000] rounded-[10px] shadow-sm transition-all duration-250 ease-out"
-              style={{ width: 'calc(50% - 5px)', transform: activeTab === 'customer' ? 'translateX(0)' : 'translateX(100%)' }}
+              className="absolute top-1 bottom-1 sm:top-[5px] sm:bottom-[5px] left-1 sm:left-[5px] bg-[#000000] rounded-[9px] sm:rounded-[10px] shadow-sm transition-all duration-250 ease-out"
+              style={{ width: 'calc(50% - 4px)', transform: activeTab === 'customer' ? 'translateX(0)' : 'translateX(100%)' }}
             ></div>
             
             <button 
               role="tab"
               aria-selected={activeTab === 'customer'}
               type="button"
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-[10px] text-[15px] font-semibold transition-colors duration-200 relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] focus-visible:ring-offset-1 ${activeTab === 'customer' ? 'text-white' : 'text-[#000000] hover:text-black'}`}
+              className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 rounded-[9px] sm:rounded-[10px] text-[13.5px] sm:text-[15px] font-semibold transition-colors duration-200 relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] focus-visible:ring-offset-1 ${activeTab === 'customer' ? 'text-white' : 'text-[#000000] hover:text-black'}`}
               onClick={() => { setActiveTab('customer'); setError(''); }}
             >
-              <User size={18} className={activeTab === 'customer' ? 'text-white' : 'text-[#6B6B6B]'} />
+              <User size={16} className={`sm:w-[18px] sm:h-[18px] ${activeTab === 'customer' ? 'text-white' : 'text-[#6B6B6B]'}`} />
               I am a Customer
             </button>
             <button 
               role="tab"
               aria-selected={activeTab === 'worker'}
               type="button"
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-[10px] text-[15px] font-semibold transition-colors duration-200 relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] focus-visible:ring-offset-1 ${activeTab === 'worker' ? 'text-white' : 'text-[#000000] hover:text-black'}`}
+              className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 rounded-[9px] sm:rounded-[10px] text-[13.5px] sm:text-[15px] font-semibold transition-colors duration-200 relative z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] focus-visible:ring-offset-1 ${activeTab === 'worker' ? 'text-white' : 'text-[#000000] hover:text-black'}`}
               onClick={() => { setActiveTab('worker'); setError(''); }}
             >
-              <Wrench size={18} className={activeTab === 'worker' ? 'text-white' : 'text-[#6B6B6B]'} />
+              <Wrench size={16} className={`sm:w-[18px] sm:h-[18px] ${activeTab === 'worker' ? 'text-white' : 'text-[#6B6B6B]'}`} />
               I am a Worker
             </button>
           </div>
@@ -180,7 +180,7 @@ const Login = () => {
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder="name@example.com or 077..."
-                  className={`w-full h-[56px] bg-white rounded-[12px] pl-11 pr-4 font-inter text-[16px] text-[#000000] placeholder-[#6B6B6B] transition-colors duration-200 outline-none
+                  className={`w-full h-[46px] sm:h-[56px] bg-white rounded-[12px] pl-11 pr-4 font-inter text-[15px] sm:text-[16px] text-[#000000] placeholder-[#6B6B6B] transition-colors duration-200 outline-none
                     ${error ? 'border-2 border-[#B42318]' : 'border border-[#E8E2DB] hover:border-[#CFC6BC] focus:border-2 focus:border-[#000000]'}`}
                   required
                   autoComplete="username"
@@ -200,7 +200,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full h-[56px] bg-white rounded-[12px] pl-11 pr-12 font-inter text-[16px] text-[#000000] placeholder-[#6B6B6B] transition-colors duration-200 outline-none
+                  className={`w-full h-[46px] sm:h-[56px] bg-white rounded-[12px] pl-11 pr-12 font-inter text-[15px] sm:text-[16px] text-[#000000] placeholder-[#6B6B6B] transition-colors duration-200 outline-none
                     ${error ? 'border-2 border-[#B42318]' : 'border border-[#E8E2DB] hover:border-[#CFC6BC] focus:border-2 focus:border-[#000000]'}`}
                   required
                   autoComplete="current-password"
@@ -213,7 +213,7 @@ const Login = () => {
                   className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#6B6B6B] hover:text-[#000000] focus:outline-none focus:text-[#000000]"
                   disabled={isLoading}
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
               </div>
             </div>
@@ -245,7 +245,7 @@ const Login = () => {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full h-[56px] bg-[#000000] hover:bg-[#1C1917] active:bg-[#2D2A26] text-white font-poppins font-semibold text-[16px] rounded-[12px] transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#000000] focus:ring-offset-2 disabled:opacity-60"
+              className="w-full h-[46px] sm:h-[56px] bg-[#000000] hover:bg-[#1C1917] active:bg-[#2D2A26] text-white font-poppins font-semibold text-[15px] sm:text-[16px] rounded-[12px] transition-colors duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#000000] focus:ring-offset-2 disabled:opacity-60 cursor-pointer"
             >
               {isLoading ? (
                 <>
@@ -262,7 +262,7 @@ const Login = () => {
           </form>
 
           {/* DIVIDER */}
-          <div className="flex items-center gap-3 my-6 text-[#6B6B6B] text-[13px] font-inter">
+          <div className="flex items-center gap-3 my-5 sm:my-6 text-[#6B6B6B] text-[13px] font-inter">
             <div className="flex-1 h-[1px] bg-[#E8E2DB]"></div>
             <span>or</span>
             <div className="flex-1 h-[1px] bg-[#E8E2DB]"></div>
@@ -272,7 +272,7 @@ const Login = () => {
           <button 
             onClick={handleGoogleLogin} 
             disabled={isLoading}
-            className="w-full h-[56px] bg-white border border-[#E8E2DB] rounded-[12px] flex items-center justify-center gap-3 text-[#000000] font-semibold text-[15px] hover:bg-gray-50 hover:border-[#CFC6BC] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black disabled:opacity-60 font-inter"
+            className="w-full h-[46px] sm:h-[56px] bg-white border border-[#E8E2DB] rounded-[12px] flex items-center justify-center gap-3 text-[#000000] font-semibold text-[14px] sm:text-[15px] hover:bg-gray-50 hover:border-[#CFC6BC] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black disabled:opacity-60 font-inter cursor-pointer"
           >
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-[20px] w-[20px]" />
             Sign in with Google

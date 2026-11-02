@@ -432,7 +432,7 @@ const WorkerRegister = () => {
                           onFocus={() => handleFieldFocus('firstName')}
                           onBlur={() => handleBlur('firstName')}
                           placeholder="e.g. Nimal"
-                          className={`w-full h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
+                          className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
                             touched.firstName && fieldErrors.firstName
                               ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                               : focusedField === 'firstName'
@@ -470,7 +470,7 @@ const WorkerRegister = () => {
                           onFocus={() => handleFieldFocus('lastName')}
                           onBlur={() => handleBlur('lastName')}
                           placeholder="e.g. Perera"
-                          className={`w-full h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
+                          className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
                             touched.lastName && fieldErrors.lastName
                               ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                               : focusedField === 'lastName'
@@ -514,7 +514,7 @@ const WorkerRegister = () => {
                         onFocus={() => handleFieldFocus('phone')}
                         onBlur={() => handleBlur('phone')}
                         placeholder="77 123 4567"
-                        className={`w-full h-[56px] rounded-[12px] bg-white pl-[92px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
+                        className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white pl-[92px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
                           touched.phone && fieldErrors.phone
                             ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                             : focusedField === 'phone'
@@ -545,7 +545,7 @@ const WorkerRegister = () => {
                           onChange={handleChange}
                           onFocus={() => handleFieldFocus('gender')}
                           onBlur={() => handleBlur('gender')}
-                          className={`w-full h-[56px] rounded-[12px] bg-white px-4 pr-10 text-[16px] text-[#000000] outline-none transition-colors duration-150 appearance-none cursor-pointer border ${
+                          className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white px-4 pr-10 text-[16px] text-[#000000] outline-none transition-colors duration-150 appearance-none cursor-pointer border ${
                             focusedField === 'gender'
                               ? 'border-[2px] border-[#000000]'
                               : 'border-[#E8E2DB] hover:border-[#CFC6BC]'
@@ -574,7 +574,7 @@ const WorkerRegister = () => {
                           onChange={handleChange}
                           onFocus={() => handleFieldFocus('dateOfBirth')}
                           onBlur={() => handleBlur('dateOfBirth')}
-                          className={`w-full h-[56px] rounded-[12px] bg-white px-4 text-[15px] text-[#000000] outline-none transition-colors duration-150 border ${
+                          className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white px-4 text-[15px] text-[#000000] outline-none transition-colors duration-150 border ${
                             touched.dateOfBirth && fieldErrors.dateOfBirth
                               ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                               : focusedField === 'dateOfBirth'
@@ -606,7 +606,7 @@ const WorkerRegister = () => {
                           onChange={handleChange}
                           onFocus={() => handleFieldFocus('district')}
                           onBlur={() => handleBlur('district')}
-                          className={`w-full h-[56px] rounded-[12px] bg-white px-4 pr-10 text-[15px] text-[#000000] outline-none transition-colors duration-150 appearance-none cursor-pointer border ${
+                          className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white px-4 pr-10 text-[15px] text-[#000000] outline-none transition-colors duration-150 appearance-none cursor-pointer border ${
                             focusedField === 'district'
                               ? 'border-[2px] border-[#000000]'
                               : 'border-[#E8E2DB] hover:border-[#CFC6BC]'
@@ -636,7 +636,7 @@ const WorkerRegister = () => {
                           disabled={!formData.district}
                           onFocus={() => handleFieldFocus('city')}
                           onBlur={() => handleBlur('city')}
-                          className={`w-full h-[56px] rounded-[12px] bg-white px-4 pr-10 text-[15px] text-[#000000] outline-none transition-colors duration-150 appearance-none cursor-pointer border disabled:bg-gray-50 disabled:text-gray-400 ${
+                          className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white px-4 pr-10 text-[15px] text-[#000000] outline-none transition-colors duration-150 appearance-none cursor-pointer border disabled:bg-gray-50 disabled:text-gray-400 ${
                             focusedField === 'city'
                               ? 'border-[2px] border-[#000000]'
                               : 'border-[#E8E2DB] hover:border-[#CFC6BC]'
@@ -715,7 +715,7 @@ const WorkerRegister = () => {
                         onFocus={() => handleFieldFocus('streetAddress')}
                         onBlur={() => handleBlur('streetAddress')}
                         placeholder="123 Main St"
-                        className={`w-full h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
+                        className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
                           touched.streetAddress && fieldErrors.streetAddress
                             ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                             : focusedField === 'streetAddress'
@@ -737,7 +737,7 @@ const WorkerRegister = () => {
                     <button
                       type="submit"
                       disabled={!isStep1Valid}
-                      className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 ${
+                      className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 ${
                         isStep1Valid
                           ? 'bg-[#000000] hover:bg-[#222222] active:bg-[#111111] active:scale-[0.99] text-white'
                           : 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
@@ -826,7 +826,7 @@ const WorkerRegister = () => {
                     <button
                       type="button"
                       onClick={goBack}
-                      className="w-[35%] h-[56px] rounded-[12px] border-[1.5px] border-[#E8E2DB] text-[#000000] font-poppins font-semibold text-[16px] hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
+                      className="w-[35%] h-[46px] sm:h-[56px] rounded-[12px] border-[1.5px] border-[#E8E2DB] text-[#000000] font-poppins font-semibold text-[16px] hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
                     >
                       Back
                     </button>
@@ -834,7 +834,7 @@ const WorkerRegister = () => {
                       type="button"
                       onClick={handleStep2Next}
                       disabled={!isStep2Valid}
-                      className={`w-[65%] h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer ${
+                      className={`w-[65%] h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer ${
                         isStep2Valid
                           ? 'bg-[#000000] hover:bg-[#222222] active:bg-[#111111] text-white'
                           : 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
@@ -941,14 +941,14 @@ const WorkerRegister = () => {
                     <button
                       type="button"
                       onClick={goBack}
-                      className="w-[35%] h-[56px] rounded-[12px] border-[1.5px] border-[#E8E2DB] text-[#000000] font-poppins font-semibold text-[16px] hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
+                      className="w-[35%] h-[46px] sm:h-[56px] rounded-[12px] border-[1.5px] border-[#E8E2DB] text-[#000000] font-poppins font-semibold text-[16px] hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
                     >
                       Back
                     </button>
                     <button
                       type="button"
                       onClick={handleStep3Next}
-                      className="w-[65%] h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 bg-[#000000] hover:bg-[#222222] active:bg-[#111111] text-white cursor-pointer"
+                      className="w-[65%] h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 bg-[#000000] hover:bg-[#222222] active:bg-[#111111] text-white cursor-pointer"
                     >
                       <span>Next Step</span>
                       <ArrowRight size={18} weight="bold" />
@@ -984,7 +984,7 @@ const WorkerRegister = () => {
                         onFocus={() => handleFieldFocus('email')}
                         onBlur={() => handleBlur('email')}
                         placeholder="you@example.com"
-                        className={`w-full h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
+                        className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white pl-[48px] pr-4 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
                           touched.email && fieldErrors.email
                             ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                             : focusedField === 'email'
@@ -1023,7 +1023,7 @@ const WorkerRegister = () => {
                         onFocus={() => handleFieldFocus('password')}
                         onBlur={() => handleBlur('password')}
                         placeholder="8+ chars with letters, numbers & symbols"
-                        className={`w-full h-[56px] rounded-[12px] bg-white pl-[48px] pr-12 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
+                        className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white pl-[48px] pr-12 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
                           touched.password && fieldErrors.password
                             ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                             : focusedField === 'password'
@@ -1070,7 +1070,7 @@ const WorkerRegister = () => {
                         onFocus={() => handleFieldFocus('confirmPassword')}
                         onBlur={() => handleBlur('confirmPassword')}
                         placeholder="Re-enter password"
-                        className={`w-full h-[56px] rounded-[12px] bg-white pl-[48px] pr-12 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
+                        className={`w-full h-[46px] sm:h-[56px] rounded-[12px] bg-white pl-[48px] pr-12 text-[16px] text-[#000000] placeholder-[#6B6B6B] outline-none transition-colors duration-150 border ${
                           touched.confirmPassword && fieldErrors.confirmPassword
                             ? 'border-[2px] border-[#B42318] bg-[#FDECEC]'
                             : focusedField === 'confirmPassword'
@@ -1131,14 +1131,14 @@ const WorkerRegister = () => {
                     <button
                       type="button"
                       onClick={goBack}
-                      className="w-[35%] h-[56px] rounded-[12px] border-[1.5px] border-[#E8E2DB] text-[#000000] font-poppins font-semibold text-[16px] hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
+                      className="w-[35%] h-[46px] sm:h-[56px] rounded-[12px] border-[1.5px] border-[#E8E2DB] text-[#000000] font-poppins font-semibold text-[16px] hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
                     >
                       Back
                     </button>
                     <button
                       type="submit"
                       disabled={!isStep4Valid || isLoading}
-                      className={`w-[65%] h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer ${
+                      className={`w-[65%] h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer ${
                         isStep4Valid && !isLoading
                           ? 'bg-[#000000] hover:bg-[#222222] active:bg-[#111111] text-white'
                           : 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
@@ -1186,7 +1186,7 @@ const WorkerRegister = () => {
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className={`w-[44px] sm:w-[50px] h-[56px] rounded-[12px] text-center text-[22px] font-poppins font-bold text-[#000000] outline-none transition-colors border ${
+                    className={`w-[44px] sm:w-[50px] h-[46px] sm:h-[56px] rounded-[12px] text-center text-[22px] font-poppins font-bold text-[#000000] outline-none transition-colors border ${
                       digit ? 'border-[2px] border-[#000000]' : 'border-[#E8E2DB] focus:border-[2px] focus:border-[#000000]'
                     }`}
                   />
@@ -1216,7 +1216,7 @@ const WorkerRegister = () => {
                   type="button"
                   onClick={handleVerifyOTP}
                   disabled={otp.join('').length < 6 || isLoading}
-                  className={`w-full h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer ${
+                  className={`w-full h-[46px] sm:h-[56px] rounded-[12px] font-poppins font-semibold text-[16px] flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer ${
                     otp.join('').length === 6 && !isLoading
                       ? 'bg-[#000000] hover:bg-[#222222] active:bg-[#111111] text-white'
                       : 'bg-[#E8E2DB] text-[#6B6B6B] cursor-not-allowed'
@@ -1245,7 +1245,7 @@ const WorkerRegister = () => {
               <button
                 type="button"
                 onClick={() => navigate('/login')}
-                className="w-full h-[56px] rounded-[12px] bg-[#000000] hover:bg-[#222222] text-white font-poppins font-semibold text-[16px] transition-colors cursor-pointer"
+                className="w-full h-[46px] sm:h-[56px] rounded-[12px] bg-[#000000] hover:bg-[#222222] text-white font-poppins font-semibold text-[16px] transition-colors cursor-pointer"
               >
                 Go to Login
               </button>
