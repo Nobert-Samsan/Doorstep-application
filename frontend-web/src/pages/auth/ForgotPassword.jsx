@@ -212,28 +212,7 @@ const ForgotPassword = () => {
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white overflow-hidden">
       
-      {/* ======================================================== */}
-      {/* MOBILE TOP BAR (below 768px: clean flat white page)      */}
-      {/* ======================================================== */}
-      <div className="md:hidden w-full h-[46px] sm:h-[56px] border-b border-[#E8E2DB] bg-white px-4 flex items-center justify-between sticky top-0 z-20">
-        <button 
-          type="button"
-          onClick={() => {
-            if (step === 2) setStep(1);
-            else if (step === 3) setStep(2);
-            else navigate('/login');
-          }}
-          aria-label="Go back"
-          className="w-11 h-11 flex items-center justify-center rounded-[12px] text-[#3D3D3D] hover:text-[#000000] active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#FF7A00]"
-        >
-          <ArrowLeft size={22} weight="bold" />
-        </button>
-        <Link to="/" className="flex items-center justify-center">
-          <img src="/logo-new.png" alt="DoorStep" className="h-6 w-auto object-contain" />
-        </Link>
-        <div className="w-11" aria-hidden="true" />
-      </div>
-
+      
       {/* ======================================================== */}
       {/* LEFT BRAND PANEL (DESKTOP >= 1024px, identical to Login) */}
       {/* ======================================================== */}
@@ -276,13 +255,13 @@ const ForgotPassword = () => {
       {/* ======================================================== */}
       {/* RIGHT CONTENT PANEL (White, flat, no outer card)        */}
       {/* ======================================================== */}
-      <div className="w-full lg:w-[55%] relative flex flex-col justify-between md:justify-center items-center bg-white min-h-[calc(100dvh-56px)] md:min-h-screen">
+      <div className="w-full lg:w-[55%] relative flex flex-col justify-between md:justify-center items-center bg-white min-h-screen md:min-h-screen">
         
         <div className="w-full max-w-[400px] px-5 py-6 md:px-0 md:py-12 flex-1 md:flex-initial flex flex-col justify-center">
 
           {/* Desktop/Tablet Back Navigation */}
           {step < 4 && (
-            <div className="hidden md:block mb-8">
+            <div className="mb-6 md:mb-8">
               <button 
                 type="button"
                 onClick={() => {
