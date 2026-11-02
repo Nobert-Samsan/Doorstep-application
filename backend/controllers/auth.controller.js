@@ -73,6 +73,7 @@ exports.sendEmailOtp = async (req, res) => {
       previewUrl: result?.previewUrl 
     });
   } catch (error) {
+    console.error('[sendEmailOtp ERROR]:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

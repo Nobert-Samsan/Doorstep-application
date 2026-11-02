@@ -302,7 +302,7 @@ const HowItWorks = () => {
 
       {/* Steps Content Redesigned */}
       <div className="bg-white">
-        <div className="max-w-[1100px] mx-auto px-5 md:px-8 pt-10 sm:pt-16 pb-12 text-center relative">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8 pt-10 sm:pt-16 pb-4 sm:pb-12 text-center relative">
           
           <div className="relative z-10">
 
@@ -332,7 +332,7 @@ const HowItWorks = () => {
             const StepIcon = step.icon;
             
             return (
-              <div key={idx} className={`relative w-full ${idx % 2 === 0 ? 'bg-[#FFFFFF]' : 'bg-[#FFF8F1]'} py-14 lg:py-20 overflow-hidden`}>
+              <div key={idx} className={`relative w-full ${idx % 2 === 0 ? 'bg-[#FFFFFF]' : 'bg-[#FFF8F1]'} py-6 sm:py-14 lg:py-20 overflow-hidden`}>
                 <FadeIn delay={100}>
                 <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
 
@@ -341,7 +341,7 @@ const HowItWorks = () => {
                     {/* Text Content */}
                     <div className="flex-1 w-full relative">
                       
-                      <div className="relative z-10 pt-4">
+                      <div className="relative z-10 pt-0 sm:pt-4">
                         <div className="mb-6 inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-full bg-[#FFF1E3] border border-[#FF7A00]/25 shadow-sm">
                           <span className="text-[#E85D00] font-poppins font-bold text-[12px] uppercase tracking-[0.14em]">
                             Step
