@@ -47,6 +47,18 @@ router.post('/register/worker', upload.fields([
   check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
 ], validate, authController.registerWorker);
 
+
+// @route   POST /api/auth/login-otp/send
+router.post('/login-otp/send', authLimiter, [
+  check('identifier', 'Email or Phone number is required').not().isEmpty()
+], validate, authController.sendLoginOtp);
+
+// @route   POST /api/auth/login-otp/verify
+router.post('/login-otp/verify', authLimiter, [
+  check('identifier', 'Email or Phone number is required').not().isEmpty(),
+  check('otp', 'OTP verification code is required').not().isEmpty()
+], validate, authController.verifyLoginOtp);
+
 // @route   POST /api/auth/login
 router.post('/login', authLimiter, [
   check('password', 'Password is required').exists()

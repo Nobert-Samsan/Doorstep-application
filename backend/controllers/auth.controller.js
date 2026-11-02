@@ -431,3 +431,150 @@ exports.verifyEmailChange = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+// ==========================================
+// PASSWORDLESS LOGIN (OTP via Email or Phone)
+// ==========================================
+exports.sendLoginOtp = async (req, res) => {
+  try {
+    const { identifier, role } = req.body;
+    if (!identifier) {
+      return res.status(400).json({ success: false, message: 'Please provide an email or phone number' });
+    }
+
+    const trimmed = identifier.trim().toLowerCase();
+    const isEmail = trimmed.includes('@');
+    
+    // Find user by email (case-insensitive) or phone
+    let user;
+    if (isEmail) {
+      user = await User.findOne({ email: { $regex: new RegExp('^' + trimmed + '$', 'i') } });
+    } else {
+      user = await User.findOne({ phone: trimmed.replace(/[^0-9+]/g, '') });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No registered account found with this ' + (isEmail ? 'email address' : 'phone number') + '. Please register first.'
+      });
+    }
+
+    if (user.isBanned) {
+      return res.status(403).json({ success: false, message: 'Account is suspended: ' + (user.banReason || 'Contact support') });
+    }
+
+    // Role check: ensure user signs in via matching role tab
+    if (role && user.role !== role) {
+      const expectedTab = user.role === 'worker' ? 'Worker' : 'Customer';
+      return res.status(400).json({
+        success: false,
+        message: 'This account belongs to a ' + expectedTab + '. Please switch to the ' + expectedTab + ' tab.'
+      });
+    }
+
+    const otp = generateOTP();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
+
+    const contactTarget = isEmail ? user.email.toLowerCase() : user.phone;
+
+    // Invalidate previous active OTPs for this target
+    await OTP.updateMany({ phoneOrEmail: contactTarget, isUsed: false }, { isUsed: true });
+
+    // Save new OTP
+    await OTP.create({ phoneOrEmail: contactTarget, otp, expiresAt });
+
+    if (isEmail) {
+      await sendEmail({
+        email: user.email,
+        subject: 'Your DoorStep Login Code',
+        message: 'Hello ' + (user.firstName || 'User') + ',
+
+Your login verification code is: ' + otp + '
+
+This code will expire in 5 minutes. Do not share this code with anyone.'
+      });
+    } else {
+      await sendSMS(user.phone, 'Your DoorStep login OTP is ' + otp + '. Valid for 5 minutes.');
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Verification code sent successfully to your ' + (isEmail ? 'email address' : 'phone number'),
+      identifier: isEmail ? user.email : user.phone,
+      isEmail,
+      mockOtp: process.env.NODE_ENV !== 'production' ? otp : undefined
+    });
+  } catch (error) {
+    console.error('[sendLoginOtp ERROR]:', error);
+    res.status(500).json({ success: false, message: error.message || 'Failed to send login code' });
+  }
+};
+
+exports.verifyLoginOtp = async (req, res) => {
+  try {
+    const { identifier, otp, role } = req.body;
+    if (!identifier || !otp) {
+      return res.status(400).json({ success: false, message: 'Identifier and OTP code are required' });
+    }
+
+    const trimmed = identifier.trim().toLowerCase();
+    const isEmail = trimmed.includes('@');
+
+    // Query user first
+    let user;
+    if (isEmail) {
+      user = await User.findOne({ email: { $regex: new RegExp('^' + trimmed + '$', 'i') } });
+    } else {
+      user = await User.findOne({ phone: trimmed.replace(/[^0-9+]/g, '') });
+    }
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const contactTarget = isEmail ? user.email.toLowerCase() : user.phone;
+
+    const otpRecord = await OTP.findOne({
+      phoneOrEmail: contactTarget,
+      otp: otp.trim(),
+      isUsed: false,
+      expiresAt: { $gt: new Date() }
+    });
+
+    if (!otpRecord) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired verification code' });
+    }
+
+    // Mark OTP as used
+    otpRecord.isUsed = true;
+    await otpRecord.save();
+
+    if (user.isBanned) {
+      return res.status(403).json({ success: false, message: 'Account is suspended: ' + (user.banReason || 'Contact support') });
+    }
+
+    if (role && user.role !== role) {
+      const expectedTab = user.role === 'worker' ? 'Worker' : 'Customer';
+      return res.status(400).json({
+        success: false,
+        message: 'This account belongs to a ' + expectedTab + '. Please switch to the ' + expectedTab + ' tab.'
+      });
+    }
+
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      token: generateToken(user._id),
+      refreshToken: generateRefreshToken(user._id),
+      user: userResponse
+    });
+  } catch (error) {
+    console.error('[verifyLoginOtp ERROR]:', error);
+    res.status(500).json({ success: false, message: error.message || 'Failed to verify login code' });
+  }
+};
