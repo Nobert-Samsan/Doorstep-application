@@ -21,8 +21,18 @@ initSocket(httpServer);
 
 // Middleware
 app.use(helmet());
+// Ensure DB connection in serverless environment
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+  } catch (e) {
+    console.error('Database connection middleware error:', e);
+  }
+  next();
+});
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: true,
   credentials: true
 }));
 app.use(express.json({ limit: '25mb' }));
@@ -62,3 +72,6 @@ const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
+
+
+module.exports = app;
