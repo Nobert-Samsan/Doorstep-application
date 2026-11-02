@@ -137,7 +137,7 @@ const WorkerProfile = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 pt-6 sm:pt-8 md:pt-10 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto space-y-6 pt-6 sm:pt-8 md:pt-10 pb-12 px-5 sm:px-6 lg:px-8">
       
       {/* Back button */}
       <div className="pt-1">

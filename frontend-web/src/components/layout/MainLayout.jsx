@@ -10,8 +10,8 @@ const MainLayout = () => {
     <div className="min-h-screen flex flex-col font-sans">
       {/* Sticky Navbar */}
       <nav className="bg-white border-b border-[#E8E2DB] sticky top-0 z-50 relative transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20 items-center">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-14 md:h-20 items-center">
             <div className="flex items-center">
               <Link to="/" className="flex items-center gap-2 group">
                 <img src="/logo-new.png" alt="DoorStep Logo" className="h-8 md:h-10 w-auto object-contain" />
@@ -60,7 +60,7 @@ const MainLayout = () => {
 
             {/* App Download Banner */}
       <div className="bg-amber-50 py-4 md:py-6 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             
             {/* Logo */}
@@ -84,7 +84,7 @@ const MainLayout = () => {
 
       {/* Footer */}
       <footer className="bg-gray-50 text-gray-900 pt-16 pb-8 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-1">
               

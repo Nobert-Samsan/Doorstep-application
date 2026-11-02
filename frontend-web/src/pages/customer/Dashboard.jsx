@@ -250,12 +250,12 @@ const Dashboard = () => {
         <>
           {/* Hero Section */}
                     {/* Hero Section Redesign */}
-          <section className="relative w-full min-h-[380px] md:min-h-[90vh] lg:min-h-[96vh] bg-[#000000] flex flex-col md:justify-center overflow-hidden">
+          <section className="relative w-full min-h-[300px] sm:min-h-[360px] md:min-h-[90vh] lg:min-h-[96vh] bg-[#000000] flex flex-col md:justify-center overflow-hidden">
             
             {/* Background Split Layout */}
             <div className="absolute inset-0 w-full h-full flex flex-col md:flex-row">
               <div className="hidden md:block w-[42%] bg-[#000000]"></div>
-              <div className="w-full h-[200px] sm:h-[240px] md:h-full md:w-[58%] relative overflow-hidden">
+              <div className="w-full h-[140px] sm:h-[200px] md:h-full md:w-[58%] relative overflow-hidden">
                 <img 
                   src="/customer-hero-bg.jpg" 
                   alt="A DoorStep electrician at work while a smiling homeowner relaxes" 
@@ -292,26 +292,26 @@ const Dashboard = () => {
             {/* Bottom Edge Line */}
             
 
-            <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12 pt-[140px] sm:pt-[170px] md:pt-0 pb-7 sm:pb-12 flex flex-col">
+            <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-12 pt-[90px] sm:pt-[140px] md:pt-0 pb-7 sm:pb-12 flex flex-col">
               
               {/* Content Container */}
               <div className="w-full max-w-[620px] text-left">
                 
                 {/* Headline */}
-                <h1 className="text-[26px] sm:text-[36px] md:text-[48px] lg:text-[60px] font-poppins font-bold text-white leading-[1.15] mb-2 sm:mb-4">
+                <h1 className="text-[28px] sm:text-[32px] md:text-[48px] lg:text-[60px] font-poppins font-bold text-white leading-[1.15] mb-2 sm:mb-4">
                   Hello, <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#FF9F0A] to-[#F94D1A] truncate max-w-[200px] md:max-w-[300px] align-bottom">
                     {user?.firstName || 'Nobert'}
                   </span>
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-white/80 font-inter text-[15px] sm:text-[18px] md:text-[20px] leading-[1.5] mb-4 sm:mb-8">
+                <p className="text-white/80 font-inter text-[13px] sm:text-[16px] md:text-[20px] leading-[1.5] mb-4 sm:mb-8">
                   What can we help you fix or clean today?
                 </p>
 
                 {/* Search Bar with Fuzzy Autocomplete */}
                 <div ref={searchRef} className="relative w-full">
-                  <form onSubmit={handleSearchSubmit} className="relative w-full h-[54px] sm:h-[60px] md:h-[64px] bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_12px_32px_rgba(0,0,0,0.4)] flex items-center p-1.5 sm:p-2 group transition-all duration-300 focus-within:ring-4 focus-within:ring-[#FF7A00]/25">
+                  <form onSubmit={handleSearchSubmit} className="relative w-full h-[46px] sm:h-[56px] md:h-[64px] bg-white rounded-[14px] sm:rounded-[16px] shadow-[0_12px_32px_rgba(0,0,0,0.4)] flex items-center p-1.5 sm:p-2 group transition-all duration-300 focus-within:ring-4 focus-within:ring-[#FF7A00]/25">
                     <div className="pl-3 sm:pl-4 pr-1.5 sm:pr-3 flex items-center justify-center pointer-events-none">
                       <Search className="text-[#555555] w-4 h-4 sm:w-5 sm:h-5 group-focus-within:text-[#FF7A00] transition-colors shrink-0" />
                     </div>
@@ -406,7 +406,7 @@ const Dashboard = () => {
 
           {/* Active Booking Slim Bar */}
           {activeBooking && (
-            <div className="w-full bg-white border-b border-[#E8E2DB] h-14 flex items-center px-4 sm:px-6 md:px-12">
+            <div className="w-full bg-white border-b border-[#E8E2DB] h-14 flex items-center px-5 sm:px-6 md:px-12">
               <div className="max-w-[1200px] w-full mx-auto flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 overflow-hidden">
                   <span className="w-2 h-2 rounded-full bg-[#FF7A00] shrink-0 animate-pulse" />
@@ -516,7 +516,7 @@ const Dashboard = () => {
 
           {/* Don't know who to hire? Post a Job Section Redesign */}
           <section className="w-full bg-white py-10 md:py-16">
-            <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8">
+            <div className="w-full max-w-[1200px] mx-auto px-5 sm:px-6 md:px-8">
               <div className="relative w-full bg-[#FFF8F1] rounded-[32px] border border-[#E8E2DB] p-7 md:p-14 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden">
                 
                 {/* Subtle Decorations */}
@@ -703,7 +703,7 @@ const Dashboard = () => {
 
           </>
       ) : (
-        <div className="content-wrapper w-full px-4 sm:px-6 py-12">
+        <div className="content-wrapper w-full px-5 sm:px-6 py-12">
           {/* Workers Grid View */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 w-full">
             <div className="flex items-center gap-4">

@@ -278,7 +278,7 @@ const getStatusMessage = (status) => {
 
 const Card = ({ children, className = '', index = 0 }) => (
   <div 
-    className={`relative bg-white rounded-[8px] md:rounded-[12px] border border-[#E8E2DB] p-6 md:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
+    className={`relative bg-white rounded-[8px] md:rounded-[12px] border border-[#E8E2DB] p-[18px] md:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
     style={{ 
       animation: 'fadeUp 0.3s ease-out forwards',
       opacity: 0,
@@ -926,7 +926,7 @@ const BookingDetail = () => {
 
         {/* Desktop fallback: if opened on desktop with ?view=timeline, render regular layout */}
         <div className="hidden md:block py-8 md:py-12">
-          <div className="max-w-[1100px] mx-auto px-6 md:px-8">
+          <div className="max-w-[1100px] mx-auto px-5 md:px-8">
             <div className="grid grid-cols-1 md:grid-cols-[64%_calc(36%-24px)] gap-6 items-stretch">
               <div className="flex flex-col gap-6 order-1">
                 {quotations.map(quote => {
@@ -942,7 +942,7 @@ const BookingDetail = () => {
                           : "The worker has provided an itemized quotation for your job. Please review and accept to proceed."}
                       </p>
                       
-                      <div className="bg-white rounded-[10px] border border-[#E8E2DB] p-5 mb-5 space-y-3">
+                      <div className="bg-white rounded-[10px] border border-[#E8E2DB] p-[18px] mb-5 space-y-3">
                         {quote.lineItems.map((item, idx) => (
                           <div key={idx} className="flex justify-between text-[15px]">
                             <span className="text-[#3D3D3D] font-medium">{item.description}</span>
@@ -1000,7 +1000,7 @@ const BookingDetail = () => {
   return (
     <div className="min-h-screen bg-white py-8 md:py-12 font-sans text-[#3D3D3D]">
       <style>{customStyles}</style>
-      <div className="max-w-[1100px] mx-auto px-6 md:px-8">
+      <div className="max-w-[1100px] mx-auto px-5 md:px-8">
         
         <div className="grid grid-cols-1 md:grid-cols-[64%_calc(36%-24px)] gap-6 items-stretch">
           
@@ -1021,7 +1021,7 @@ const BookingDetail = () => {
                       : "The worker has provided an itemized quotation for your job. Please review and accept to proceed."}
                   </p>
                   
-                  <div className="bg-white rounded-[10px] border border-[#E8E2DB] p-5 mb-5 space-y-3">
+                  <div className="bg-white rounded-[10px] border border-[#E8E2DB] p-[18px] mb-5 space-y-3">
                     {quote.lineItems.map((item, idx) => (
                       <div key={idx} className="flex justify-between text-[15px]">
                         <span className="text-[#6B6B6B]">{item.description}</span>

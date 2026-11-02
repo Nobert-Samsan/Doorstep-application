@@ -133,7 +133,7 @@ const BookWorker = () => {
   const locationInfo = [worker.district || worker.userId?.district, worker.city || worker.userId?.city].filter(Boolean).join(', ');
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 px-4 sm:px-6 pt-6 sm:pt-8 md:pt-10 pb-16">
+    <div className="max-w-4xl mx-auto space-y-6 px-5 sm:px-6 pt-6 sm:pt-8 md:pt-10 pb-16">
       <div className="pt-1">
         <Link to={`/customer/worker/${id}`} className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-primary transition-colors">
           <ChevronLeft size={20} className="mr-1" /> Back to Profile
@@ -216,7 +216,7 @@ const BookWorker = () => {
                   
                   <label className="cursor-pointer">
                     <input type="radio" name="urgency" value="emergency" checked={urgency === 'emergency'} onChange={(e) => setUrgency(e.target.value)} className="peer hidden" />
-                    <div className="border-2 border-gray-100 rounded-2xl p-5 sm:p-6 hover:bg-gray-50 peer-checked:border-red-500 peer-checked:bg-red-50/70 transition-all h-full shadow-sm">
+                    <div className="border-2 border-gray-100 rounded-2xl p-[18px] sm:p-6 hover:bg-gray-50 peer-checked:border-red-500 peer-checked:bg-red-50/70 transition-all h-full shadow-sm">
                       <div className="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-3">
                         <Shield size={24} />
                       </div>
@@ -227,7 +227,7 @@ const BookWorker = () => {
 
                   <label className="cursor-pointer">
                     <input type="radio" name="urgency" value="flexible" checked={urgency === 'flexible'} onChange={(e) => setUrgency(e.target.value)} className="peer hidden" />
-                    <div className="border-2 border-gray-100 rounded-2xl p-5 sm:p-6 hover:bg-gray-50 peer-checked:border-amber-500 peer-checked:bg-amber-50/70 transition-all h-full shadow-sm">
+                    <div className="border-2 border-gray-100 rounded-2xl p-[18px] sm:p-6 hover:bg-gray-50 peer-checked:border-amber-500 peer-checked:bg-amber-50/70 transition-all h-full shadow-sm">
                       <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-3">
                         <Clock size={24} />
                       </div>
@@ -238,7 +238,7 @@ const BookWorker = () => {
 
                   <label className="cursor-pointer">
                     <input type="radio" name="urgency" value="specific" checked={urgency === 'specific'} onChange={(e) => setUrgency(e.target.value)} className="peer hidden" />
-                    <div className="border-2 border-gray-100 rounded-2xl p-5 sm:p-6 hover:bg-gray-50 peer-checked:border-blue-500 peer-checked:bg-blue-50/70 transition-all h-full shadow-sm">
+                    <div className="border-2 border-gray-100 rounded-2xl p-[18px] sm:p-6 hover:bg-gray-50 peer-checked:border-blue-500 peer-checked:bg-blue-50/70 transition-all h-full shadow-sm">
                       <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-3">
                         <Calendar size={24} />
                       </div>
@@ -295,7 +295,7 @@ const BookWorker = () => {
                       name="district" 
                       value={bookingData.district || ''} 
                       onChange={handleBookingChange} 
-                      className="w-full border border-gray-200 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-gray-900 text-base font-medium bg-white shadow-sm" 
+                      className="w-full border border-gray-200 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-6 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-gray-900 text-base font-medium bg-white shadow-sm" 
                       required
                     >
                       <option value="">Select District</option>
@@ -310,7 +310,7 @@ const BookWorker = () => {
                       value={bookingData.city} 
                       onChange={handleBookingChange} 
                       placeholder="e.g. Nugegoda" 
-                      className="w-full border border-gray-200 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-gray-900 text-base font-medium shadow-sm" 
+                      className="w-full border border-gray-200 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-6 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-gray-900 text-base font-medium shadow-sm" 
                       required 
                     />
                   </div>
@@ -324,7 +324,7 @@ const BookWorker = () => {
                     value={bookingData.streetAddress} 
                     onChange={handleBookingChange} 
                     placeholder="e.g. 123 Main Street" 
-                    className="w-full border border-gray-200 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-gray-900 text-base font-medium shadow-sm mb-6" 
+                    className="w-full border border-gray-200 rounded-2xl py-3.5 sm:py-4 px-4 sm:px-6 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-gray-900 text-base font-medium shadow-sm mb-6" 
                     required 
                   />
                   

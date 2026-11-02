@@ -264,7 +264,7 @@ const WorkerLayout = () => {
       {/* MAIN CONTENT AREA                                         */}
       {/* ======================================================== */}
       <div className="flex-1 flex flex-col min-w-0 min-h-screen overflow-x-hidden pb-[72px] md:pb-0">
-        <header className="h-16 glass z-10 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b border-gray-200 shadow-sm shrink-0">
+        <header className="h-16 glass z-10 flex items-center justify-between px-5 sm:px-6 lg:px-8 border-b border-gray-200 shadow-sm shrink-0">
           <div className="flex items-center gap-4">
             <h1 className="text-xl font-bold text-gray-800">Worker Portal</h1>
           </div>
@@ -307,7 +307,7 @@ const WorkerLayout = () => {
           </div>
         </header>
         
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto overflow-x-hidden bg-[#F8FAFC]">
+        <main className="flex-1 py-4 px-5 sm:p-6 lg:p-8 overflow-y-auto overflow-x-hidden bg-[#F8FAFC]">
           <div className="max-w-7xl mx-auto transition-opacity duration-150">
             <Outlet />
           </div>

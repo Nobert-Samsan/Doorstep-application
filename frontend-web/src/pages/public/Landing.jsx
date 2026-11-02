@@ -174,7 +174,7 @@ const Landing = () => {
   return (
     <div className="bg-white">
             {/* 1. Hero Section - Redesigned */}
-      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[96vh] flex items-center bg-[#000000] overflow-hidden pt-16 sm:pt-20 lg:py-0 pb-10">
+      <section className="relative min-h-[360px] sm:min-h-[480px] md:min-h-[600px] lg:min-h-[96vh] flex items-center bg-[#000000] overflow-hidden pt-6 sm:pt-16 lg:py-0 pb-6 sm:pb-10">
         
         {/* Subtle dot grid overlay */}
         
@@ -183,25 +183,25 @@ const Landing = () => {
         
 
         {/* Image Container */}
-        <div className="absolute top-0 right-0 w-full h-[50%] sm:h-[70%] md:h-[85%] lg:h-full z-0">
+        <div className="absolute top-0 right-0 w-full h-[30%] sm:h-[65%] md:h-[85%] lg:h-full z-0">
           <img src="/hero-ultra.jpg?v=1793085985420" alt="DoorStep Home Services" className="w-full h-full object-cover lg:object-right " />
           
           {/* Gradient Overlay for Desktop (fades left to right) */}
           <div className="hidden md:block absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.78) 35%, rgba(0,0,0,0.40) 55%, transparent 75%)' }}></div>
 
           {/* Gradient Overlay for Mobile (fades top to bottom) */}
-          <div className="block md:hidden absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 70%, #000000 100%)' }}></div>
+          <div className="block md:hidden absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 25%, #000000 65%, #000000 100%)' }}></div>
           
           
         </div>
 
         {/* Content Container */}
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
-          <div className="max-w-[620px] mt-4 sm:mt-8 lg:mt-0">
+        <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
+          <div className="max-w-[620px] mt-10 sm:mt-8 lg:mt-0">
             
 
             {/* Headline */}
-            <h1 className="text-[32px] sm:text-[44px] lg:text-[64px] xl:text-[72px] font-extrabold text-white leading-[1.08] mb-4 lg:mb-6 tracking-tight">
+            <h1 className="text-[28px] sm:text-[36px] lg:text-[64px] xl:text-[72px] font-extrabold text-white leading-[1.08] mb-4 lg:mb-6 tracking-tight">
               Every Service, <br className="hidden lg:block" />
               <span className="relative inline-block mt-2 lg:mt-0">
                 Right at Your DoorStep
@@ -209,19 +209,19 @@ const Landing = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className=" text-[15px] sm:text-[18px] lg:text-[22px] text-white/80 leading-[1.6] max-w-[540px] mb-6 lg:mb-12 font-normal">
+            <p className=" text-[13px] sm:text-[16px] lg:text-[22px] text-white/80 leading-[1.6] max-w-[540px] mb-4 sm:mb-6 lg:mb-12 font-normal">
               Connect with trusted, verified local skilled workers in Sri Lanka for all your home service needs. Book instantly, pay securely.
             </p>
 
             {/* Call to Action Buttons */}
-            <div className=" flex flex-col sm:flex-row items-center gap-4">
-              <Link to="/login" className="w-full sm:w-auto group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-[16px] px-[32px] rounded-[12px] shadow-[0_4px_14px_rgba(255,122,0,0.30)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
-                Explore Services
-                <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+            <div className="flex flex-row items-center gap-2.5 sm:gap-4 w-full">
+              <Link to="/login" className="flex-1 sm:flex-initial sm:w-auto group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-bold py-[12px] sm:py-[16px] px-[14px] sm:px-[32px] text-[13px] sm:text-[16px] rounded-[12px] shadow-[0_4px_14px_rgba(255,122,0,0.30)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                <span>Explore Services</span>
+                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1 shrink-0" />
               </Link>
               
-              <Link to="/register/worker" className="w-full sm:w-auto group bg-transparent border-2 border-white/20 text-white font-bold py-[14px] px-[32px] rounded-[12px] hover:bg-white hover:text-[#000000] hover:border-white transition-all duration-300 flex items-center justify-center gap-2">
-                Join as a Professional
+              <Link to="/register/worker" className="flex-1 sm:flex-initial sm:w-auto group bg-transparent border-2 border-white/20 text-white font-bold py-[10px] sm:py-[14px] px-[14px] sm:px-[32px] text-[13px] sm:text-[16px] rounded-[12px] hover:bg-white hover:text-[#000000] hover:border-white transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                <span>Join as Worker</span>
               </Link>
             </div>
 
@@ -231,26 +231,26 @@ const Landing = () => {
       </section>
 
       {/* Mission Statement Section */}
-      <section className="relative bg-[#FFFFFF] pt-10 pb-4 sm:py-16 md:py-24">
+      <section className="relative bg-[#FFFFFF] pt-10 pb-0 sm:py-16 md:py-24">
         
 
-        <div className="max-w-[1100px] mx-auto px-6 md:px-8 relative z-10">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
           
           {/* Header Area */}
-          <FadeIn delay={100}><div className="flex flex-col items-center text-center mb-16">
+          <FadeIn delay={100}><div className="flex flex-col items-center text-center mb-10 sm:mb-16">
 
             {/* Headline */}
-            <h2 className="text-[#000000] font-bold text-[30px] md:text-[48px] leading-[1.15] max-w-[820px] font-poppins tracking-tight">
+            <h2 className="text-[#000000] font-bold text-[28px] sm:text-[36px] md:text-[48px] leading-[1.15] max-w-[820px] font-poppins tracking-tight">
               Finding reliable home help in <span className="whitespace-nowrap">Sri Lanka</span> has always been a{' '}
               <span className="text-[#E85D00]">challenge.</span>
             </h2>
           </div></FadeIn>
 
           {/* Cards Grid */}
-          <FadeIn delay={200}><div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <FadeIn delay={200}><div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-0 md:mb-12">
             
             {/* Card 1 */}
-            <div className="group relative bg-white rounded-[16px] border border-[#E8E2DB] p-8 md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col overflow-hidden focus-within:ring-2 focus-within:ring-[#FF7A00] focus-within:border-transparent">
+            <div className="group relative bg-white rounded-[16px] border border-[#E8E2DB] py-8 px-[18px] md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col overflow-hidden focus-within:ring-2 focus-within:ring-[#FF7A00] focus-within:border-transparent">
               {/* Top Gradient Accent Bar */}
               
               
@@ -267,7 +267,7 @@ const Landing = () => {
             </div>
 
             {/* Card 2 */}
-            <div className="group relative bg-white rounded-[16px] border border-[#E8E2DB] p-8 md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col overflow-hidden focus-within:ring-2 focus-within:ring-[#FF7A00] focus-within:border-transparent">
+            <div className="group relative bg-white rounded-[16px] border border-[#E8E2DB] py-8 px-[18px] md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col overflow-hidden focus-within:ring-2 focus-within:ring-[#FF7A00] focus-within:border-transparent">
               {/* Top Gradient Accent Bar */}
               
               
@@ -302,7 +302,7 @@ const Landing = () => {
           </div></FadeIn>
 
           {/* Stats Bar */}
-          <FadeIn delay={300}><div className="relative bg-[#000000] rounded-[16px] py-4 sm:py-6 md:py-8 px-3 sm:px-6 md:px-8 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
+          <FadeIn delay={300}><div className="hidden relative bg-[#000000] rounded-[16px] py-4 sm:py-6 md:py-8 px-[18px] sm:px-6 md:px-8 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
             {/* Dotted pattern and glow */}
             
             
@@ -360,9 +360,9 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="pt-4 pb-16 sm:py-20 bg-white">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-          <div className="bg-[#FFF8F1] rounded-[16px] p-6 sm:p-8 md:p-12 lg:p-14 border border-[#E8E2DB] shadow-[0_4px_16px_rgba(0,0,0,0.06)] relative overflow-hidden">
+      <section className="pt-0 pb-16 sm:py-20 bg-white">
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8 space-y-16">
+          <div className="bg-[#FFF8F1] rounded-[16px] py-6 px-[18px] sm:p-8 md:p-12 lg:p-14 border border-[#E8E2DB] shadow-[0_4px_16px_rgba(0,0,0,0.06)] relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 xl:gap-20 items-center">
               
               {/* Image Column */}
@@ -434,7 +434,7 @@ const Landing = () => {
           </div>
 
           {/* Block 2: Worker - Redesigned */}
-          <div className="bg-[#000000] rounded-[16px] p-6 sm:p-8 md:p-12 lg:p-14 relative overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
+          <div className="bg-[#000000] rounded-[16px] py-6 px-[18px] sm:p-8 md:p-12 lg:p-14 relative overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
             {/* Ambient Background Glow */}
             
             
@@ -465,13 +465,13 @@ const Landing = () => {
                 </div>
 
                 {/* Headline */}
-                <h2 className="text-[30px] lg:text-[48px] font-extrabold text-white leading-[1.15] mb-2.5 tracking-tight">
+                <h2 className="text-[28px] sm:text-[34px] lg:text-[48px] font-extrabold text-white leading-[1.15] mb-2.5 tracking-tight">
                   Got A Skill? <br />
                   <span className="text-[#FF7A00]">Grow With Us.</span>
                 </h2>
 
                 {/* Sub-headline */}
-                <p className="text-[18px] lg:text-[20px] font-semibold text-white mb-2.5 leading-[1.4]">
+                <p className="text-[16px] sm:text-[18px] lg:text-[20px] font-medium sm:font-semibold text-white mb-2.5 leading-[1.4]">
                   We're hungry for the BEST! A world of customers now within your reach!
                 </p>
 
@@ -545,11 +545,11 @@ const Landing = () => {
       
 
       {/* 5. Why Choose DoorStep? */}
-      <section className="py-16 md:py-24 bg-white relative">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16 flex flex-col items-center">
+      <section className="py-10 sm:py-16 md:py-24 bg-white relative">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-10 sm:mb-16 flex flex-col items-center">
             {/* Headline */}
-            <h2 className="text-[30px] md:text-[44px] font-extrabold text-[#000000] mb-2.5 leading-tight">
+            <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-extrabold text-[#000000] mb-2.5 leading-tight">
               Why Choose <span className="text-[#E85D00]">DoorStep?</span>
             </h2>
             
@@ -585,7 +585,7 @@ const Landing = () => {
                 </div>
               </div>
               
-              <div className="p-8 pt-12 flex-1 flex flex-col bg-white z-10 relative">
+              <div className="p-[18px] pt-12 sm:p-8 sm:pt-12 flex-1 flex flex-col bg-white z-10 relative">
                 <h3 className="text-[20px] font-bold text-[#000000] mb-3">Verified Professionals</h3>
                 <p className="text-[#3D3D3D] leading-[1.7] text-[16px]">Every worker undergoes strict identity checks, skill verification, and continuous quality monitoring.</p>
               </div>
@@ -613,7 +613,7 @@ const Landing = () => {
                 </div>
               </div>
               
-              <div className="p-8 pt-12 flex-1 flex flex-col bg-white z-10 relative">
+              <div className="p-[18px] pt-12 sm:p-8 sm:pt-12 flex-1 flex flex-col bg-white z-10 relative">
                 <h3 className="text-[20px] font-bold text-[#000000] mb-3">Instant Booking</h3>
                 <p className="text-[#3D3D3D] leading-[1.7] text-[16px]">Book a service in seconds. Track your worker's arrival time and communicate securely via the app.</p>
               </div>
@@ -641,7 +641,7 @@ const Landing = () => {
                 </div>
               </div>
               
-              <div className="p-8 pt-12 flex-1 flex flex-col bg-white z-10 relative">
+              <div className="p-[18px] pt-12 sm:p-8 sm:pt-12 flex-1 flex flex-col bg-white z-10 relative">
                 <h3 className="text-[20px] font-bold text-[#000000] mb-3">Satisfaction Guaranteed</h3>
                 <p className="text-[#3D3D3D] leading-[1.7] text-[16px]">Pay securely online or in cash. We ensure 100% satisfaction with dedicated customer support.</p>
               </div>
@@ -651,14 +651,14 @@ const Landing = () => {
       </section>
 
       {/* 6. FAQ Section */}
-      <section className="py-24 bg-[#FAFAFA]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-10 sm:py-24 bg-[#FAFAFA]">
+        <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-[28px] sm:text-[36px] md:text-[40px] font-extrabold text-gray-900 mb-2.5 leading-tight">Frequently Asked Questions</h2>
             <p className="text-gray-500 text-base">Everything you need to know about using DoorStep</p>
           </div>
           
-          <div className="bg-white rounded-3xl p-6 sm:p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+          <div className="bg-white rounded-3xl py-6 px-[18px] sm:p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
             {faqs.map((faq, idx) => (
               <FAQItem key={idx} question={faq.q} answer={faq.a} />
             ))}

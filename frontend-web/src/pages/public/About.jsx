@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {    ChevronRight, Target, Telescope, Shield, Lock, Eye, Heart, ArrowRight, Link as LinkIcon , CheckCircle, Handshake, ChevronRight as ChevronRightIcon , ShieldCheck, Check , Search, Briefcase, Home } from 'lucide-react';
 import api from '../../services/api';
@@ -116,7 +116,7 @@ const About = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. Hero Banner - Redesigned */}
-      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[96vh] flex items-center bg-[#000000] overflow-hidden pt-16 sm:pt-20 pb-8 lg:py-0">
+      <section className="relative min-h-[340px] sm:min-h-[480px] md:min-h-[600px] lg:min-h-[96vh] flex items-center bg-[#000000] overflow-hidden pt-6 sm:pt-16 pb-6 sm:pb-8 lg:py-0">
         
         {/* Inline Styles for animations */}
         <style dangerouslySetInnerHTML={{__html: `
@@ -149,7 +149,7 @@ const About = () => {
         {/* Radial glow removed for solid black bg */}
 
         {/* Image Container */}
-        <div className="absolute top-0 right-0 w-full h-[50%] sm:h-[70%] md:h-[85%] lg:h-full z-0 animate-zoom-out">
+        <div className="absolute top-0 right-0 w-full h-[30%] sm:h-[65%] md:h-[85%] lg:h-full z-0 animate-zoom-out">
           {/* Preload image */}
           <link rel="preload" as="image" href="/about-hero-new.jpg" />
           <img src="/about-hero-new.jpg" alt="A DoorStep professional shaking hands with a smiling Sri Lankan family" className="w-full h-full object-cover object-[30%_center] lg:object-[35%_center]" />
@@ -158,25 +158,25 @@ const About = () => {
           <div className="hidden md:block absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 25%, rgba(0,0,0,0.3) 45%, transparent 65%)' }}></div>
 
           {/* Gradient Overlay for Mobile (fades top to bottom) */}
-          <div className="block md:hidden absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 70%, #000000 100%)' }}></div>
+          <div className="block md:hidden absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 25%, #000000 65%, #000000 100%)' }}></div>
         </div>
 
         {/* Bottom edge gradient divider */}
         <div className="absolute bottom-0 left-0 w-full h-[3px] z-20" style={{ background: 'linear-gradient(90deg, transparent 0%, #FF7A00 50%, transparent 100%)', opacity: 0.8 }}></div>
 
         {/* Content Container */}
-        <div className="max-w-[1200px] mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
-          <div className="max-w-[580px] mt-24 sm:mt-32 lg:mt-0">
+        <div className="max-w-[1200px] mx-auto w-full px-5 sm:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
+          <div className="max-w-[580px] mt-10 sm:mt-24 lg:mt-0">
             
 
 
             {/* Headline */}
-            <h1 className="text-[32px] sm:text-[44px] lg:text-[72px] font-extrabold text-white leading-[1.1] mb-3 lg:mb-6 font-poppins tracking-tight animate-fade-up-3">
+            <h1 className="text-[28px] sm:text-[36px] lg:text-[72px] font-extrabold text-white leading-[1.1] mb-3 lg:mb-6 font-poppins tracking-tight animate-fade-up-3">
               About DoorStep
             </h1>
 
             {/* Subtitle */}
-            <p className="text-[16px] sm:text-[18px] lg:text-[22px] font-normal text-white/80 leading-[1.7] max-w-[520px] mb-4 lg:mb-10 font-inter animate-fade-up-4">
+            <p className="text-[13px] sm:text-[16px] lg:text-[22px] font-normal text-white/80 leading-[1.7] max-w-[520px] mb-4 lg:mb-10 font-inter animate-fade-up-4">
               Sri Lanka's trusted home services platform, connecting households with verified professionals.
             </p>
 
@@ -186,13 +186,13 @@ const About = () => {
       </section>
 
       {/* 2. Our Story - Redesigned */}
-      <section className="relative bg-[#FFFFFF] py-16 md:py-24 overflow-hidden">
+      <section className="relative bg-[#FFFFFF] pt-10 pb-2 sm:py-16 md:py-24 overflow-hidden">
         
         {/* Subtle radial glow & dotted pattern */}
         
         
 
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-16 items-center">
             
             {/* Left Column - Text Side */}
@@ -202,14 +202,14 @@ const About = () => {
 
 
                 {/* Headline */}
-                <h2 className="text-[30px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-[#000000] leading-[1.15] mb-8">
+                <h2 className="text-[28px] sm:text-[36px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-[#000000] leading-[1.15] mb-8">
                   Connecting Sri Lanka, One <span className="text-[#E85D00]">Home</span> at a Time
                 </h2>
               </FadeIn>
 
               <FadeIn delay={100}>
                 {/* Pull-quote */}
-                <div className="relative bg-[#FFF8F1] rounded-[16px] shadow-[0_8px_24px_rgba(0,0,0,0.05)] p-5 md:p-6 mb-8 overflow-hidden">
+                <div className="relative bg-[#FFF8F1] rounded-[16px] shadow-[0_8px_24px_rgba(0,0,0,0.05)] p-[18px] md:p-6 mb-8 overflow-hidden">
                   <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#FF7A00]"></div>
                   <div className="absolute top-2 left-4 text-[60px] font-serif leading-none text-[#FF7A00] opacity-25 select-none">“</div>
                   <p className="relative z-10 text-[#000000] font-inter italic font-semibold text-[17px] md:text-[18px] leading-[1.6] pl-6 pt-2">
@@ -270,21 +270,21 @@ const About = () => {
       </section>
 
       {/* 3. Mission and Vision - Redesigned Dark */}
-      <section className="relative bg-[#FFFFFF] py-16 md:py-24 overflow-hidden">
+      <section className="relative bg-[#FFFFFF] pt-4 pb-10 sm:py-16 md:py-24 overflow-hidden">
         
         {/* Background glow and patterns */}
         
         
         
 
-        <div className="max-w-[1100px] mx-auto px-4 sm:px-6 md:px-8 relative z-10">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 md:px-8 relative z-10">
           
-          <div className="flex flex-col items-center text-center mb-16">
+          <div className="flex flex-col items-center text-center mb-8 sm:mb-16">
             
             
             <FadeIn delay={150}>
               {/* Headline */}
-              <h2 className="text-[30px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-black leading-tight mb-5">
+              <h2 className="text-[28px] sm:text-[36px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-black leading-tight mb-5">
                 Our Mission & <span className="text-[#E85D00]">Vision</span>
               </h2>
               {/* Decorative Line */}
@@ -296,7 +296,7 @@ const About = () => {
             
             <FadeIn delay={300}>
               {/* Mission Card */}
-              <div className="group relative bg-[#111111] border border-white/5 rounded-[16px] p-8 md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col h-full overflow-hidden">
+              <div className="group relative bg-[#111111] border border-white/5 rounded-[16px] p-[18px] md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col h-full overflow-hidden">
                 {/* Top Accent Bar */}
                 
                 
@@ -323,7 +323,7 @@ const About = () => {
 
             <FadeIn delay={450}>
               {/* Vision Card */}
-              <div className="group relative bg-[#111111] border border-white/5 rounded-[16px] p-8 md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col h-full overflow-hidden">
+              <div className="group relative bg-[#111111] border border-white/5 rounded-[16px] p-[18px] md:p-10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-[#FF7A00]/50 transition-all duration-200 flex flex-col h-full overflow-hidden">
                 {/* Top Accent Bar */}
                 
                 
@@ -353,11 +353,11 @@ const About = () => {
       </section>
       
       {/* 6. What We Stand For (Redesigned) */}
-<section className="py-16 md:py-32 bg-[#F9FAFB] border-t border-gray-100">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section className="py-10 sm:py-20 md:py-32 bg-[#F9FAFB] border-t border-gray-100">
+  <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
     <div className="text-center mb-24">
       <span className="text-primary font-bold tracking-widest uppercase text-sm mb-4 block">Core Values</span>
-      <h2 className="text-[26px] sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap">What We Stand For</h2>
+      <h2 className="text-[28px] sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap">What We Stand For</h2>
     </div>
     
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
@@ -386,11 +386,11 @@ const About = () => {
 </section>
 
       {/* 7. Join Us Banner */}
-      <section className="py-16 md:py-24 bg-white relative z-10 overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-10 sm:py-16 md:py-24 bg-white relative z-10 overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-6 lg:px-8">
           
           <FadeIn delay={0}>
-            <div className="relative rounded-[16px] p-6 sm:p-10 md:p-16 lg:px-12 lg:py-20 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)] border border-white/10" 
+            <div className="relative rounded-[16px] p-[18px] sm:p-10 md:p-16 lg:px-12 lg:py-20 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)] border border-white/10" 
                  style={{ background: '#000000' }}>
               
               {/* Decorative dotted pattern */}
@@ -413,7 +413,7 @@ const About = () => {
 
                 <FadeIn delay={200}>
                   {/* Heading */}
-                  <h2 className="text-[30px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-white leading-[1.15] mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)]">
+                  <h2 className="text-[28px] sm:text-[36px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-white leading-[1.15] mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)]">
                     Ready to Join DoorStep?
                   </h2>
                 </FadeIn>

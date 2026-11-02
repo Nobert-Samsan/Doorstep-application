@@ -177,7 +177,7 @@ const MyBookings = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div className="max-w-7xl mx-auto px-5 sm:px-6 py-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-text-primary">My Bookings</h2>
         

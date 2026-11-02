@@ -51,7 +51,7 @@ const WorkerReviews = () => {
   });
 
   return (
-    <div className="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white py-8 px-5 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Top Navigation */}
         <div className="flex items-center gap-3">

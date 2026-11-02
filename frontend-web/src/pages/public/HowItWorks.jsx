@@ -172,14 +172,14 @@ const HowItWorks = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* 1. Hero Banner - Clean Minimalist */}
-      <section className="relative min-h-[500px] md:min-h-[600px] lg:min-h-[96vh] bg-[#000000] overflow-hidden flex items-center pt-16 sm:pt-20 lg:pt-0 pb-8 lg:pb-0">
+      <section className="relative min-h-[340px] sm:min-h-[480px] md:min-h-[600px] lg:min-h-[96vh] bg-[#000000] overflow-hidden flex items-center pt-6 sm:pt-16 lg:pt-0 pb-6 sm:pb-8 lg:pb-0">
         
         {/* Decorative background glow & pattern */}
         
         
 
         {/* Image side (Mobile: top 42% height, Desktop: right 50% width) */}
-        <div className="absolute top-0 right-0 w-full h-[50%] sm:h-[70%] md:h-[85%] lg:h-full overflow-hidden">
+        <div className="absolute top-0 right-0 w-full h-[30%] sm:h-[65%] md:h-[85%] lg:h-full overflow-hidden">
           <img 
             src="/how-it-works-hero-new.jpg" 
             alt="A smiling homeowner booking a DoorStep professional on her phone" 
@@ -187,19 +187,19 @@ const HowItWorks = () => {
             fetchPriority="high"
           />
           {/* Mobile bottom fade to black */}
-          <div className="absolute inset-0 block md:hidden" style={{ background: "linear-gradient(180deg, transparent 70%, #000000 100%)" }}></div>
+          <div className="absolute inset-0 block md:hidden" style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 25%, #000000 65%, #000000 100%)" }}></div>
           {/* Desktop left fade to black */}
           <div className="absolute inset-0 hidden md:block pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.65) 25%, rgba(0,0,0,0.3) 45%, transparent 65%)" }}></div>
         </div>
 
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8 relative z-10 w-full flex flex-col items-start mt-24 sm:mt-32 lg:mt-0">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-6 md:px-8 relative z-10 w-full flex flex-col items-start mt-10 sm:mt-24 lg:mt-0">
           <div className="max-w-[600px] w-full pt-4 lg:pt-24">
             
 
 
             <FadeIn delay={200}>
               {/* Headline */}
-              <h1 className="text-[30px] sm:text-[44px] lg:text-[52px] xl:text-[72px] font-poppins font-extrabold text-white leading-[1.1] mb-3 lg:mb-6">
+              <h1 className="text-[28px] sm:text-[36px] lg:text-[52px] xl:text-[72px] font-poppins font-extrabold text-white leading-[1.1] mb-3 lg:mb-6">
                 How <span className="relative inline-block whitespace-nowrap">
                   <span className="text-[#FF7A00]">DoorStep Works</span>
                   
@@ -209,7 +209,7 @@ const HowItWorks = () => {
 
             <FadeIn delay={300}>
               {/* Subtitle */}
-              <p className="font-inter text-[16px] sm:text-[18px] md:text-[22px] font-normal text-white/80 leading-[1.7] max-w-[540px]">
+              <p className="font-inter text-[13px] sm:text-[16px] md:text-[22px] font-normal text-white/80 leading-[1.7] max-w-[540px]">
                 Your journey to a perfectly maintained home is simple and transparent. Here is how we connect you with the best professionals in Sri Lanka.
               </p>
             </FadeIn>
@@ -229,50 +229,72 @@ const HowItWorks = () => {
         `}} />
       </section>
 
-      {/* 2. Tab Selector - Pill Style */}
-      <section id="steps-section" className="bg-white border-b border-[#E8E2DB] sticky top-0 md:top-[72px] z-40 shadow-[0_4px_12px_rgba(0,0,0,0.02)] pt-6 pb-4 scroll-mt-20">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-8">
+      {/* 2. Modern Segmented Tab Bar */}
+      <section id="steps-section" className="bg-white/95 backdrop-blur-md border-b border-[#E8E2DB] sticky top-0 md:top-[72px] z-40 shadow-[0_2px_10px_rgba(0,0,0,0.03)] py-5 sm:py-6 scroll-mt-20">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
           <div className="flex justify-center">
-            <div className="relative flex p-[6px] bg-[#FFF8F1] rounded-full border border-[#E8E2DB] shadow-[0_6px_20px_rgba(0,0,0,0.05)]" role="tablist">
-              
-              {/* Sliding Active Pill */}
-              <div 
-                className="absolute top-[6px] bottom-[6px] w-[160px] sm:w-[220px] rounded-full bg-[#FF7A00] shadow-[0_4px_12px_rgba(255,122,0,0.20)] transition-transform duration-200 ease-in-out"
-                style={{ transform: activeTab === 'customer' ? 'translateX(0)' : 'translateX(100%)' }}
-              ></div>
-
-              <button 
+            <div 
+              className="inline-flex p-1 bg-[#F4EFEA] rounded-[16px] border border-[#E8E2DB] shadow-inner"
+              role="tablist"
+              aria-label="User Type Selector"
+            >
+              {/* Customer Tab */}
+              <button
+                type="button"
                 onClick={() => {
                   setActiveTab('customer');
                   setSearchParams({ tab: 'customer' }, { replace: true });
                 }}
                 role="tab"
                 aria-selected={activeTab === 'customer'}
-                className={`relative z-10 w-[160px] sm:w-[220px] py-3 flex flex-col items-center justify-center rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] ${activeTab === 'customer' ? 'text-white' : 'text-[#000000] hover:bg-[#FFF1E3]'}`}
+                style={{ outline: 'none', border: 'none', WebkitTapHighlightColor: 'transparent', WebkitFocusRingColor: 'transparent' }}
+                className={`flex items-center gap-2 sm:gap-2.5 px-4 sm:px-6 py-2 sm:py-2.5 rounded-[12px] font-poppins text-[13px] sm:text-[14px] font-semibold transition-all duration-200 outline-none focus:outline-none focus:ring-0 select-none ${
+                  activeTab === 'customer'
+                    ? 'bg-white text-[#000000] shadow-[0_2px_8px_rgba(0,0,0,0.06)]'
+                    : 'text-[#6B6B6B] hover:text-[#000000] hover:bg-white/50'
+                }`}
               >
-                <div className="flex items-center gap-1 sm:gap-2">
-                  <Home size={16} className={activeTab === 'customer' ? 'text-white' : 'text-[#6B6B6B]'} />
-                  <span className="font-poppins font-semibold text-[13px] sm:text-[15px]">For Customers</span>
+                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-[8px] flex items-center justify-center transition-colors ${
+                  activeTab === 'customer' ? 'bg-[#FF7A00] text-white shadow-sm' : 'bg-transparent text-[#6B6B6B]'
+                }`}>
+                  <Home size={16} />
                 </div>
-                <span className={`text-[10px] sm:text-[12px] mt-0.5 ${activeTab === 'customer' ? 'text-white/85' : 'text-[#6B6B6B]'}`}>(Homeowners)</span>
+                <div className="flex flex-col text-left">
+                  <span className="leading-tight">For Customers</span>
+                  <span className={`text-[10px] sm:text-[11px] font-normal leading-none mt-0.5 ${
+                    activeTab === 'customer' ? 'text-[#6B6B6B]' : 'text-[#8A8A8A]'
+                  }`}>Homeowners</span>
+                </div>
               </button>
 
-              <button 
+              {/* Worker Tab */}
+              <button
+                type="button"
                 onClick={() => {
                   setActiveTab('worker');
                   setSearchParams({ tab: 'worker' }, { replace: true });
                 }}
                 role="tab"
                 aria-selected={activeTab === 'worker'}
-                className={`relative z-10 w-[160px] sm:w-[220px] py-3 flex flex-col items-center justify-center rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] ${activeTab === 'worker' ? 'text-white' : 'text-[#000000] hover:bg-[#FFF1E3]'}`}
+                style={{ outline: 'none', border: 'none', WebkitTapHighlightColor: 'transparent', WebkitFocusRingColor: 'transparent' }}
+                className={`flex items-center gap-2 sm:gap-2.5 px-4 sm:px-6 py-2 sm:py-2.5 rounded-[12px] font-poppins text-[13px] sm:text-[14px] font-semibold transition-all duration-200 outline-none focus:outline-none focus:ring-0 select-none ${
+                  activeTab === 'worker'
+                    ? 'bg-white text-[#000000] shadow-[0_2px_8px_rgba(0,0,0,0.06)]'
+                    : 'text-[#6B6B6B] hover:text-[#000000] hover:bg-white/50'
+                }`}
               >
-                <div className="flex items-center gap-1 sm:gap-2">
-                  <Wrench size={16} className={activeTab === 'worker' ? 'text-white' : 'text-[#6B6B6B]'} />
-                  <span className="font-poppins font-semibold text-[13px] sm:text-[15px]">For Workers</span>
+                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-[8px] flex items-center justify-center transition-colors ${
+                  activeTab === 'worker' ? 'bg-[#FF7A00] text-white shadow-sm' : 'bg-transparent text-[#6B6B6B]'
+                }`}>
+                  <Wrench size={16} />
                 </div>
-                <span className={`text-[10px] sm:text-[12px] mt-0.5 ${activeTab === 'worker' ? 'text-white/85' : 'text-[#6B6B6B]'}`}>(Service Providers)</span>
+                <div className="flex flex-col text-left">
+                  <span className="leading-tight">For Workers</span>
+                  <span className={`text-[10px] sm:text-[11px] font-normal leading-none mt-0.5 ${
+                    activeTab === 'worker' ? 'text-[#6B6B6B]' : 'text-[#8A8A8A]'
+                  }`}>Service Providers</span>
+                </div>
               </button>
-
             </div>
           </div>
         </div>
@@ -280,12 +302,12 @@ const HowItWorks = () => {
 
       {/* Steps Content Redesigned */}
       <div className="bg-white">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-8 pt-16 pb-12 text-center relative">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8 pt-10 sm:pt-16 pb-12 text-center relative">
           
           <div className="relative z-10">
 
             <FadeIn delay={100}>
-              <h2 className="text-[30px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-[#000000] mb-6 leading-tight">
+              <h2 className="text-[28px] sm:text-[36px] md:text-[40px] lg:text-[48px] font-poppins font-bold text-[#000000] mb-6 leading-tight">
                 How {activeTab === 'customer' ? 'Customers' : 'Workers'} Use <span className="relative inline-block">
                   <span className="text-[#E85D00]">DoorStep</span>
                   
@@ -312,7 +334,7 @@ const HowItWorks = () => {
             return (
               <div key={idx} className={`relative w-full ${idx % 2 === 0 ? 'bg-[#FFFFFF]' : 'bg-[#FFF8F1]'} py-14 lg:py-20 overflow-hidden`}>
                 <FadeIn delay={100}>
-                <div className="max-w-[1100px] mx-auto px-6 md:px-8 relative z-10">
+                <div className="max-w-[1100px] mx-auto px-5 md:px-8 relative z-10">
 
                   <div className={`flex flex-col lg:flex-row items-center gap-8 md:p-12 lg:gap-[100px] xl:gap-[120px] ${!isLeft ? 'lg:flex-row-reverse' : ''}`}>
                     
@@ -320,11 +342,13 @@ const HowItWorks = () => {
                     <div className="flex-1 w-full relative">
                       
                       <div className="relative z-10 pt-4">
-                        <div className="mb-8 inline-flex">
-                          <div className="w-[56px] h-[56px] rounded-full bg-[#FF7A00] flex flex-col items-center justify-center shadow-[0_4px_12px_rgba(255,122,0,0.20)]">
-                            <span className="text-white/90 font-poppins font-bold text-[11px] tracking-[0.12em] uppercase leading-none mb-1">Step</span>
-                            <span className="text-white font-poppins font-extrabold text-[24px] leading-none">{idx + 1}</span>
-                          </div>
+                        <div className="mb-6 inline-flex items-center gap-2.5 pl-4 pr-1.5 py-1.5 rounded-full bg-[#FFF1E3] border border-[#FF7A00]/25 shadow-sm">
+                          <span className="text-[#E85D00] font-poppins font-bold text-[12px] uppercase tracking-[0.14em]">
+                            Step
+                          </span>
+                          <span className="w-6 h-6 rounded-full bg-[#FF7A00] text-white flex items-center justify-center text-[12px] font-poppins font-bold tabular-nums shadow-sm">
+                            {idx + 1}
+                          </span>
                         </div>
                         <h3 className="text-[28px] lg:text-[32px] font-poppins font-bold text-[#000000] mb-5 leading-tight">{step.title}</h3>
                         <p className="font-inter text-[16px] lg:text-[17px] text-[#3D3D3D] leading-[1.75] mb-8" dangerouslySetInnerHTML={{ __html: step.desc.replace(/ΓÇö/g, '—') }}></p>
@@ -369,8 +393,8 @@ const HowItWorks = () => {
         
         {/* Closing Strip Redesigned */}
         <div className="py-12 lg:py-16 bg-white">
-          <div className="max-w-[1100px] mx-auto px-6 md:px-8">
-            <div className="relative bg-[#000000] rounded-[16px] py-10 px-6 lg:py-14 lg:px-12 text-center overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)] border border-white/10">
+          <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+            <div className="relative bg-[#000000] rounded-[16px] p-[18px] lg:py-14 lg:px-12 text-center overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)] border border-white/10">
               
               {/* Background Decorations */}
               
@@ -416,9 +440,9 @@ const HowItWorks = () => {
       
 
       {/* Still Have Questions Banner Redesigned */}
-      <section className="pt-8 pb-16 lg:pt-8 lg:pb-24 bg-white">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-8">
-          <div className="relative bg-[#FFF8F1] border border-[#E8E2DB] rounded-[16px] py-10 px-6 lg:py-14 lg:px-12 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
+      <section className="py-10 lg:py-24 bg-white">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-8">
+          <div className="relative bg-[#FFF8F1] border border-[#E8E2DB] rounded-[16px] p-[18px] lg:py-14 lg:px-12 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
             
             {/* Background Decorations */}
             
@@ -448,7 +472,7 @@ const HowItWorks = () => {
               <div className="flex-shrink-0 w-full lg:w-[320px] flex flex-col gap-5">
                 <FadeIn delay={200}>
                   <div className="w-full">
-                    <a href="tel:+94112345678" className="w-full group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-poppins font-semibold text-[16px] py-[16px] px-[28px] rounded-[12px] shadow-[0_4px_12px_rgba(255,122,0,0.20)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFF8F1] outline-none">
+                    <a href="tel:+94112345678" className="w-full group bg-[#FF7A00] hover:bg-[#E86100] active:bg-[#CC5200] text-white font-poppins font-semibold text-[16px] py-[16px] px-[28px] rounded-[12px] shadow-[0_4px_12px_rgba(255,122,0,0.20)] hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 select-none focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFF8F1] outline-none">
                       <PhoneCall size={20} />
                       Call Us: +94 11 234 5678
                     </a>
@@ -460,7 +484,7 @@ const HowItWorks = () => {
                 
                 <FadeIn delay={300}>
                   <div className="w-full">
-                    <a href="https://wa.me/94771234567" target="_blank" rel="noreferrer" className="w-full group bg-[#000000] text-white font-poppins font-semibold text-[16px] py-[16px] px-[28px] rounded-[12px] shadow-[0_10px_28px_rgba(0,0,0,0.20)] hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.30)] transition-all duration-300 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7A00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFF8F1] outline-none">
+                    <a href="https://wa.me/94771234567" target="_blank" rel="noreferrer" className="w-full group bg-[#000000] text-white font-poppins font-semibold text-[16px] py-[16px] px-[28px] rounded-[12px] shadow-[0_10px_28px_rgba(0,0,0,0.20)] hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.30)] transition-all duration-300 flex items-center justify-center gap-2 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 select-none focus-visible:ring-offset-2 focus-visible:ring-offset-[#FFF8F1] outline-none">
                       <MessageSquare size={20} className="text-[#25D366]" />
                       WhatsApp Us
                     </a>

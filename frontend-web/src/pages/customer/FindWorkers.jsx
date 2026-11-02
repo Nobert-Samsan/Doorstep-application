@@ -47,7 +47,7 @@ const FindWorkers = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 py-8">
+    <div className="max-w-7xl mx-auto space-y-6 px-5 sm:px-6 py-8">
       
       {/* Search Header Banner */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">

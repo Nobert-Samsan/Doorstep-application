@@ -165,10 +165,10 @@ const Dashboard = () => {
 @media (max-width: 767px) {
   .worker-welcome-panel {
     border-radius: 24px !important;
-    margin-left: 12px !important;
-    margin-right: 12px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     margin-bottom: 16px !important;
-    padding: 16px !important;
+    padding: 18px !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
   }
 }

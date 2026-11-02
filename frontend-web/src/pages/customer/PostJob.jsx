@@ -138,7 +138,7 @@ const PostJob = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-5 px-4 sm:px-6 pt-3 sm:pt-4 pb-10">
+    <div className="max-w-7xl mx-auto space-y-5 px-5 sm:px-6 pt-3 sm:pt-4 pb-10">
       
       {/* Header */}
       <div>
@@ -231,7 +231,7 @@ const PostJob = () => {
                           )}
                         </div>
 
-                        <div className="p-4 sm:p-5 rounded-2xl bg-white border-0 shadow-2xs transition-all duration-300">
+                        <div className="p-[18px] sm:p-5 rounded-2xl bg-white border-0 shadow-2xs transition-all duration-300">
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
                           {serviceCategories
                             .find(c => c.name === selectedMainCategory)

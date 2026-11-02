@@ -235,11 +235,11 @@ const CustomerLayout = () => {
       {/* TOP NAVBAR (White #FFFFFF, 80px) */}
       <header 
         style={{ backgroundColor: '#FFFFFF' }}
-        className={`fixed top-0 left-0 right-0 z-50 h-20 bg-white border-b border-[#E8E2DB] transition-all duration-200 ${
+        className={`fixed top-0 left-0 right-0 z-50 h-14 md:h-20 bg-white border-b border-[#E8E2DB] transition-all duration-200 ${
           isScrolled ? 'shadow-[0_4px_20px_rgba(0,0,0,0.06)]' : ''
         }`}
       >
-        <div className="max-w-[1200px] mx-auto h-full px-6 md:px-8 flex items-center justify-between">
+        <div className="max-w-[1200px] mx-auto h-full px-5 md:px-8 flex items-center justify-between">
           
           {/* Zone 1: Logo (Left) */}
           <div className="flex items-center shrink-0">
@@ -562,7 +562,7 @@ const CustomerLayout = () => {
       </header>
       
       {/* Main Content Area */}
-      <main ref={mainRef} className="flex-1 overflow-y-auto pt-20 pb-[80px] md:pb-0">
+      <main ref={mainRef} className="flex-1 overflow-y-auto pt-14 md:pt-20 pb-[80px] md:pb-0">
         <Outlet />
       </main>
 
