@@ -297,22 +297,11 @@ const Login = () => {
                     />
                   </div>
                   <p className="text-[13px] text-[#6B6B6B] mt-1.5 font-inter">
-                    We will send a one-time verification code to this address. No password needed.
+                    We will send a one-time verification code to this address.
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between pt-1 pb-1">
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-4 h-4 rounded text-[#000000] focus:ring-[#000000] border-gray-300 cursor-pointer"
-                      disabled={isLoading}
-                    />
-                    <span className="text-[#3D3D3D] text-[13.5px] sm:text-[14px] select-none font-inter">Remember my email / phone</span>
-                  </label>
-                </div>
+                
 
                 <button 
                   type="submit" 
@@ -326,7 +315,7 @@ const Login = () => {
                     </>
                   ) : (
                     <>
-                      <span>Continue with OTP</span>
+                      <span>Next</span>
                       <ArrowRight size={18} />
                     </>
                   )}
