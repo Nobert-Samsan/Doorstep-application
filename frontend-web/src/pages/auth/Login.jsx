@@ -168,10 +168,7 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    toast.info("Google Login integration coming soon!");
-  };
-
+  
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white overflow-hidden">
       
@@ -322,23 +319,7 @@ const Login = () => {
                 </button>
               </form>
 
-              {/* DIVIDER */}
-              <div className="flex items-center gap-3 my-5 sm:my-6 text-[#6B6B6B] text-[13px] font-inter">
-                <div className="flex-1 h-[1px] bg-[#E8E2DB]"></div>
-                <span>or</span>
-                <div className="flex-1 h-[1px] bg-[#E8E2DB]"></div>
-              </div>
-
-              {/* GOOGLE SIGN IN */}
-              <button 
-                onClick={handleGoogleLogin} 
-                disabled={isLoading}
-                type="button"
-                className="w-full h-[46px] sm:h-[56px] bg-white border border-[#E8E2DB] rounded-[12px] flex items-center justify-center gap-3 text-[#000000] font-semibold text-[14px] sm:text-[15px] hover:bg-gray-50 hover:border-[#CFC6BC] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black disabled:opacity-60 font-inter cursor-pointer"
-              >
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-[20px] w-[20px]" />
-                Sign in with Google
-              </button>
+              
 
               {/* REGISTER LINK */}
               <div className="text-center mt-7 sm:mt-8 text-[14px] text-[#3D3D3D] font-inter">
