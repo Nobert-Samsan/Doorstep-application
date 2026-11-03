@@ -489,11 +489,7 @@ exports.sendLoginOtp = async (req, res) => {
       await sendEmail({
         email: user.email,
         subject: 'Your DoorStep Login Code',
-        message: 'Hello ' + (user.firstName || 'User') + ',
-
-Your login verification code is: ' + otp + '
-
-This code will expire in 5 minutes. Do not share this code with anyone.'
+        message: `Hello ${user.firstName || 'User'},\n\nYour login verification code is: ${otp}\n\nThis code will expire in 5 minutes. Do not share this code with anyone.`
       });
     } else {
       await sendSMS(user.phone, 'Your DoorStep login OTP is ' + otp + '. Valid for 5 minutes.');
