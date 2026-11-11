@@ -205,11 +205,44 @@ const CustomerLayout = () => {
   // Mobile Bottom Tabs
   // Mobile Bottom Tabs: Home, Bookings, Post a Job (Center), Notifications, Account
   const mobileTabs = [
-    { name: 'Home', path: '/customer/dashboard', matchPaths: ['/customer/dashboard'], icon: Home },
-    { name: 'Bookings', path: '/customer/bookings', matchPaths: ['/customer/bookings'], icon: Calendar, badge: bookingCount > 0 ? bookingCount : null },
-    { name: 'Post a Job', path: '/customer/post-job', matchPaths: ['/customer/post-job'], icon: Plus },
-    { name: 'Notifications', path: '/customer/notifications', matchPaths: ['/customer/notifications'], icon: Bell, badge: unreadNotifCount > 0 ? unreadNotifCount : null },
-    { name: 'Account', path: '/customer/settings', matchPaths: ['/customer/settings'], icon: User },
+    { 
+      name: 'Home', 
+      path: '/customer/dashboard', 
+      matchPaths: [
+        '/customer/dashboard', 
+        '/customer/category', 
+        '/customer/find-workers', 
+        '/customer/worker', 
+        '/customer/book'
+      ], 
+      icon: Home 
+    },
+    { 
+      name: 'Bookings', 
+      path: '/customer/bookings', 
+      matchPaths: ['/customer/bookings'], 
+      icon: Calendar, 
+      badge: bookingCount > 0 ? bookingCount : null 
+    },
+    { 
+      name: 'Post a Job', 
+      path: '/customer/post-job', 
+      matchPaths: ['/customer/post-job'], 
+      icon: Plus 
+    },
+    { 
+      name: 'Notifications', 
+      path: '/customer/notifications', 
+      matchPaths: ['/customer/notifications'], 
+      icon: Bell, 
+      badge: unreadNotifCount > 0 ? unreadNotifCount : null 
+    },
+    { 
+      name: 'Account', 
+      path: '/customer/settings', 
+      matchPaths: ['/customer/settings'], 
+      icon: User 
+    },
   ];
 
   return (
@@ -611,9 +644,6 @@ const CustomerLayout = () => {
               <span className="text-[11px] font-medium mt-1 leading-none">
                 {tab.name}
               </span>
-              {isActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-[#E86100] mt-1" />
-              )}
             </Link>
           );
         })}

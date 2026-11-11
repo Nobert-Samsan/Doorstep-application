@@ -172,10 +172,6 @@ const MyBookings = () => {
     return status.replace('_', ' ').toUpperCase();
   };
 
-  if (loading) {
-    return <div className="p-8 text-center text-gray-500">Loading your bookings...</div>;
-  }
-
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-6 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -199,44 +195,63 @@ const MyBookings = () => {
         ))}
       </div>
 
-      <div className="space-y-4">
-        {filteredBookings.map(booking => (
-          <div key={booking.id} className="bg-white rounded-lg shadow-sm border border-border flex flex-col md:flex-row overflow-hidden">
-            <div className={`w-2 md:w-auto md:w-1 ${getStatusStyle(booking.status).split(' ')[0]}`}></div>
-            <div className="p-5 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              
-              <div>
-                <h3 className="font-bold text-lg text-text-primary capitalize">{booking.serviceTitle}</h3>
-                {booking.description && booking.description.trim() !== '' && booking.description.toLowerCase() !== 'no additional notes provided' && (
-                  <p className="text-xs text-text-muted mt-0.5 max-w-md line-clamp-1 italic">
-                    "{booking.description}"
-                  </p>
-                )}
-                <div className="mt-1.5 space-y-0.5 text-sm text-text-secondary">
-                  <p><span className="font-medium text-text-primary">Professional Name:</span> {booking.worker}</p>
-                  <p><span className="font-medium text-text-primary">Booking Date:</span> {booking.date}</p>
-                </div>
+      {loading ? (
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white rounded-xl p-5 border border-gray-100 shadow-xs animate-pulse flex flex-col md:flex-row justify-between gap-4">
+              <div className="space-y-2.5 flex-1">
+                <div className="h-5 w-48 bg-gray-200 rounded"></div>
+                <div className="h-3.5 w-72 bg-gray-100 rounded"></div>
+                <div className="h-3 w-32 bg-gray-100 rounded"></div>
               </div>
-
-              <div className="flex flex-col md:items-end w-full md:w-auto gap-2">
-                <div className="flex justify-between w-full md:w-auto gap-4 items-center">
-
-                  <span className={`px-2 py-1 rounded text-xs font-bold ${getStatusStyle(booking.status).replace('border-l-4 border-', '')}`}>
-                    {getStatusText(booking.status)}
-                  </span>
-                </div>
-                <div className="flex gap-2 w-full md:w-auto">
-                  <Link to={`/customer/bookings/${booking.id}`} className="flex-1 md:flex-none text-center px-4 py-1.5 border border-primary text-primary rounded text-sm hover:bg-light-accent">View Details</Link>
-
-                  {booking.status === 'completed' && <button onClick={() => handleOpenReview(booking)} className="flex-1 md:flex-none px-4 py-1.5 bg-success text-white rounded text-sm hover:bg-green-700">Leave Review</button>}
-
-                </div>
-              </div>
-
+              <div className="h-8 w-24 bg-gray-100 rounded-lg shrink-0"></div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : filteredBookings.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
+          <p className="text-gray-500 font-medium">No bookings found in this category.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredBookings.map(booking => (
+            <div key={booking.id} className="bg-white rounded-lg shadow-sm border border-border flex flex-col md:flex-row overflow-hidden">
+              <div className={`w-2 md:w-auto md:w-1 ${getStatusStyle(booking.status).split(' ')[0]}`}></div>
+              <div className="p-5 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                
+                <div>
+                  <h3 className="font-bold text-lg text-text-primary capitalize">{booking.serviceTitle}</h3>
+                  {booking.description && booking.description.trim() !== '' && booking.description.toLowerCase() !== 'no additional notes provided' && (
+                    <p className="text-xs text-text-muted mt-0.5 max-w-md line-clamp-1 italic">
+                      "{booking.description}"
+                    </p>
+                  )}
+                  <div className="mt-1.5 space-y-0.5 text-sm text-text-secondary">
+                    <p><span className="font-medium text-text-primary">Professional Name:</span> {booking.worker}</p>
+                    <p><span className="font-medium text-text-primary">Booking Date:</span> {booking.date}</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:items-end w-full md:w-auto gap-2">
+                  <div className="flex justify-between w-full md:w-auto gap-4 items-center">
+
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${getStatusStyle(booking.status).replace('border-l-4 border-', '')}`}>
+                      {getStatusText(booking.status)}
+                    </span>
+                  </div>
+                  <div className="flex gap-2 w-full md:w-auto">
+                    <Link to={`/customer/bookings/${booking.id}`} className="flex-1 md:flex-none text-center px-4 py-1.5 border border-primary text-primary rounded text-sm hover:bg-light-accent">View Details</Link>
+
+                    {booking.status === 'completed' && <button onClick={() => handleOpenReview(booking)} className="flex-1 md:flex-none px-4 py-1.5 bg-success text-white rounded text-sm hover:bg-green-700">Leave Review</button>}
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Review Modal */}
       {reviewModalOpen && selectedBooking && (

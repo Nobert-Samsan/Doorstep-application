@@ -231,9 +231,8 @@ const WorkerProfile = () => {
             </div>
             
             {reviews.length === 0 ? (
-              <div className="text-center py-10 bg-gray-50 rounded-2xl border border-gray-100">
+              <div className="text-center py-6">
                 <p className="text-gray-500 text-sm font-medium">No customer reviews yet.</p>
-                <p className="text-gray-400 text-xs mt-1">Be the first to review after completing a job with {worker.firstName}!</p>
               </div>
             ) : (
               <div className="space-y-6">

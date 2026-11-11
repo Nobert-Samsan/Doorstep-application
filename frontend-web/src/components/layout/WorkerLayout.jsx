@@ -343,9 +343,6 @@ const WorkerLayout = () => {
             >
               <Icon size={22} weight={isActive ? "fill" : "regular"} />
               <span className="text-[11px] mt-0.5 font-medium">{item.name}</span>
-              {isActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FF7A00] mt-0.5" />
-              )}
             </Link>
           );
         })}
