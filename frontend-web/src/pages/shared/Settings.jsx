@@ -235,7 +235,7 @@ const Settings = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-8">Settings</h2>
+      <h2 className="text-[24px] sm:text-3xl font-bold text-gray-800 mb-8">Settings</h2>
       
       <div className="flex flex-col md:flex-row bg-transparent md:bg-white md:rounded-lg md:shadow-sm md:border md:border-gray-200 md:overflow-hidden">
         {/* Sidebar / Tabs */}

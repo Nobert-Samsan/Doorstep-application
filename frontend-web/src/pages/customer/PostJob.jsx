@@ -138,26 +138,25 @@ const PostJob = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-5 px-5 sm:px-6 pt-3 sm:pt-4 pb-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-3 sm:pt-6 pb-12">
       
       {/* Header */}
-      <div>
+      <div className="mb-5 sm:mb-7">
         <Link 
           to="/customer/dashboard" 
           aria-label="Back to dashboard"
-          className="inline-flex items-center text-gray-700 hover:text-black transition-colors mb-1 -ml-1 py-1 pr-2 group"
+          className="inline-flex items-center text-gray-500 hover:text-gray-900 transition-colors mb-2 -ml-1 py-1 pr-2 group text-sm font-medium"
         >
-          <ChevronLeft size={26} strokeWidth={2.5} className="group-hover:-translate-x-1 transition-transform" />
+          <ChevronLeft size={20} strokeWidth={2.5} className="group-hover:-translate-x-1 transition-transform mr-0.5" />
+          <span>Back</span>
         </Link>
-        <h1 className="text-3xl font-extrabold text-gray-900">Broadcast a Job</h1>
-        <p className="text-gray-500 mt-1">Get quotes from available professionals in your area within minutes.</p>
+        <h1 className="text-[24px] sm:text-3xl font-extrabold text-gray-900 tracking-tight">Broadcast a Job</h1>
+        <p className="text-gray-500 text-sm sm:text-base mt-1">Get quotes from verified professionals in your area within minutes.</p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 mt-8">
-        
-        {/* LEFT COLUMN - Wizard Form */}
-        <div className="flex-1">
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 sm:p-10">
+      <div className="w-full">
+        {/* Main Card Container */}
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-200/80 p-4 sm:p-8 md:p-10">
             
 
 
@@ -172,22 +171,24 @@ const PostJob = () => {
               
               {/* STEP 1: JOB DETAILS */}
               {step === 1 && currentView === 'form' && (
-                <div className="space-y-6 animate-fadeIn">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">What do you need help with?</h2>
-                    <p className="text-gray-500 mb-6">Select a category and describe the problem.</p>
+                <div className="space-y-6 sm:space-y-8 animate-fadeIn">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">What do you need help with?</h2>
+                    <p className="text-gray-500 text-xs sm:text-sm mt-0.5">Select a category and choose the specific service required.</p>
                   </div>
 
                   <div>
                     {/* Step 1: Main Category Selection */}
-                    <div className="mb-3">
-                      <label className="block text-[18px] font-bold text-gray-900">
+                    <div className="flex items-center justify-between mb-2.5">
+                      <label className="text-sm font-bold text-gray-900">
                         Select Category <span className="text-[#FF7A00]">*</span>
                       </label>
+                      <span className="text-[11px] text-gray-400 font-medium">Scroll to see all</span>
                     </div>
 
-                    <div className="bg-gray-50 rounded-2xl p-2.5 border-0">
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 max-h-56 sm:max-h-none overflow-y-auto sm:overflow-visible custom-scrollbar p-1">
+                    <div className="relative">
+                      {/* Horizontal scroll pill strip on mobile, neat wrap on desktop */}
+                      <div className="flex sm:flex-wrap gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-none -mx-1 px-1">
                         {serviceCategories.map((cat, idx) => {
                           const isSelected = selectedMainCategory === cat.name;
                           return (
@@ -195,18 +196,18 @@ const PostJob = () => {
                               type="button"
                               key={idx}
                               onClick={() => handleMainCategorySelect(cat.name)}
-                              className={`rounded-xl p-3 text-center transition-all duration-200 flex flex-col items-center justify-center cursor-pointer border-2 ${
+                              className={`shrink-0 sm:shrink px-3.5 py-2 sm:py-2.5 rounded-xl text-left transition-all duration-150 cursor-pointer border flex items-center gap-2 ${
                                 isSelected
-                                  ? 'border-[#FF7A00] bg-[#FFF8F1] shadow-sm ring-2 ring-[#FF7A00]/20 -translate-y-0.5'
-                                  : 'bg-white border-transparent hover:border-gray-200 hover:shadow-sm'
+                                  ? 'border-[#FF7A00] bg-[#FFF8F1] text-[#E86100] shadow-xs ring-1 ring-[#FF7A00]/20'
+                                  : 'bg-white border-gray-200/90 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
                               }`}
                             >
-                              
-                              <div className={`font-bold text-xs leading-tight ${isSelected ? 'text-[#E86100]' : 'text-gray-700'}`}>
+                              <span className={`w-2 h-2 rounded-full shrink-0 ${isSelected ? 'bg-[#FF7A00]' : 'bg-gray-300'}`} />
+                              <div className="font-semibold text-xs whitespace-nowrap">
                                 {cat.name}
                               </div>
-                              <span className="text-[10px] text-gray-400 mt-1 font-medium">
-                                {cat.jobs.length} jobs
+                              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${isSelected ? 'bg-[#FF7A00]/15 text-[#E86100]' : 'bg-gray-100 text-gray-500'}`}>
+                                {cat.jobs.length}
                               </span>
                             </button>
                           );
@@ -216,23 +217,20 @@ const PostJob = () => {
 
                     {/* Jobs list under the selected Main Category */}
                     {selectedMainCategory && (
-                      <div className="mt-6">
-                        {/* Heading placed OUTSIDE the box with black text */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
-                          <div>
-                            <label className="block text-[18px] font-bold text-gray-900">
-                              Choose Job under "{selectedMainCategory}" <span className="text-[#FF7A00]">*</span>
-                            </label>
-                          </div>
+                      <div className="mt-6 pt-5 border-t border-gray-100">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-3">
+                          <label className="text-sm font-bold text-gray-900">
+                            Choose Specific Job <span className="text-[#FF7A00]">*</span>
+                          </label>
                           {formData.category && (
-                            <span className="self-start sm:self-auto text-xs font-semibold px-2.5 py-1 bg-[#FFF8F1] text-[#E86100] border border-[#FF7A00]/30 rounded-full shadow-xs">
-                              Selected: {formData.category}
+                            <span className="self-start sm:self-auto text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full flex items-center gap-1">
+                              <CheckCircle size={13} className="text-emerald-600" />
+                              {formData.category}
                             </span>
                           )}
                         </div>
 
-                        <div className="p-[18px] sm:p-5 rounded-2xl bg-white border-0 shadow-2xs transition-all duration-300">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
                           {serviceCategories
                             .find(c => c.name === selectedMainCategory)
                             ?.jobs.map((job, jIdx) => {
@@ -242,43 +240,57 @@ const PostJob = () => {
                                   type="button"
                                   key={jIdx}
                                   onClick={() => handleJobSelect(job)}
-                                  className={`p-3 rounded-xl text-left transition-all duration-200 cursor-pointer border flex flex-col justify-between ${
+                                  className={`p-3 sm:p-3.5 rounded-xl text-left transition-all duration-150 cursor-pointer border flex flex-col justify-between ${
                                     isJobSelected
-                                      ? 'bg-[#FF7A00] text-white border-[#FF7A00] shadow-sm ring-2 ring-[#FF7A00]/30'
-                                      : 'bg-white text-gray-800 border-[#E8E2DB] hover:border-[#FF7A00] hover:bg-orange-50/30'
+                                      ? 'bg-[#FFF8F1] border-[#FF7A00] shadow-xs ring-1 ring-[#FF7A00]'
+                                      : 'bg-white text-gray-800 border-gray-200/90 hover:border-gray-300 hover:bg-gray-50/50'
                                   }`}
                                 >
                                   <div className="flex items-center justify-between w-full mb-1">
-                                    <span className={`font-bold text-[15px] leading-snug ${isJobSelected ? 'text-white' : 'text-gray-900'}`}>
+                                    <span className={`font-bold text-sm ${isJobSelected ? 'text-[#E86100]' : 'text-gray-900'}`}>
                                       {job.title}
                                     </span>
-                                    {isJobSelected ? (
-                                      <span className="w-5 h-5 rounded-full bg-white text-[#FF7A00] flex items-center justify-center text-xs font-black shrink-0 ml-1">✓</span>
-                                    ) : (
-                                      <span className="text-gray-300 text-sm">○</span>
-                                    )}
+                                    <span className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ml-2 ${
+                                      isJobSelected ? 'border-[#FF7A00] bg-[#FF7A00] text-white' : 'border-gray-300 bg-white'
+                                    }`}>
+                                      {isJobSelected && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                                    </span>
                                   </div>
                                   {job.details && (
-                                    <p className={`text-[11px] line-clamp-2 leading-relaxed ${isJobSelected ? 'text-white/90' : 'text-gray-500'}`}>
+                                    <p className="text-xs text-gray-500 line-clamp-1 leading-normal">
                                       {job.details}
                                     </p>
                                   )}
                                 </button>
                               );
                             })}
-                          </div>
                         </div>
                       </div>
                     )}
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-2">Describe the service you need</label>
-                    <textarea name="jobDescription" value={formData.jobDescription} onChange={handleInputChange} rows="4" placeholder="e.g. The pipe under the kitchen sink bursts every time I turn on the hot water. I need a plumber to fix or replace it." className="w-full border-2 border-gray-100 rounded-xl py-3.5 px-4 focus:border-primary focus:ring-0 outline-none text-gray-900 resize-none font-medium" required></textarea>
+                  {/* Describe problem */}
+                  <div className="pt-2">
+                    <label className="block text-sm font-bold text-gray-900 mb-1.5">
+                      Describe the service you need <span className="text-[#FF7A00]">*</span>
+                    </label>
+                    <textarea 
+                      name="jobDescription" 
+                      value={formData.jobDescription} 
+                      onChange={handleInputChange} 
+                      rows="3" 
+                      placeholder="e.g. The pipe under the kitchen sink bursts every time I turn on the hot water. I need a plumber to fix or replace it." 
+                      className="w-full border border-gray-200 rounded-xl py-3 px-3.5 focus:border-[#FF7A00] focus:ring-2 focus:ring-[#FF7A00]/20 outline-none text-gray-900 text-sm font-medium resize-none shadow-xs transition-all" 
+                      required
+                    ></textarea>
                   </div>
+
+                  {/* Urgency */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-3">When do you need this done?</label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <label className="block text-sm font-bold text-gray-900 mb-2.5">
+                      When do you need this done? <span className="text-[#FF7A00]">*</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                       
                       <label className="cursor-pointer">
                         <input 
@@ -292,12 +304,14 @@ const PostJob = () => {
                           }} 
                           className="peer hidden" 
                         />
-                        <div className="border-2 border-gray-100 rounded-2xl p-5 hover:bg-gray-50 peer-checked:border-red-500 peer-checked:bg-red-50 transition-colors h-full">
-                          <div className="w-10 h-10 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mb-3">
-                            <Shield size={20} />
+                        <div className="border border-gray-200/90 rounded-xl p-3 sm:p-4 hover:bg-gray-50 peer-checked:border-red-500 peer-checked:bg-red-50/60 transition-all flex items-center sm:flex-col sm:items-start gap-3 h-full">
+                          <div className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                            <Shield size={16} />
                           </div>
-                          <div className="font-bold text-gray-900 mb-1">Emergency</div>
-                          <div className="text-sm text-gray-500 font-medium">As soon as possible!</div>
+                          <div>
+                            <div className="font-bold text-sm text-gray-900">Emergency</div>
+                            <div className="text-xs text-gray-500 font-medium">As soon as possible</div>
+                          </div>
                         </div>
                       </label>
 
@@ -313,12 +327,14 @@ const PostJob = () => {
                           }} 
                           className="peer hidden" 
                         />
-                        <div className="border-2 border-gray-100 rounded-2xl p-5 hover:bg-gray-50 peer-checked:border-amber-500 peer-checked:bg-amber-50 transition-colors h-full">
-                          <div className="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mb-3">
-                            <Clock size={20} />
+                        <div className="border border-gray-200/90 rounded-xl p-3 sm:p-4 hover:bg-gray-50 peer-checked:border-[#FF7A00] peer-checked:bg-[#FFF8F1] transition-all flex items-center sm:flex-col sm:items-start gap-3 h-full">
+                          <div className="w-8 h-8 rounded-lg bg-amber-100 text-[#FF7A00] flex items-center justify-center shrink-0">
+                            <Clock size={16} />
                           </div>
-                          <div className="font-bold text-gray-900 mb-1">Flexible</div>
-                          <div className="text-sm text-gray-500 font-medium">Within a few days.</div>
+                          <div>
+                            <div className="font-bold text-sm text-gray-900">Flexible</div>
+                            <div className="text-xs text-gray-500 font-medium">Within a few days</div>
+                          </div>
                         </div>
                       </label>
 
@@ -334,12 +350,14 @@ const PostJob = () => {
                           }} 
                           className="peer hidden" 
                         />
-                        <div className="border-2 border-gray-100 rounded-2xl p-5 hover:bg-gray-50 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-colors h-full">
-                          <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-3">
-                            <Calendar size={20} />
+                        <div className="border border-gray-200/90 rounded-xl p-3 sm:p-4 hover:bg-gray-50 peer-checked:border-blue-500 peer-checked:bg-blue-50/60 transition-all flex items-center sm:flex-col sm:items-start gap-3 h-full">
+                          <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                            <Calendar size={16} />
                           </div>
-                          <div className="font-bold text-gray-900 mb-1">Specific Date</div>
-                          <div className="text-sm text-gray-500 font-medium">Choose a preferred date.</div>
+                          <div>
+                            <div className="font-bold text-sm text-gray-900">Specific Date</div>
+                            <div className="text-xs text-gray-500 font-medium">Choose date</div>
+                          </div>
                         </div>
                       </label>
 
@@ -348,21 +366,21 @@ const PostJob = () => {
 
                   {urgency === 'specific' && (
                     <div className="animate-fadeIn">
-                      <label className="block text-sm font-bold text-gray-900 mb-2">Preferred Date</label>
+                      <label className="block text-sm font-bold text-gray-900 mb-1.5">Preferred Date</label>
                       <input 
                         type="date" 
                         min={new Date().toISOString().split('T')[0]}
-                        className="w-full border-2 border-gray-100 rounded-xl py-3.5 px-4 focus:border-primary focus:ring-0 outline-none text-gray-900 font-medium" 
+                        className="w-full sm:w-auto border border-gray-200 rounded-xl py-2.5 px-3.5 focus:border-[#FF7A00] outline-none text-gray-900 text-sm font-medium shadow-xs" 
                         required={urgency === 'specific'}
                       />
                     </div>
                   )}
 
-                  <div className="mt-6">
-                    <label className="block text-sm font-bold text-gray-900 mb-1">Upload Photos of the Issue (Highly Recommended)</label>
-                    <p className="text-xs text-gray-500 mb-3">Workers provide much more accurate quotes when they can see exactly what needs to be fixed or worked on.</p>
+                  <div className="pt-2">
+                    <label className="block text-sm font-bold text-gray-900 mb-1">Upload Photos of the Issue (Optional)</label>
+                    <p className="text-xs text-gray-500 mb-3">Workers provide accurate quotes when they see what needs repair.</p>
                     
-                    <div className="border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group relative overflow-hidden">
+                    <div className="border border-dashed border-gray-300 rounded-xl p-6 text-center bg-gray-50/60 hover:bg-gray-50 transition-colors cursor-pointer group relative overflow-hidden">
                       <input 
                         type="file" 
                         multiple 
@@ -374,11 +392,11 @@ const PostJob = () => {
                           }
                         }}
                       />
-                      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform text-primary">
-                        <UploadCloud size={28} />
+                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-2 border border-gray-200 text-[#FF7A00] shadow-2xs group-hover:scale-105 transition-transform">
+                        <UploadCloud size={20} />
                       </div>
-                      <h4 className="font-bold text-gray-900 mb-1">Click to upload photos of the problem</h4>
-                      <p className="text-sm text-gray-500 font-medium">PNG, JPG up to 10MB</p>
+                      <div className="text-xs font-bold text-gray-800">Tap to upload photos</div>
+                      <p className="text-[11px] text-gray-400 mt-0.5">PNG, JPG up to 10MB</p>
                     </div>
 
                     {/* Image Previews */}
@@ -408,25 +426,15 @@ const PostJob = () => {
                     )}
                   </div>
 
-                  {/* Service Location Summary Card with Edit Address Button */}
+                  {/* Service Location Summary Card */}
                   <div className="pt-6 border-t border-gray-100">
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <label className="block text-sm font-bold text-gray-900">
-                          Job Location & Address <span className="text-[#FF7A00]">*</span>
-                        </label>
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          Where does the service need to take place?
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentView('location')}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#FFF8F1] text-[#E86100] border border-[#FF7A00]/30 hover:bg-[#FFEEDC] transition-all"
-                      >
-                        <Edit3 size={13} />
-                        <span>Edit Address</span>
-                      </button>
+                    <div className="mb-3">
+                      <label className="block text-sm font-bold text-gray-900">
+                        Job Location & Address <span className="text-[#FF7A00]">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        Where does the service need to take place?
+                      </p>
                     </div>
 
                     {/* Summary card of current address */}
@@ -648,11 +656,11 @@ const PostJob = () => {
 
               {/* Form Navigation (Hidden on success screen) */}
               {step < 3 && currentView === 'form' && (
-                <div className="flex justify-end items-center mt-10 pt-6 border-t border-gray-100">
+                <div className="mt-8 pt-6 border-t border-gray-100">
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="bg-primary text-white font-bold px-10 py-3.5 rounded-xl hover:bg-amber-600 transition-colors shadow-lg shadow-primary/20 flex items-center disabled:opacity-50"
+                    className="w-full bg-[#FF7A00] text-white font-bold py-3.5 sm:py-4 px-6 rounded-xl hover:bg-[#E86100] transition-all shadow-md shadow-[#FF7A00]/25 flex items-center justify-center text-base disabled:opacity-50 cursor-pointer"
                   >
                     {isSubmitting ? 'Broadcasting...' : 'Broadcast Job Now'}
                   </button>
@@ -664,7 +672,6 @@ const PostJob = () => {
         </div>
 
       </div>
-    </div>
   );
 };
 

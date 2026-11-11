@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Star, Copy, Check, MapPin, Calendar, MessageSquare, Phone, Info, Lock, Zap, ShieldCheck, Tag, Wrench, Navigation, ArrowRight, FileText, ArrowLeft } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -500,9 +500,9 @@ const WorkerCard = ({ booking, navigate, handleCancel, index }) => {
     <Card index={index}>
       <div className="flex items-center justify-between gap-4 mb-5">
         <div>
-          <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            Assigned Worker
-          </div>
+          <h3 className="text-black font-semibold text-[20px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Worker Details
+          </h3>
           <div className="text-[#6B6B6B] font-bold text-[14px] mt-0.5" style={{ fontFamily: 'Poppins, sans-serif' }}>
             ID: #{booking._id ? booking._id.substring(booking._id.length - 6).toUpperCase() : ""}
           </div>

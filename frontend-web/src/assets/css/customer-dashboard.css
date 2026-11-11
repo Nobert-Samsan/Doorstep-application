@@ -432,7 +432,11 @@ button:focus-visible, a:focus-visible {
     margin-bottom: 18px;
   }
   .category-block {
-    padding: 0 20px !important;
+    padding: 0 !important;
+  }
+  .category-block > div:first-child {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
   .services-grid {
     display: flex !important;
@@ -447,7 +451,8 @@ button:focus-visible, a:focus-visible {
     -ms-overflow-style: none; /* IE and Edge */
   }
   .category-block .services-grid {
-    margin: 0 -20px !important;
+    margin: 0 !important;
+    padding: 6px 20px 24px 20px !important;
   }
   .services-grid::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */

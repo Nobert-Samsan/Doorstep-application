@@ -152,42 +152,51 @@ const WorkerProfile = () => {
         <div className="flex-1 space-y-8 w-full">
           
           {/* Main Profile Header */}
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            {/* Cover Photo - Profile Picture, Name, and Details totally inside */}
-            <div className="bg-gradient-to-r from-amber-500 to-primary relative p-6 sm:p-8 flex items-center">
-              <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+          <div className="bg-gradient-to-br from-[#FF9F0A] via-[#FF7A00] to-[#E65100] rounded-2xl md:rounded-3xl shadow-md p-4 sm:p-5 md:p-6 text-white relative overflow-hidden">
+            <div className="absolute -right-10 -bottom-10 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-5 relative z-10">
+              {/* Profile Avatar */}
+              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl border-2 sm:border-3 border-white/90 shadow-md flex items-center justify-center overflow-hidden shrink-0 bg-white">
+                {worker.profilePhoto ? (
+                  <img src={worker.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <User size={38} className="text-[#FF7A00]" />
+                )}
+              </div>
               
-              <div className="flex flex-col sm:flex-row sm:items-center gap-6 relative z-10 w-full">
-                {/* Profile Avatar */}
-                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl border-4 border-white shadow-xl flex items-center justify-center overflow-hidden shrink-0 bg-white">
-                  {worker.profilePhoto ? (
-                    <img src={worker.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <User size={48} className="text-[#FF7A00]" />
+              <div className="flex-1 text-center sm:text-left min-w-0">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight drop-shadow-sm truncate">
+                    {worker.firstName} {worker.lastName}
+                  </h1>
+                  {worker.verifiedBadge && (
+                    <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-2 py-0.5 rounded-full border border-white/30">
+                      <ShieldCheck className="w-3.5 h-3.5 text-white" />
+                      Verified
+                    </span>
                   )}
                 </div>
-                
-                <div className="flex-1">
-                  <h1 className="text-3xl font-extrabold text-white flex items-center gap-2 drop-shadow-md">
-                    {worker.firstName} {worker.lastName}
-                    {worker.verifiedBadge && <ShieldCheck className="text-white w-7 h-7 drop-shadow-md" title="Verified Professional" />}
-                  </h1>
-                  <p className="text-lg text-amber-50 font-bold mt-1 drop-shadow-sm">
-                    {ROLE_MAP[worker.services[0].serviceTitle] || worker.services[0].serviceTitle}
-                  </p>
 
-                  {/* Chips inside the orange box */}
-                  <div className="flex flex-wrap items-center gap-3 mt-4 text-sm font-medium">
-                    <span className="flex items-center gap-1.5 bg-white/95 text-gray-800 px-3.5 py-1.5 rounded-xl border border-white/40 shadow-sm">
-                      <MapPin size={16} className="text-gray-500" /> {worker.district}
-                    </span>
-                    <span className="flex items-center gap-1.5 bg-white/95 text-amber-800 px-3.5 py-1.5 rounded-xl border border-white/40 shadow-sm">
-                      <Star size={16} className="fill-current text-amber-500" /> {worker.averageRating} ({worker.totalReviews} Reviews)
-                    </span>
-                    <span className="flex items-center gap-1.5 bg-white/95 text-green-800 px-3.5 py-1.5 rounded-xl border border-white/40 shadow-sm">
-                      <CheckCircle size={16} className="text-green-600" /> {worker.totalJobsCompleted} Jobs Completed
-                    </span>
-                  </div>
+                <p className="text-sm sm:text-base text-amber-100 font-semibold mt-0.5">
+                  {ROLE_MAP[worker.services[0].serviceTitle] || worker.services[0].serviceTitle}
+                </p>
+
+                {/* Compact badges row */}
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3 text-xs sm:text-sm font-medium">
+                  <span className="inline-flex items-center gap-1.5 bg-white/95 text-gray-800 px-3 py-1 rounded-full shadow-sm">
+                    <MapPin size={14} className="text-[#FF7A00]" />
+                    <span className="font-semibold text-gray-700">{worker.district}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/95 text-gray-800 px-3 py-1 rounded-full shadow-sm">
+                    <Star size={14} className="fill-amber-400 text-amber-400" />
+                    <span className="font-bold text-gray-900">{worker.averageRating}</span>
+                    <span className="text-gray-500 font-normal">({worker.totalReviews})</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 bg-white/95 text-gray-800 px-3 py-1 rounded-full shadow-sm">
+                    <CheckCircle size={14} className="text-emerald-500" />
+                    <span className="font-semibold text-gray-700">{worker.totalJobsCompleted} Completed</span>
+                  </span>
                 </div>
               </div>
             </div>
