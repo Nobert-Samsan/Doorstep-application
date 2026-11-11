@@ -208,12 +208,12 @@ const CategoryService = () => {
               </div>
             ) : (
               /* When viewing a specific trade without any active workers */
-              <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm max-w-2xl mx-auto mt-6">
+              <div className="text-center py-16 sm:py-20 px-6 sm:px-8 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm max-w-2xl mx-auto mt-6">
                 <div className="mx-auto w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mb-4">
                   <Search size={36} />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">No professionals found</h3>
-                <p className="text-gray-500 mb-8 max-w-sm mx-auto text-base">
+                <p className="text-gray-500 mb-8 max-w-sm mx-auto text-base px-4">
                   We couldn't find any active {categoryName} workers in {district || 'Sri Lanka'}.
                 </p>
                 <div className="flex items-center justify-center gap-4">

@@ -550,7 +550,7 @@ const CustomerLayout = () => {
                     </div>
                   </div>
 
-                  {/* Dropdown Items (44px height, hover #FFF8F1 with orange icon) */}
+                  {/* Dropdown Items */}
                   <div className="py-1">
                     <Link
                       to="/customer/settings"
@@ -562,18 +562,8 @@ const CustomerLayout = () => {
                       <span>Settings</span>
                     </Link>
 
-                    <Link
-                      to="/contact"
-                      onClick={() => setIsAvatarOpen(false)}
-                      className="flex items-center gap-3 px-4 h-[44px] text-[15px] font-medium font-['Inter',sans-serif] text-black hover:bg-[#FFF8F1] group transition-colors"
-                      role="menuitem"
-                    >
-                      <HelpCircle size={20} className="text-[#6B6B6B] group-hover:text-[#FF7A00] transition-colors" />
-                      <span>Help & Support</span>
-                    </Link>
-
-                    {/* 1px #E8E2DB Divider */}
-                    <div className="border-t border-[#E8E2DB] my-1" />
+                    {/* 1px #E8E2DB Divider (Only on desktop where Settings link is visible above it) */}
+                    <div className="hidden md:block border-t border-[#E8E2DB] my-1" />
 
                     {/* Log Out */}
                     <button
