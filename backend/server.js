@@ -24,15 +24,6 @@ initSocket(httpServer);
 
 // Middleware
 app.use(helmet());
-// Ensure DB connection in serverless environment
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-  } catch (e) {
-    console.error('Database connection middleware error:', e);
-  }
-  next();
-});
 
 app.use(cors({
   origin: true,
