@@ -16,6 +16,9 @@ connectDB();
 const app = express();
 const httpServer = createServer(app);
 
+// Enable trust proxy for Render / Cloudflare reverse proxies
+app.set('trust proxy', 1);
+
 // Init Socket.io
 initSocket(httpServer);
 
