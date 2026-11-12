@@ -88,6 +88,22 @@ app.get('/api/debug-status', async (req, res) => {
   }
 });
 
+// Diagnostic email test route
+app.get('/api/test-email', async (req, res) => {
+  const to = req.query.to || 'samsan122000@gmail.com';
+  const sendEmail = require('./utils/sendEmail');
+  try {
+    const result = await sendEmail({
+      email: to,
+      subject: 'DoorStep Diagnostic Test',
+      message: 'This is a test email sent from the live server.'
+    });
+    res.json({ success: true, message: 'Email sent', to, result });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message, stack: err.stack });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('[SERVER ERROR]:', err);
