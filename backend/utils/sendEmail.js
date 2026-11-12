@@ -18,39 +18,35 @@ const sendEmail = async (options) => {
   const isRealGmail = cleanHost.includes('gmail') || cleanUser.includes('gmail.com') || isPassInHost;
   const isDummyHost = (!cleanHost && !cleanUser) || cleanHost === 'your_smtp_host';
 
-  if (!isDummyHost) {
-    if (isRealGmail) {
-      // Use official Google direct service
-      transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: cleanUser || 'nobertsam1812@gmail.com',
-          pass: isPassInHost ? cleanHost : (cleanPass || cleanHost)
-        }
-      });
-    } else {
-      const port = parseInt(process.env.SMTP_PORT, 10) || 587;
-      transporter = nodemailer.createTransport({
-        host: cleanHost,
-        port,
-        secure: port === 465,
-        auth: {
-          user: cleanUser,
-          pass: cleanPass
-        }
-      });
-    }
-  } else {
-    // Generate test account automatically for real-time testing
-    const testAccount = await nodemailer.createTestAccount();
+  // If neither cleanUser nor cleanHost is configured, use built-in Gmail fallback or mock
+  if (isDummyHost) {
+    // When no SMTP is configured in environment, use direct Gmail with app password
     transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false,
+      service: 'gmail',
       auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
+        user: 'nobertsam1812@gmail.com',
+        pass: 'jlkd omcb egvl ifed'
+      }
+    });
+  } else if (isRealGmail) {
+    // Use official Google direct service
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: cleanUser || 'nobertsam1812@gmail.com',
+        pass: isPassInHost ? cleanHost : (cleanPass || cleanHost || 'jlkd omcb egvl ifed')
+      }
+    });
+  } else {
+    const port = parseInt(process.env.SMTP_PORT, 10) || 587;
+    transporter = nodemailer.createTransport({
+      host: cleanHost,
+      port,
+      secure: port === 465,
+      auth: {
+        user: cleanUser,
+        pass: cleanPass
+      }
     });
   }
 

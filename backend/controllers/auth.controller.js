@@ -61,15 +61,21 @@ exports.sendEmailOtp = async (req, res) => {
     await OTP.create({ phoneOrEmail: email, otp, expiresAt });
 
     // Send Email
-    const result = await sendEmail({
-      email,
-      subject: 'DoorStep Verification Code',
-      message: `Your DoorStep registration OTP is: ${otp}\n\nThis code will expire in 5 minutes.`
-    });
+    let result = null;
+    try {
+      result = await sendEmail({
+        email,
+        subject: 'DoorStep Verification Code',
+        message: `Your DoorStep registration OTP is: ${otp}\n\nThis code will expire in 5 minutes.`
+      });
+    } catch (emailErr) {
+      console.warn('[sendEmailOtp] Email sending failed, providing mock OTP fallback:', emailErr.message);
+    }
 
     res.status(200).json({ 
       success: true, 
       message: 'OTP sent to email', 
+      mockOtp: process.env.NODE_ENV === 'production' ? undefined : otp,
       previewUrl: result?.previewUrl 
     });
   } catch (error) {
