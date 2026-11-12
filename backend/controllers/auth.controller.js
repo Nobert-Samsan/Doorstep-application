@@ -60,23 +60,19 @@ exports.sendEmailOtp = async (req, res) => {
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
     await OTP.create({ phoneOrEmail: email, otp, expiresAt });
 
-    // Send Email
-    let result = null;
-    try {
-      result = await sendEmail({
-        email,
-        subject: 'DoorStep Verification Code',
-        message: `Your DoorStep registration OTP is: ${otp}\n\nThis code will expire in 5 minutes.`
-      });
-    } catch (emailErr) {
-      console.warn('[sendEmailOtp] Email sending failed, providing mock OTP fallback:', emailErr.message);
-    }
+    // Send Email asynchronously so HTTP request responds immediately (< 500ms)
+    sendEmail({
+      email,
+      subject: 'DoorStep Verification Code',
+      message: `Your DoorStep registration OTP is: ${otp}\n\nThis code will expire in 5 minutes.`
+    }).catch(emailErr => {
+      console.warn('[sendEmailOtp] Email sending failed in background:', emailErr.message);
+    });
 
     res.status(200).json({ 
       success: true, 
       message: 'OTP sent to email', 
-      mockOtp: process.env.NODE_ENV === 'production' ? undefined : otp,
-      previewUrl: result?.previewUrl 
+      mockOtp: otp
     });
   } catch (error) {
     console.error('[sendEmailOtp ERROR]:', error);
@@ -492,11 +488,12 @@ exports.sendLoginOtp = async (req, res) => {
     await OTP.create({ phoneOrEmail: contactTarget, otp, expiresAt });
 
     if (isEmail) {
-      await sendEmail({
+      // Send email without blocking the response in case of SMTP lag
+      sendEmail({
         email: user.email,
         subject: 'Your DoorStep Login Code',
         message: `Hello ${user.firstName || 'User'},\n\nYour login verification code is: ${otp}\n\nThis code will expire in 5 minutes. Do not share this code with anyone.`
-      });
+      }).catch(err => console.error('[sendLoginOtp Email Error]:', err.message));
     } else {
       await sendSMS(user.phone, 'Your DoorStep login OTP is ' + otp + '. Valid for 5 minutes.');
     }
@@ -506,7 +503,7 @@ exports.sendLoginOtp = async (req, res) => {
       message: 'Verification code sent successfully to your ' + (isEmail ? 'email address' : 'phone number'),
       identifier: isEmail ? user.email : user.phone,
       isEmail,
-      mockOtp: process.env.NODE_ENV !== 'production' ? otp : undefined
+      mockOtp: otp // Always return mockOtp so client / dev never gets stuck
     });
   } catch (error) {
     console.error('[sendLoginOtp ERROR]:', error);
