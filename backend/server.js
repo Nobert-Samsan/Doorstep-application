@@ -64,10 +64,47 @@ app.get('/', (req, res) => {
   res.send('DoorStep API is running...');
 });
 
-// Error handling middleware (to be implemented later)
+// Diagnostic debug route
+app.get('/api/debug-status', async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    const dbState = mongoose.connection.readyState;
+    const dbStates = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+    
+    // Test a basic query
+    let userCount = -1;
+    let dbError = null;
+    try {
+      const User = require('./models/User');
+      userCount = await User.countDocuments();
+    } catch (err) {
+      dbError = err.message;
+    }
+
+    res.json({
+      success: true,
+      env: process.env.NODE_ENV,
+      hasMongoUri: !!process.env.MONGODB_URI,
+      mongoUriPreview: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 25) + '...' : null,
+      hasJwtSecret: !!process.env.JWT_SECRET,
+      hasSmtpUser: !!process.env.SMTP_USER,
+      dbState: dbStates[dbState] || dbState,
+      userCount,
+      dbError
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message, stack: error.stack });
+  }
+});
+
+// Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ success: false, error: 'Server Error' });
+  console.error('[SERVER ERROR]:', err);
+  res.status(500).json({ 
+    success: false, 
+    error: err.message || 'Server Error',
+    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
+  });
 });
 
 const PORT = process.env.PORT || 5000;
