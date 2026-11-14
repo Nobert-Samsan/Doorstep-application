@@ -274,7 +274,7 @@ const getStatusMessage = (status) => {
 
 const Card = ({ children, className = '', index = 0 }) => (
   <div 
-    className={`relative bg-white rounded-[8px] md:rounded-[12px] border border-[#E8E2DB] p-6 md:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
+    className={`relative bg-white rounded-[8px] md:rounded-[12px] border border-[#E8E2DB] p-[18px] md:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
     style={{ 
       animation: 'fadeUp 0.3s ease-out forwards',
       opacity: 0,
@@ -337,9 +337,9 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
     <Card index={index}>
       <div className="flex items-center justify-between gap-4 mb-5">
         <div>
-          <div className="text-[#6B6B6B] uppercase text-[12px] tracking-[0.1em] font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h3 className="text-black font-semibold text-[20px]" style={{ fontFamily: "Poppins, sans-serif" }}>
             Customer Details
-          </div>
+          </h3>
           {refId && (
             <div className="text-[#6B6B6B] font-bold text-[14px] mt-0.5" style={{ fontFamily: 'Poppins, sans-serif' }}>
               ID: #{refId}
@@ -374,7 +374,7 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
             </div>
             <div className="flex items-center gap-2">
               <span className="font-medium text-[#6B6B6B] text-[15px] capitalize" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                {job.serviceTitle || roleName}
+                {job.serviceTitle || 'Plumber'}
               </span>
             </div>
           </div>
@@ -426,13 +426,13 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
             <div className="flex items-center gap-3 w-full md:w-auto">
               <button 
                 onClick={() => updateStatus('decline')} 
-                className="flex-1 md:flex-none bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#DC2626] border border-[#FECACA] px-5 py-2.5 rounded-[12px] font-semibold text-[14px] flex items-center justify-center gap-1.5 transition-all"
+                className="flex-1 md:flex-none bg-[#FDECEC] hover:bg-[#FEE2E2] text-[#B42318] border border-[#FECACA] px-5 py-3 rounded-[12px] font-semibold text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-none"
               >
                 <X size={16} /> Decline Request
               </button>
               <button 
                 onClick={() => updateStatus('accept')} 
-                className="flex-1 md:flex-none bg-[#2E9E5B] hover:bg-[#268a4e] text-white px-5 py-2.5 rounded-[12px] font-semibold text-[14px] shadow-sm flex items-center justify-center gap-1.5 transition-all"
+                className="flex-1 md:flex-none bg-[#2E9E5B] hover:bg-[#268a4e] text-white px-5 py-3 rounded-[12px] font-semibold text-[15px] shadow-sm flex items-center justify-center gap-1.5 transition-all"
               >
                 <Check size={16} /> Accept Request
               </button>
@@ -684,7 +684,7 @@ const TimelineCard = ({ timeline, updateStatus, index }) => {
                 {isCurrent && step.status === 'accepted' && (
                   <button 
                     onClick={() => updateStatus('en-route')} 
-                    className="mt-2.5 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-[12px] bg-[#D97706] text-white font-semibold text-[13px] hover:bg-[#B45309] shadow-md shadow-[#D97706]/20 transition-all"
+                    className="mt-2.5 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#FF7A00] text-white font-semibold text-[14px] hover:bg-[#E86100] shadow-md shadow-[#FF7A00]/20 transition-all font-['Poppins',sans-serif]"
                   >
                     Mark as En Route <ArrowRight size={14} />
                   </button>
@@ -692,7 +692,7 @@ const TimelineCard = ({ timeline, updateStatus, index }) => {
                 {isCurrent && step.status === 'en_route' && (
                   <button 
                     onClick={() => updateStatus('start')} 
-                    className="mt-2.5 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-[12px] bg-[#D97706] text-white font-semibold text-[13px] hover:bg-[#B45309] shadow-md shadow-[#D97706]/20 transition-all"
+                    className="mt-2.5 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#FF7A00] text-white font-semibold text-[14px] hover:bg-[#E86100] shadow-md shadow-[#FF7A00]/20 transition-all font-['Poppins',sans-serif]"
                   >
                     Mark Arrived & Start <ArrowRight size={14} />
                   </button>
@@ -700,13 +700,13 @@ const TimelineCard = ({ timeline, updateStatus, index }) => {
                 {isCurrent && step.status === 'in_progress' && (
                   <button 
                     onClick={() => updateStatus('complete')} 
-                    className="mt-2.5 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-[12px] bg-[#2E9E5B] text-white font-semibold text-[13px] hover:bg-[#268a4e] shadow-md shadow-[#2E9E5B]/20 transition-all"
+                    className="mt-2.5 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#2E9E5B] text-white font-semibold text-[14px] hover:bg-[#268a4e] shadow-md shadow-[#2E9E5B]/20 transition-all font-['Poppins',sans-serif]"
                   >
                     Mark Completed <ArrowRight size={14} />
                   </button>
                 )}
                 {isCurrent && step.status === 'quote_provided' && (
-                  <div className="mt-2 text-[12px] text-[#B84700] p-2.5 bg-[#FFF1E3] rounded-[10px] border border-orange-200">
+                  <div className="mt-2 text-[12px] text-[#B84700] p-2.5 bg-[#FFF1E3] rounded-xl border border-orange-200">
                     Waiting for customer to accept bill...
                   </div>
                 )}
@@ -1011,15 +1011,15 @@ const WorkerJobDetail = () => {
   }
 
   return (
-    <div className="py-4 md:py-8 font-sans text-[#3D3D3D]">
+    <div className="py-2 md:py-4 font-sans text-[#3D3D3D]">
       <style>{customStyles}</style>
-      <div className="max-w-[1100px] mx-auto px-5 sm:px-6 md:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         
         {/* Top Navigation */}
         <div className="flex items-center justify-between mb-6">
           <Link 
             to="/worker/activities" 
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E8E2DB] hover:border-[#D97706] rounded-[12px] text-[#3D3D3D] hover:text-[#D97706] font-semibold text-[14px] shadow-sm transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E8E2DB] hover:border-[#FF7A00] rounded-xl text-[#3D3D3D] hover:text-[#FF7A00] font-semibold text-[14px] shadow-xs hover:bg-[#FFF8F1] transition-all font-['Poppins',sans-serif]"
           >
             <ArrowLeft size={16} /> Back to Jobs
           </Link>

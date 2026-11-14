@@ -340,6 +340,10 @@ const WorkerRegister = () => {
         phone: formData.phone
       });
       toast.success('Verification code sent to your email!');
+      if (response.data?.mockOtp && String(response.data.mockOtp).length === 6) {
+        setOtp(String(response.data.mockOtp).split(''));
+        toast.info(`Your OTP is: ${response.data.mockOtp}`);
+      }
       if (response.data?.previewUrl) {
         console.log('Testing Email URL:', response.data.previewUrl);
       }

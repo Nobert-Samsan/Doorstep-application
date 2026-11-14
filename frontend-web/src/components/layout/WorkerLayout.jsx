@@ -264,24 +264,62 @@ const WorkerLayout = () => {
       {/* MAIN CONTENT AREA                                         */}
       {/* ======================================================== */}
       <div className="flex-1 flex flex-col min-w-0 min-h-screen overflow-x-hidden pb-[72px] md:pb-0">
-        <header className="h-16 glass z-10 flex items-center justify-between px-5 sm:px-6 lg:px-8 border-b border-gray-200 shadow-sm shrink-0">
+        
+        {/* DESKTOP HEADER (>= 768px) */}
+        <header className="hidden md:flex sticky top-0 left-0 right-0 z-50 h-20 bg-white border-b border-[#E8E2DB] shadow-none items-center justify-between px-5 md:px-8 shrink-0">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-gray-800">Worker Portal</h1>
+            <Link to="/worker/dashboard" className="flex items-center gap-2">
+              <img 
+                src="/logo-new.png" 
+                alt="DoorStep Logo" 
+                className="h-8 md:h-9 w-auto object-contain" 
+              />
+              <span 
+                className="text-[11px] font-semibold text-white px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0"
+                style={{ 
+                  background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)',
+                  fontFamily: 'Poppins, sans-serif'
+                }}
+              >
+                Pro
+              </span>
+            </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <button className="p-2 text-gray-400 hover:text-primary relative rounded-full hover:bg-gray-100 transition-colors">
+            <button className="flex w-10 h-10 rounded-full items-center justify-center text-[#6B6B6B] hover:text-black hover:bg-black/[0.04] transition-colors relative">
               <Bell size={20} />
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+              <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-[#FF7A00] rounded-full ring-2 ring-white"></span>
             </button>
-            {/* Mobile Top Bar Avatar: Tapping opens /worker/profile on mobile (< 768px) */}
+          </div>
+        </header>
+
+        {/* MOBILE TOP NAVBAR (< 768px): Exact screenshot style with bottom border */}
+        <header className="md:hidden sticky top-0 left-0 right-0 z-40 bg-white px-5 pt-3 pb-3 flex items-center justify-between shrink-0 border-b border-gray-200">
+          <h1 className="text-[24px] font-bold text-[#1C1917] tracking-tight font-['Poppins',sans-serif]">
+            Worker Portal
+          </h1>
+          <div className="flex items-center gap-3">
+            <button 
+              type="button" 
+              onClick={() => navigate('/worker/activities')}
+              className="relative p-1.5 text-gray-500 hover:text-black focus:outline-none"
+              aria-label="Notifications"
+            >
+              <Bell size={22} className="text-gray-500" />
+              {newRequestsCount > 0 && (
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#EF4444] rounded-full border-2 border-white"></span>
+              )}
+            </button>
+
+            {/* Avatar with orange ring & availability dot */}
             <button
               type="button"
               onClick={() => navigate('/worker/profile')}
               aria-label="View My Profile"
-              className="md:hidden relative w-9 h-9 rounded-full p-[2px] shrink-0 focus:outline-none focus:ring-2 focus:ring-[#FF7A00]"
+              className="relative w-10 h-10 rounded-full p-[2px] shrink-0 focus:outline-none focus:ring-2 focus:ring-[#FF7A00]"
               style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
             >
-              <div className="w-full h-full rounded-full bg-white p-[1px] flex items-center justify-center overflow-hidden">
+              <div className="w-full h-full rounded-full bg-white p-[1.5px] flex items-center justify-center overflow-hidden">
                 {user?.profilePhoto ? (
                   <img 
                     src={user.profilePhoto} 
@@ -290,7 +328,7 @@ const WorkerLayout = () => {
                   />
                 ) : (
                   <div 
-                    className="w-full h-full rounded-full flex items-center justify-center font-bold text-white text-[11px]"
+                    className="w-full h-full rounded-full flex items-center justify-center font-bold text-white text-xs font-['Poppins',sans-serif]"
                     style={{ background: 'linear-gradient(180deg, #FF9F0A 0%, #F94D1A 100%)' }}
                   >
                     {initials}
@@ -298,7 +336,7 @@ const WorkerLayout = () => {
                 )}
               </div>
               <span 
-                className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-[1.5px] border-white ${
+                className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
                   isAvailable ? 'bg-[#2E9E5B]' : 'bg-[#9A9A9A]'
                 }`}
                 aria-hidden="true"
@@ -307,7 +345,7 @@ const WorkerLayout = () => {
           </div>
         </header>
         
-        <main className="flex-1 py-4 px-5 sm:p-6 lg:p-8 overflow-y-auto overflow-x-hidden bg-[#F8FAFC]">
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-3 md:py-8 bg-white min-h-[calc(100vh-64px)]">
           <div className="max-w-7xl mx-auto transition-opacity duration-150">
             <Outlet />
           </div>
@@ -318,8 +356,9 @@ const WorkerLayout = () => {
       {/* MOBILE BOTTOM TAB BAR (< 768px)                           */}
       {/* ======================================================== */}
       <nav 
-        className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E8E2DB] z-50 flex justify-around items-center h-[60px] shadow-[0_-4px_12px_rgba(0,0,0,0.05)]" 
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E8E2DB] shadow-[0_-8px_24px_rgba(0,0,0,0.08)] z-50 flex items-center justify-around h-[64px] px-2" 
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+        aria-label="Worker Mobile Navigation"
       >
         {navItems.map((item) => {
           let isActive = false;
@@ -333,16 +372,28 @@ const WorkerLayout = () => {
               : location.pathname === item.path || location.pathname.startsWith(item.path + '/');
           }
           const Icon = item.icon;
+          const isActivities = item.name === 'Activities';
+          const showBadge = isActivities && newRequestsCount > 0;
+
           return (
             <Link 
               key={item.name}
               to={item.path} 
-              className={`relative flex flex-col items-center justify-center py-1 flex-1 text-center transition-colors ${
-                isActive ? 'text-[#E86100]' : 'text-[#78716C] hover:text-[#000000]'
+              className={`flex-1 flex flex-col items-center justify-center py-1 transition-colors relative min-w-[50px] min-h-[44px] ${
+                isActive ? 'text-[#E86100]' : 'text-[#6B6B6B] hover:text-black'
               }`}
             >
-              <Icon size={22} weight={isActive ? "fill" : "regular"} />
-              <span className="text-[11px] mt-0.5 font-medium">{item.name}</span>
+              <div className="relative">
+                <Icon size={20} weight={isActive ? "fill" : "regular"} />
+                {showBadge && (
+                  <span className="absolute -top-1 -right-2 bg-[#FF7A00] text-white text-[10px] font-bold px-1 rounded-full leading-none min-w-[14px] text-center">
+                    {newRequestsCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] font-medium mt-1 leading-none">
+                {item.name}
+              </span>
             </Link>
           );
         })}

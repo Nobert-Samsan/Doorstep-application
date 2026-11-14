@@ -84,7 +84,16 @@ const Login = () => {
 
         setTargetInfo(response.data.identifier || identifier.trim());
         setStep(2);
-        setOtp(['', '', '', '', '', '']);
+        
+        // Auto-fill OTP if returned (or allow manual entry)
+        if (response.data.mockOtp && String(response.data.mockOtp).length === 6) {
+          const otpChars = String(response.data.mockOtp).split('');
+          setOtp(otpChars);
+          toast.info(`Your OTP is: ${response.data.mockOtp}`);
+        } else {
+          setOtp(['', '', '', '', '', '']);
+        }
+        
         setCooldown(45); // 45 seconds cooldown for resend
         toast.success(response.data.message || 'Verification code sent!');
         

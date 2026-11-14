@@ -125,9 +125,9 @@ const MyJobs = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-5 sm:px-6 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-text-primary">Worker Activities</h2>
+        <h2 className="text-2xl font-bold font-['Poppins',sans-serif] text-gray-900">Worker Activities</h2>
       </div>
 
       <div className="flex space-x-4 sm:space-x-6 mb-6 overflow-x-auto scrollbar-hide pb-1">
@@ -135,10 +135,10 @@ const MyJobs = () => {
           <button 
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-2 border-b-2 font-medium whitespace-nowrap text-sm sm:text-base shrink-0 transition-colors ${
+            className={`pb-2 border-b-2 font-medium whitespace-nowrap text-sm sm:text-base shrink-0 transition-colors font-['Poppins',sans-serif] ${
               activeTab === tab 
-                ? 'border-primary text-primary font-semibold' 
-                : 'border-transparent text-text-secondary hover:text-text-primary'
+                ? 'border-[#FF7A00] text-[#FF7A00] font-semibold' 
+                : 'border-transparent text-[#6B6B6B] hover:text-gray-900'
             }`}
           >
             {tab}
@@ -148,8 +148,8 @@ const MyJobs = () => {
 
       <div className="space-y-4">
         {filteredJobs.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-            No {activeTab.toLowerCase()} found.
+          <div className="text-center py-12 bg-white rounded-2xl border border-gray-100 shadow-xs">
+            <p className="text-gray-500 font-medium font-['Inter',sans-serif]">No {activeTab.toLowerCase()} found.</p>
           </div>
         ) : (
           filteredJobs.map(job => {
@@ -159,33 +159,34 @@ const MyJobs = () => {
             const scheduledDate = job.scheduledDate ? new Date(job.scheduledDate).toLocaleDateString() : '-';
 
             return (
-              <div key={job._id} className="bg-white rounded-lg shadow-sm border border-border flex flex-col md:flex-row overflow-hidden">
+              <div key={job._id} className="bg-white rounded-xl shadow-xs border border-[#E8E2DB] flex flex-col md:flex-row overflow-hidden hover:shadow-sm transition-shadow">
+                <div className={`w-2 md:w-auto md:w-1 ${getStatusStyle(job.status).split(' ')[0]}`}></div>
                 <div className="p-5 flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                   <div>
-                    <h3 className="font-bold text-lg text-text-primary capitalize">
+                    <h3 className="font-bold text-lg text-gray-900 font-['Poppins',sans-serif] capitalize">
                       {getJobRole(job.serviceTitle, job.workerSkill || job.categoryId?.nameEn)}
                     </h3>
                     {job.jobDescription && job.jobDescription.trim() !== '' && job.jobDescription.toLowerCase() !== 'no additional notes provided' && (
-                      <p className="text-xs text-text-muted mt-0.5 max-w-md line-clamp-1 italic">
+                      <p className="text-xs text-[#6B6B6B] mt-0.5 max-w-md line-clamp-1 italic font-['Inter',sans-serif]">
                         "{job.jobDescription}"
                       </p>
                     )}
-                    <div className="mt-1.5 space-y-0.5 text-sm text-text-secondary">
-                      <p><span className="font-medium text-text-primary">Customer Name:</span> {customerName}</p>
-                      <p><span className="font-medium text-text-primary">Booking Date:</span> {scheduledDate}</p>
+                    <div className="mt-1.5 space-y-0.5 text-sm text-[#6B6B6B] font-['Inter',sans-serif]">
+                      <p><span className="font-medium text-gray-900">Customer Name:</span> {customerName}</p>
+                      <p><span className="font-medium text-gray-900">Booking Date:</span> {scheduledDate}</p>
                     </div>
                   </div>
 
                   <div className="flex flex-col md:items-end w-full md:w-auto gap-2">
                     <div className="flex justify-between w-full md:w-auto gap-4 items-center">
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${getStatusStyle(job.status).replace('border-l-4 border-', '')}`}>
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusStyle(job.status).replace('border-l-4 border-', '')}`}>
                         {getStatusText(job.status)}
                       </span>
                     </div>
                     <div className="flex gap-2 w-full md:w-auto">
                       <Link 
                         to={`/worker/jobs/${job._id}`} 
-                        className="flex-1 md:flex-none text-center px-4 py-1.5 border border-primary text-primary rounded text-sm hover:bg-light-accent"
+                        className="flex-1 md:flex-none text-center px-4 py-2 border border-[#FF7A00] text-[#FF7A00] hover:bg-[#FFF8F1] rounded-xl text-sm font-semibold font-['Poppins',sans-serif] transition-colors"
                       >
                         Manage Job
                       </Link>
