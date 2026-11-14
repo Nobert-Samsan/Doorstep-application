@@ -45,9 +45,9 @@ const customStyles = `
   @media (max-width: 767px) {
     .job-summary-mobile {
       background: #ffffff;
-      border-radius: 8px;
-      border: 1px solid #E8E2DB;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      border-radius: 14px;
+      border: 1.5px solid #C8C1B7;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
       padding: 20px;
       overflow: hidden;
       position: relative;
@@ -274,7 +274,7 @@ const getStatusMessage = (status) => {
 
 const Card = ({ children, className = '', index = 0 }) => (
   <div 
-    className={`relative bg-white rounded-[8px] md:rounded-[12px] border border-[#E8E2DB] p-[18px] md:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.06)] ${className}`}
+    className={`relative bg-white rounded-[14px] md:rounded-[16px] border border-[#C8C1B7] p-[18px] md:p-7 shadow-[0_4px_16px_rgba(0,0,0,0.06)] ${className}`}
     style={{ 
       animation: 'fadeUp 0.3s ease-out forwards',
       opacity: 0,
@@ -373,8 +373,8 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
               </h3>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-medium text-[#6B6B6B] text-[15px] capitalize" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                {job.serviceTitle || 'Plumber'}
+              <span className="font-medium text-[#6B6B6B] text-[15px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                {cName}
               </span>
             </div>
           </div>
@@ -383,24 +383,24 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
         <div className="flex flex-row gap-3 w-full md:w-auto">
           <button 
             onClick={() => navigate('/worker/messages')}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-[12px] bg-[#D97706] text-white font-semibold text-[15px] shadow-md shadow-[#D97706]/30 hover:bg-[#B45309] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#D97706]/40 transition-all focus:ring-2 focus:ring-[#D97706] focus:ring-offset-2"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-[12px] bg-[#FF7A00] text-white font-semibold text-[15px] shadow-md shadow-[#FF7A00]/25 hover:bg-[#E86100] hover:-translate-y-0.5 hover:shadow-lg transition-all focus:ring-2 focus:ring-[#FF7A00] focus:ring-offset-2"
           >
             <MessageSquare size={18} /> Message
           </button>
           {customer?.phone ? (
             <a 
               href={`tel:${customer.phone}`}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-[12px] bg-white border border-[#D97706] text-[#D97706] font-semibold text-[15px] hover:bg-amber-50 transition-colors focus:ring-2 focus:ring-amber-300"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-[12px] bg-white border-2 border-[#FF7A00] text-[#FF7A00] font-semibold text-[15px] hover:bg-orange-50 transition-colors focus:ring-2 focus:ring-orange-300"
             >
-              <Phone size={18} /> Call
+              <Phone size={18} className="text-[#FF7A00]" /> Call
             </a>
           ) : (
             <button 
               disabled
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-[12px] bg-gray-50 border border-gray-200 text-gray-400 font-semibold text-[15px] cursor-not-allowed"
-              title="Phone number hidden until booking accepted"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-[12px] bg-white border-2 border-[#FF7A00] text-[#FF7A00] font-semibold text-[15px] hover:bg-orange-50 transition-colors"
+              title="Call Customer"
             >
-              <Phone size={18} /> Call
+              <Phone size={18} className="text-[#FF7A00]" /> Call
             </button>
           )}
         </div>
@@ -426,15 +426,15 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
             <div className="flex items-center gap-3 w-full md:w-auto">
               <button 
                 onClick={() => updateStatus('decline')} 
-                className="flex-1 md:flex-none bg-[#FDECEC] hover:bg-[#FEE2E2] text-[#B42318] border border-[#FECACA] px-5 py-3 rounded-[12px] font-semibold text-[15px] flex items-center justify-center gap-1.5 transition-all shadow-none"
+                className="flex-1 md:flex-none btn-decline"
               >
-                <X size={16} /> Decline Request
+                Decline
               </button>
               <button 
                 onClick={() => updateStatus('accept')} 
-                className="flex-1 md:flex-none bg-[#2E9E5B] hover:bg-[#268a4e] text-white px-5 py-3 rounded-[12px] font-semibold text-[15px] shadow-sm flex items-center justify-center gap-1.5 transition-all"
+                className="flex-1 md:flex-none btn-accept"
               >
-                <Check size={16} /> Accept Request
+                Accept
               </button>
             </div>
           )}
