@@ -160,7 +160,7 @@ const JobRequests = ({ isPage = false }) => {
               
               <div className="job-card-meta">
                 <div className="meta-item">
-                  <strong>Customer:</strong> {request.customerId?.firstName} {request.customerId?.lastName}{request.city ? ` - ${request.city}` : ''}
+                  <strong>Customer:</strong> {[request.customerId?.firstName, request.customerId?.lastName].filter(Boolean).join(' ') || request.city || 'Customer'}
                 </div>
               </div>
               
