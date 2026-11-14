@@ -893,9 +893,9 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* CHIPS ROW: Single line horizontal scroll with fade */}
+          {/* CHIPS ROW: Single line horizontal scroll */}
           <div className="relative mt-3">
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pr-6">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
               {workerServices.map((role, idx) => (
                 <div key={idx} className="inline-flex items-center gap-1.5 bg-white border border-[#E8E2DB] rounded-full px-3 py-1.5 text-[#000000] text-[13px] font-medium whitespace-nowrap shrink-0">
                   <Wrench size={16} className="text-[#FF7A00]" />
@@ -907,11 +907,6 @@ const Dashboard = () => {
                 <span>{district}</span>
               </div>
             </div>
-            {/* 24px subtle right-edge fade indicator */}
-            <div 
-              className="absolute top-0 right-0 bottom-0 w-6 bg-gradient-to-l from-[#FFF8F1] to-transparent pointer-events-none"
-              aria-hidden="true"
-            />
           </div>
 
           {/* AVAILABILITY ROW: 52px slim white bar */}
