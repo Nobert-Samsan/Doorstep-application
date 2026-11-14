@@ -1282,7 +1282,6 @@ const Dashboard = () => {
             <div className="section-title">
               <div className="section-title-icon"><Inbox size={16} /></div>
               Incoming Job Requests
-              <span className="section-count-badge">0</span>
             </div>
             <Link to="/worker/requests" className="view-all-link">
               View All <span>&rarr;</span>
