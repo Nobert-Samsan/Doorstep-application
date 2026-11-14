@@ -154,22 +154,24 @@ const Dashboard = () => {
         {`
 /* WORKER DASHBOARD WELCOME PANEL */
 .worker-welcome-panel {
-  background-color: #FFF8F1;
+  background: linear-gradient(135deg, #FFF0E0 0%, #FFE6CC 50%, #FFD9B3 100%);
   border-radius: 32px;
-  border: 1px solid #E8E2DB;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+  border: 1px solid #F5CBA7;
+  box-shadow: 0 16px 40px rgba(234, 88, 12, 0.08);
   position: relative;
   overflow: hidden;
   margin-bottom: 24px;
 }
 @media (max-width: 767px) {
   .worker-welcome-panel {
+    background: linear-gradient(135deg, #FFF1E2 0%, #FFE5CD 45%, #FFD8B5 100%) !important;
     border-radius: 24px !important;
+    border: 1px solid #F6CCA9 !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
     margin-bottom: 16px !important;
     padding: 18px !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 10px 30px rgba(234, 88, 12, 0.09) !important;
   }
 }
 .no-scrollbar::-webkit-scrollbar {
