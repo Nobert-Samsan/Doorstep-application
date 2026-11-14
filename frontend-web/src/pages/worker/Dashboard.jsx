@@ -902,14 +902,14 @@ const Dashboard = () => {
                   <span>{role}</span>
                 </div>
               ))}
-              <div className="inline-flex items-center gap-1.5 text-[#000000] text-[13px] font-medium whitespace-nowrap shrink-0 px-1 py-1.5">
+              <div className="inline-flex items-center gap-1.5 bg-white border border-[#E8E2DB] rounded-full px-3 py-1.5 text-[#000000] text-[13px] font-medium whitespace-nowrap shrink-0">
                 <MapPin size={16} className="text-[#FF7A00]" />
                 <span>{district}</span>
               </div>
             </div>
             {/* 24px subtle right-edge fade indicator */}
             <div 
-              className="absolute top-0 right-0 bottom-0 w-6 bg-gradient-to-l from-[#FFE6CC] to-transparent pointer-events-none"
+              className="absolute top-0 right-0 bottom-0 w-6 bg-gradient-to-l from-[#FFF8F1] to-transparent pointer-events-none"
               aria-hidden="true"
             />
           </div>
@@ -1040,7 +1040,7 @@ const Dashboard = () => {
                   <span>{role}</span>
                 </div>
               ))}
-              <div className="inline-flex items-center gap-2 text-[#000000] text-[14px] font-medium px-1 py-2">
+              <div className="inline-flex items-center gap-2 bg-white border border-[#E8E2DB] rounded-full px-3.5 py-2 text-[#000000] text-[14px] font-medium">
                 <MapPin size={15} className="text-[#E86100]" />
                 <span>{district}</span>
               </div>
