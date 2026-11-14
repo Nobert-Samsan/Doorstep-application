@@ -1014,16 +1014,6 @@ const WorkerJobDetail = () => {
     <div className="py-2 md:py-4 font-sans text-[#3D3D3D]">
       <style>{customStyles}</style>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        
-        {/* Top Navigation */}
-        <div className="flex items-center justify-between mb-6">
-          <Link 
-            to="/worker/activities" 
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E8E2DB] hover:border-[#FF7A00] rounded-xl text-[#3D3D3D] hover:text-[#FF7A00] font-semibold text-[14px] shadow-xs hover:bg-[#FFF8F1] transition-all font-['Poppins',sans-serif]"
-          >
-            <ArrowLeft size={16} /> Back to Jobs
-          </Link>
-        </div>
 
         {/* Emergency Alert Banner */}
         {isEmergency && (
