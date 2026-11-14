@@ -442,18 +442,18 @@ const CustomerCard = ({ job, navigate, updateStatus, setShowQuoteModal, index })
           {['accepted', 'en_route', 'in_progress'].includes(job.status) && (
             <button 
               onClick={() => setShowQuoteModal(true)} 
-              className="bg-white border border-[#D97706] text-[#D97706] hover:bg-amber-50 px-4 py-2.5 rounded-[12px] font-semibold text-[13px] flex items-center gap-1.5 transition-all shadow-sm"
+              className="flex-1 md:flex-none bg-white border border-[#FF7A00] text-[#FF7A00] hover:bg-orange-50 px-4 py-2.5 rounded-[12px] font-semibold text-[14px] flex items-center justify-center transition-all shadow-sm"
             >
-              <FileText size={16} /> Send Quotation / Bill
+              Send Quotation
             </button>
           )}
 
           {['accepted', 'en_route'].includes(job.status) && (
             <button 
               onClick={() => updateStatus('cancel')} 
-              className="bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#DC2626] border border-[#FECACA] px-4 py-2.5 rounded-[12px] font-semibold text-[13px] flex items-center gap-1.5 transition-all"
+              className="flex-1 md:flex-none bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#DC2626] border border-[#FECACA] px-4 py-2.5 rounded-[12px] font-semibold text-[14px] flex items-center justify-center transition-all"
             >
-              <X size={16} /> Cancel Job
+              Cancel
             </button>
           )}
         </div>

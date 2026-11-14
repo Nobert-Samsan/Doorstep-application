@@ -90,7 +90,7 @@ const JobRequests = ({ isPage = false }) => {
     try {
       await api.put(`/bookings/${id}/accept`);
       toast.success('Job request accepted successfully!');
-      fetchRequests();
+      navigate(`/worker/jobs/${id}`);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to accept job');
     }
