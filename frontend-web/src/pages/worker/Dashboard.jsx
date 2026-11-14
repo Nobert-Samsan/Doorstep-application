@@ -963,36 +963,37 @@ const Dashboard = () => {
 
           {/* LIVE COUNTS (new requests & today's earnings - stacked number & label) */}
           {hasLiveCounts && (
-            <div className="flex items-center justify-around mt-3 pt-2.5 border-t border-[#E8E2DB]/70 text-[#000000]">
+            <div className="flex items-center justify-around mt-3 pt-3 border-t border-[#F5CBA7]/80 text-[#000000]">
               <button
                 type="button"
                 onClick={() => {
                   const el = document.getElementById('incoming-requests');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="flex-1 flex flex-col items-center justify-center text-center hover:opacity-80 transition-opacity focus:outline-none mobile-banner-focus rounded-lg py-0.5"
+                className="flex-1 flex flex-col items-center justify-center text-center hover:opacity-80 transition-opacity focus:outline-none mobile-banner-focus rounded-lg py-1"
               >
                 <div className="flex items-center gap-1 font-poppins font-bold text-[16px] text-[#000000] leading-tight">
                   <Zap size={14} className="text-[#FF7A00]" fill="#FF7A00" />
                   <span>{newRequestsCount}</span>
                 </div>
-                <span className="font-inter text-[11px] font-medium text-[#6B6B6B] leading-tight mt-0.5">
+                <span className="font-inter text-[11px] font-medium text-[#78716C] leading-tight mt-0.5">
                   New Requests
                 </span>
               </button>
 
-              <span className="w-px h-7 bg-[#E8E2DB]" aria-hidden="true" />
+              {/* High-contrast vertical divider line between metrics */}
+              <div className="w-[1.5px] h-8 bg-[#F5CBA7] shrink-0 opacity-90 mx-1" aria-hidden="true" />
 
               <button
                 type="button"
                 onClick={() => navigate('/worker/earnings')}
-                className="flex-1 flex flex-col items-center justify-center text-center hover:opacity-80 transition-opacity focus:outline-none mobile-banner-focus rounded-lg py-0.5"
+                className="flex-1 flex flex-col items-center justify-center text-center hover:opacity-80 transition-opacity focus:outline-none mobile-banner-focus rounded-lg py-1"
               >
                 <div className="flex items-center gap-1 font-poppins font-bold text-[16px] text-[#000000] leading-tight">
                   <TrendingUp size={14} className="text-[#2E9E5B]" />
                   <span>Rs. {todayEarningsVal.toFixed(2)}</span>
                 </div>
-                <span className="font-inter text-[11px] font-medium text-[#6B6B6B] leading-tight mt-0.5">
+                <span className="font-inter text-[11px] font-medium text-[#78716C] leading-tight mt-0.5">
                   Today's Earnings
                 </span>
               </button>
