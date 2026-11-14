@@ -160,13 +160,13 @@ const JobRequests = ({ isPage = false }) => {
               
               <div className="job-card-meta">
                 <div className="meta-item">
-                  <strong>Customer:</strong> {request.customerId?.firstName} {request.customerId?.lastName} &bull; {request.city || 'Location N/A'}
+                  <strong>Customer:</strong> {request.customerId?.firstName} {request.customerId?.lastName}{request.city ? ` - ${request.city}` : ''}
                 </div>
               </div>
               
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-2">
-                <div className="meta-item text-[12px] text-gray-500">
-                  <Clock size={13} /> {new Date(request.scheduledDate).toLocaleDateString()} | {request.scheduledTimeSlot}
+                <div className="meta-item text-[13px]">
+                  <strong>Date:</strong> {new Date(request.scheduledDate).toLocaleDateString()} | {request.scheduledTimeSlot}
                 </div>
                 
                 <div className="job-card-actions">
