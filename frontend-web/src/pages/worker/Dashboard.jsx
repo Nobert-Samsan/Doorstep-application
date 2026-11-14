@@ -924,14 +924,8 @@ const Dashboard = () => {
             aria-label={`Availability toggle: Currently ${isAvailable ? 'Online' : 'Offline'}`}
             className="w-full h-[52px] bg-white rounded-[14px] border border-[#E8E2DB] shadow-[0_6px_16px_rgba(0,0,0,0.04)] px-[14px] mt-3 flex items-center justify-between cursor-pointer focus:outline-none mobile-banner-focus select-none transition-colors"
           >
-            {/* Left: Green/Gray dot + Two short un-truncated lines */}
-            <div className="flex items-center gap-2.5 min-w-0">
-              <span
-                className={`w-2.5 h-2.5 rounded-full shrink-0 transition-colors ${
-                  isAvailable ? 'bg-[#2E9E5B]' : 'bg-[#9A9A9A]'
-                }`}
-                aria-hidden="true"
-              />
+            {/* Left: Two short un-truncated lines */}
+            <div className="flex items-center min-w-0">
               <div className="flex flex-col text-left leading-none">
                 <span className="font-poppins font-semibold text-[14px] text-[#000000] leading-tight">
                   {isAvailable ? 'Online' : 'Offline'}
