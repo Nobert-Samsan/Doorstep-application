@@ -438,13 +438,13 @@ const Dashboard = () => {
 .section-card {
   background: white;
   border-radius: 16px;
-  border: 1px solid #F0EDE9;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  border: 1.5px solid #D1CAC0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 .section-header {
   padding: 20px 24px 16px;
-  border-bottom: 1px solid #F5F2EF;
+  border-bottom: 1.5px solid #E8E2DB;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -491,15 +491,15 @@ const Dashboard = () => {
 .job-request-card {
   padding: 18px 20px;
   background: #FFFFFF;
-  border: 1px solid #E8E2DB;
+  border: 1.5px solid #C8C1B7;
   border-radius: 14px;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
 }
 .job-request-card:hover {
   background: #FFFDFB;
   border-color: #FF7A00;
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.08);
+  box-shadow: 0 6px 16px rgba(255, 122, 0, 0.12);
 }
 .job-card-top {
   display: flex;
@@ -514,7 +514,7 @@ const Dashboard = () => {
   align-items: center;
   gap: 6px;
   background: #FFF7ED;
-  border: 1px solid #FED7AA;
+  border: 1.5px solid #F97316;
   border-radius: 8px;
   padding: 4px 10px;
   font-size: 12px;
@@ -711,8 +711,8 @@ const Dashboard = () => {
 .schedule-section {
   background: white;
   border-radius: 16px;
-  border: 1px solid #F0EDE9;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  border: 1.5px solid #D1CAC0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 .schedule-empty {
