@@ -481,7 +481,7 @@ const JobDetailsCard = ({ job, index }) => {
             <span className="jsm-title">Booking Details</span>
           </div>
           <Link
-            to={`/worker/activities/${job._id}?view=timeline`}
+            to={`/worker/jobs/${job._id}?view=timeline`}
             className={`jsm-track-btn-top${!job._id ? ' disabled' : ''}`}
             aria-label="Track Job"
           >
@@ -978,8 +978,8 @@ const WorkerJobDetail = () => {
           {/* Top navigation bar */}
           <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#E8E2DB]">
             <button
-              onClick={() => navigate(`/worker/activities/${job._id}`)}
-              className="flex items-center gap-2 text-black font-semibold text-[15px] hover:text-[#D97706] transition-colors py-1.5 pr-3"
+              onClick={() => navigate(`/worker/jobs/${job._id}`)}
+              className="flex items-center gap-2 text-black font-semibold text-[15px] hover:text-[#D97706] transition-colors py-1.5 pr-3 cursor-pointer"
             >
               <ArrowLeft size={20} strokeWidth={2.5} />
               <span>Back</span>
