@@ -95,7 +95,7 @@ const WorkerLayout = () => {
 
   const navItems = [
     { name: 'Dashboard', path: '/worker/dashboard', icon: SquaresFour, matchPaths: ['/worker/dashboard'] },
-    { name: 'Activities', path: '/worker/activities', icon: Briefcase, matchPaths: ['/worker/activities', '/worker/jobs'] },
+    { name: 'Activities', path: '/worker/activities', icon: Briefcase, matchPaths: ['/worker/activities', '/worker/jobs', '/worker/requests'] },
     { name: 'Earnings', path: '/worker/earnings', icon: CurrencyDollar },
     { name: 'Settings', path: '/worker/settings', icon: Gear },
   ];

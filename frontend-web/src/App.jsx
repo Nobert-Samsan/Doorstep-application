@@ -149,6 +149,7 @@ function App() {
           </ProtectedRoute>
         }>
           <Route path="dashboard" element={<WorkerDashboard />} />
+          <Route path="requests" element={<JobRequests isPage={true} />} />
           <Route path="activities" element={<MyJobs />} />
           <Route path="jobs/:id" element={<WorkerJobDetail />} />
           <Route path="earnings" element={<Earnings />} />

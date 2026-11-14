@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
-import { Clock, AlertCircle } from 'lucide-react';
+import { Clock, AlertCircle, ArrowLeft, Inbox } from 'lucide-react';
 
 const ROLE_MAP = {
   'Plumbing': 'Plumber',
@@ -66,7 +66,8 @@ const getJobRole = (title, fallback) => {
   return tryResolve(title) || tryResolve(fallback) || 'Service';
 };
 
-const JobRequests = () => {
+const JobRequests = ({ isPage = false }) => {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -113,7 +114,7 @@ const JobRequests = () => {
     );
   }
 
-  return (
+  const content = (
     <div>
       {requests.length === 0 ? (
         <div className="py-16 flex flex-col items-center justify-center text-center">
@@ -173,13 +174,45 @@ const JobRequests = () => {
                     <button onClick={() => handleDecline(request._id)} className="btn-decline">Decline</button>
                     <button onClick={() => handleAccept(request._id)} className="btn-accept">Accept</button>
                   </div>
-                  <Link to={`/worker/jobs/${request._id}?from=dashboard`} className="btn-view" style={{textDecoration: 'none'}}>View Details</Link>
+                  <Link to={`/worker/jobs/${request._id}?from=requests`} className="btn-view" style={{textDecoration: 'none'}}>View Details</Link>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
+    </div>
+  );
+
+  if (!isPage) {
+    return content;
+  }
+
+  return (
+    <div className="max-w-5xl mx-auto py-4 sm:py-6">
+      <div className="flex items-center justify-between gap-3 mb-6">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => navigate('/worker/dashboard')}
+            className="w-9 h-9 rounded-full bg-white border border-[#D1CAC0] flex items-center justify-center text-gray-700 hover:text-black hover:border-gray-400 transition-colors cursor-pointer"
+            aria-label="Back to dashboard"
+          >
+            <ArrowLeft size={18} />
+          </button>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold font-['Poppins',sans-serif] text-gray-900 flex items-center gap-2">
+              <span>Incoming Job Requests</span>
+              <span className="text-xs sm:text-sm font-semibold bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA] px-2.5 py-0.5 rounded-full">
+                {requests.length}
+              </span>
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 font-['Inter',sans-serif]">Review and accept job leads in your area</p>
+          </div>
+        </div>
+      </div>
+
+      {content}
     </div>
   );
 };
