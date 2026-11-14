@@ -189,27 +189,27 @@ const JobRequests = ({ isPage = false }) => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto py-4 sm:py-6">
-      <div className="flex items-center justify-between gap-3 mb-6">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => navigate('/worker/dashboard')}
-            className="w-9 h-9 rounded-full bg-white border border-[#D1CAC0] flex items-center justify-center text-gray-700 hover:text-black hover:border-gray-400 transition-colors cursor-pointer"
-            aria-label="Back to dashboard"
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold font-['Poppins',sans-serif] text-gray-900 flex items-center gap-2">
-              <span>Incoming Job Requests</span>
-              <span className="text-xs sm:text-sm font-semibold bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA] px-2.5 py-0.5 rounded-full">
-                {requests.length}
-              </span>
-            </h1>
-            <p className="text-xs sm:text-sm text-gray-500 font-['Inter',sans-serif]">Review and accept job leads in your area</p>
-          </div>
-        </div>
+    <div className="max-w-5xl mx-auto py-2 sm:py-6">
+      {/* Back button above heading */}
+      <div className="mb-3">
+        <button
+          type="button"
+          onClick={() => navigate('/worker/dashboard')}
+          className="w-9 h-9 rounded-full bg-white border border-[#D1CAC0] flex items-center justify-center text-gray-700 hover:text-black hover:border-gray-400 transition-colors cursor-pointer shadow-sm"
+          aria-label="Back to dashboard"
+        >
+          <ArrowLeft size={18} />
+        </button>
+      </div>
+
+      {/* Heading */}
+      <div className="mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold font-['Poppins',sans-serif] text-gray-900">
+          Incoming Job Requests
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-500 font-['Inter',sans-serif] mt-0.5">
+          Review and accept job leads in your area
+        </p>
       </div>
 
       {content}
